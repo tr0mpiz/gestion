@@ -1,0 +1,156 @@
+[
+    {
+        "title": "Counter-Strike: Global Offensive",
+        "description": "es un videojuego de disparos en primera persona desarrollado por Valve Corporation y Hidden Path Entertainment",
+        "price": 15,
+        "thumbnail": "https://www.clarin.com/img/2021/11/25/dQJKs5qYm_2000x1500__1.jpg",
+        "code": "CS-GO",
+        "stock": 25,
+        "producId": "6c8ea02c-b8d1-4b90-a48c-b6967b908a2f",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "World of Warcraft",
+        "description": "es un videojuego de rol multijugador masivo en línea desarrollado por Blizzard Entertainment",
+        "price": 60,
+        "thumbnail": "https://static.wikia.nocookie.net/wowpedia/images/6/60/WoW-boxcover.jpg",
+        "code": "WoW",
+        "stock": 203,
+        "producId": "7297c7b2-f94d-4a0f-887e-f648d0caa327",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "League of Legends,",
+        "description": "es un videojuego multijugador de arena de batalla en línea desarrollado y publicado por Riot Games",
+        "price": 0,
+        "thumbnail": "https://cloudfront-us-east-1.images.arcpublishing.com/infobae/CNTWUAMXZRF3BPIYPCNPFHOMJQ.jpg",
+        "code": "lol",
+        "stock": 1000,
+        "producId": "4773dcd8-2e70-4a18-97b2-24d22d416bb4",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "Assassin's Creed Valhalla",
+        "description": "Un juego de rol de acción en mundo abierto. Encarna a Eivor, un guerrero vikingo, y lidera a tu clan en la conquista de Inglaterra.",
+        "price": 50,
+        "thumbnail": "https://cdn.cloudflare.steamstatic.com/steam/apps/2208920/header.jpg",
+        "code": "ACV",
+        "stock": 20,
+        "producId": "4fe03507-796b-477d-a217-ea7842ab1bc2",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "Grand Theft Auto V",
+        "description": "Un juego de acción y aventuras en mundo abierto. Sigue las vidas entrelazadas de tres personajes y lleva a cabo misiones en Los Santos.",
+        "price": 30,
+        "thumbnail": "https://image.api.playstation.com/cdn/UP1004/CUSA00419_00/bTNSe7ok8eFVGeQByA5qSzBQoKAAY32R.png",
+        "code": "GTA V",
+        "stock": 15,
+        "producId": "35dde592-f343-437a-a647-ce8dd4c7a931",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "Minecraft",
+        "description": "Un juego de aventuras y construcción en mundo abierto. Explora y construye en un mundo de bloques.",
+        "price": 20,
+        "thumbnail": "https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png",
+        "code": "MC",
+        "stock": 50,
+        "producId": "6c93a615-3601-412d-b082-2aa1470f2832",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "Red Dead Redemption 2",
+        "description": "Un juego de acción y aventuras en mundo abierto. Encarna a Arthur Morgan, un forajido en el Salvaje Oeste, y sobrevive en un mundo implacable.",
+        "price": 40,
+        "thumbnail": "https://cdn.akamai.steamstatic.com/steam/apps/1174180/header.jpg",
+        "code": "RDR2",
+        "stock": 10,
+        "producId": "1ccac07e-7707-4f01-ade8-afd52ac8c50b",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "Fortnite",
+        "description": "Un juego de batalla real en línea y multijugador. Salta en paracaídas a una isla, consigue armas y elimina a tus oponentes para ganar.",
+        "price": 0,
+        "thumbnail": "https://cloudfront-us-east-1.images.arcpublishing.com/infobae/LFCORIJV7JFB3GZWLHP2DI2HSI.jpg",
+        "code": "Fortnite",
+        "stock": 100,
+        "producId": "f53d78da-936f-4989-b6f1-35f614bae2da",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "Among Us",
+        "description": "Un juego de deducción y engaño en línea y multijugador. Descubre quién es el impostor entre la tripulación de la nave espacial.",
+        "price": 5,
+        "thumbnail": "https://cdn.businessinsider.es/sites/navi.axelspringer.es/public/media/image/2020/09/among-us-2056913.jpg",
+        "code": "AU",
+        "stock": 30,
+        "producId": "70d8286d-a254-4de7-a285-b868ed7fa27d",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "FIFA 22",
+        "description": "Un juego de deportes de fútbol en línea y multijugador. Escoge a tu equipo y juega partidos en línea contra otros jugadores.",
+        "price": 60,
+        "thumbnail": "https://cdn.cloudflare.steamstatic.com/steam/apps/1506830/capsule_616x353.jpg",
+        "code": "FIFA 22",
+        "stock": 5,
+        "producId": "14a2f151-2854-441e-a854-ab97d6b63c70",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "Overwatch",
+        "description": "Un juego de disparos en línea y multijugador. Escoge a un héroe y lucha en equipos de seis para cumplir los objetivos del mapa.",
+        "price": 25,
+        "thumbnail": "https://i.ytimg.com/vi/PSucU14Iogw/maxresdefault.jpg",
+        "code": "OW",
+        "stock": 15,
+        "producId": "b8a523bc-552b-44f5-8434-4903ffd6cd06",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "The Legend of Zelda: Breath of the Wild",
+        "description": "Un juego de aventuras y acción en mundo abierto. Explora y sobrevive en el reino de Hyrule y derrota a Ganon.",
+        "price": 45,
+        "thumbnail": "https://www.zelda.com/breath-of-the-wild/assets/icons/BOTW-Share_icon.jpg",
+        "code": "Zelda BotW",
+        "stock": 8,
+        "producId": "e29dbb05-5ab6-4044-a8a4-d666448b2246",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "Dark Souls III",
+        "description": "Un juego de acción y aventuras en tercera persona. Sobrevive en un mundo oscuro y peligroso, lucha contra jefes épicos y consigue almas.",
+        "price": 20,
+        "thumbnail": "thumbnail_webagendatel-01.jpg",
+        "code": "DS III",
+        "stock": 12,
+        "producId": "ef6d8831-c4b7-4bf1-8fe7-5e348420a192",
+        "status": true,
+        "category": "videojuegos"
+    },
+    {
+        "title": "wada",
+        "description": "dawdawda",
+        "price": "dawdawdawd",
+        "thumbnail": "85239300_2241293419510038_5838583807812304896_n.jpg",
+        "code": "awdawd",
+        "stock": "awdawd",
+        "producId": "27f31197-28f2-4fb5-a1d5-3d0ae1d1212e",
+        "status": true,
+        "category": "wda"
+    }
+]

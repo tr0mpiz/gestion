@@ -1,0 +1,185 @@
+{{! <style>
+    .form-group{ flex-basis: 50% !important; box-sizing: border-box !important; }img{width: 5rem;height: 3rem;}td{vertical-align: middle; }
+</style> }}
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">PACIENTES /</span> SIGUIENTE </h4>
+<div class="container">
+  <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="d-flex align-items-end row">
+                    <div class="col-sm-7">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">SIGUIENTE 🎉</h5>
+                        <p class="mb-4">En esta <span class="fw-bold">seccion</span> aparecen los pacientes que estan en la sala de espera <strong> PROXIMOS A ATENDER </strong></p>
+
+                        <a href="/agenda" class="btn btn-sm btn-outline-primary">Ver Agenda</a>
+                    </div>
+                    </div>
+                    <div class="col-sm-5 text-center text-sm-left">
+                    <div class="card-body pb-0 px-0 px-md-4">
+                        <img src="../assets/img/illustrations/man-with-laptop-light.png" height="140" alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png" data-app-light-img="illustrations/man-with-laptop-light.png">
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       <div class="col-md-3 col-12 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <i class="bx bx-calendar-plus"></i>
+              </div>
+              {{!-- <div class="dropdown">
+                <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
+                  <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                  <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                </div>
+              </div> --}}
+            </div>
+             <span class="fw-semibold d-block mb-1 en">EN SALA</span>
+             <h3 class="card-title mb-2" id="cantidadsala" >{{#if ensala.0.ensala}} {{ ensala.0.ensala }}{{else}}0{{/if}}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-12 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <i class="bx bx-calendar-check"></i>
+              </div>
+              {{!-- <div class="dropdown">
+                <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
+                  <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                  <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                </div>
+              </div> --}}
+            </div>
+            <span class="fw-semibold d-block mb-1">HOY</span>
+           {{#if hoy.0.hoy}}
+              <h3 class="card-title mb-2">{{ hoy.0.hoy }}</h3>
+              {{else}}
+              <h3 class="card-title mb-2">0</h3>
+              {{/if}}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-12 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <i class="bx bxs-calendar-exclamation"></i>
+              </div>
+              {{!-- <div class="dropdown">
+                <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
+                  <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                  <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                </div>
+              </div> --}}
+            </div>
+            <span class="fw-semibold d-block mb-1">MAÑANA</span>
+            {{#if maniana.0.maniana}}
+              <h3 class="card-title mb-2">{{ maniana.0.maniana }}</h3>
+              {{else}}
+              <h3 class="card-title mb-2">0</h3>
+              {{/if}}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-12 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <i class="bx bx-calendar"></i>
+              </div>
+              {{!-- <div class="dropdown">
+                <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
+                  <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                  <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                </div>
+              </div> --}}
+            </div>
+            <span class="fw-semibold d-block mb-1">TOTAL</span>
+            {{#if pactadas.0.pactadas}}
+              <h3 class="card-title mb-2">{{ pactadas.0.pactadas }}</h3>
+              {{else}}
+              <h3 class="card-title mb-2">0</h3>
+              {{/if}}
+          </div>
+        </div>
+      </div>
+      
+     
+    </div>
+
+    
+    
+  </div>
+  <div class="card shadow m-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Proximo a atender</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Fecha cita</th>
+                            <th>Nombre Paciente</th>
+                            <th>Apellido Paciente</th>
+                            <th>DNI Paciente</th>
+                            <th>Contacto Paciente</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody id="table-proximo">
+                      {{#each pacientes}}
+                      <tr id="paciente-{{this.id_paciente}}">
+                        <td>{{this.fecha_cita}}</td>
+                        <td>{{this.nombre_paciente}}</td>
+                        <td>{{this.apellido_paciente}}</td>
+                        <td>{{this.dni_paciente}}</td>
+                        <td>{{this.contacto_paciente}}</td>
+                        <td data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<span>{{this.observacion}}</span>"><span class="badge bg-white text-primary">{{this.descripcion}}</span></td>
+                        <td>
+                          <div class="btn-group btn-group-horizontal">
+                            {{!-- <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bi bi-eye-fill' ></i> <span>Consultar Paciente</span>"  href="/paciente/consulta?id={{this.id_paciente}}" class="btn btn-icon btn-outline-primary ml-1"><i class="bi bi-eye-fill"></i></a> --}}
+                             <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bi ib-wrench-adjustable' ></i> <span>Enviar a Taller</span>" href="#"    class="btn btn-icon btn-outline-success ml-1" onclick="peticionAjax('/agenda/entaller?id={{this.id_agenda}}','GET','true','true')"><i class="bi bi-wrench-adjustable"></i> </a>
+                            <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-pencil bx-xs' ></i> <span>Modifica Paciente</span>" href="/paciente/modificar?dni={{this.dni_paciente}}" class="btn btn-icon btn-outline-warning ml-1"><i class="bi bi-pencil-fill"></i></a>
+                          </div>
+                        </td>
+                      </tr>
+                      {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="../js/funcionesHtmlAgenda.js"></script>
+<script src="../js/main.js"></script>
+{{! <script></script> }}

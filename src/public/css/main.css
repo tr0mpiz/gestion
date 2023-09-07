@@ -1,0 +1,27 @@
+.form-group {
+    flex-basis: 50% !important;
+    box-sizing: border-box !important;
+}
+img {
+    width: 5rem;
+    height: 3rem;
+}
+td {
+    vertical-align: middle;
+}
+
+.aDisable {
+    pointer-events: none !important;
+    color: gray !important;
+    text-decoration: none !important;
+    cursor: default !important;
+}
+
+.contenedor-botonera {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: stretch;
+    gap: 1rem;
+    margin: 1rem;
+}

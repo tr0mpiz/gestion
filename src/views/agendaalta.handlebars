@@ -1,0 +1,179 @@
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">AGENDA /</span> ALTA </h4>
+<div class="container">
+  <div class="row">
+    <div class="col-xxl">
+      <div class="card mb-4">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h5 class="mb-0">AGENDAR PACIENTE</h5> <small class="text-muted float-end">Formulario de alta de turno, ingresar primero el <strong>DNI</strong>.</small>
+        </div>
+        <div class="card-body">
+          <form id="agendar-cita-form" class="mt-4" method="POST">
+            <div class="row">
+              <div class="col-md-6">
+                <h4><i class="bx bx-user"></i> Datos del Paciente</h4>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label" for="dni_paciente">DNI</label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="dni_paciente2" class="input-group-text"><i class="bx bx-id-card"></i></span>
+                      <input type="text" class="form-control" id="dni_paciente" value="{{ agenda.0.dni_paciente }}" name="dni_paciente" aria-describedby="dni_paciente2">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label" for="nombre_paciente">Nombre</label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="nombre_paciente2" class="input-group-text"><i class="bx bx-user"></i></span>
+                      <input type="text" class="form-control" id="nombre_paciente" value="{{ agenda.0.nombre_paciente }}" name="nombre_paciente" required aria-describedby="nombre_paciente2">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label" for="apellido_paciente">Apellido</label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="apellido_paciente2" class="input-group-text"><i class="bx bx-user"></i></span>
+                      <input type="text" class="form-control" id="apellido_paciente" value="{{ agenda.0.apellido_paciente }}" name="apellido_paciente" required aria-describedby="apellido_paciente2">
+                    </div>
+                  </div>
+                </div>
+                
+
+                <div class="form-group row d-none">
+                  <label class="col-sm-2 col-form-label text-muted" for="peso_paciente">Peso</label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="" class="input-group-text"><i class="bx bx-weight"></i></span>
+                      <input type="text" class="form-control" id="peso_paciente" name="peso_paciente" readonly value="0" style="background-color: #e9ecef;">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row d-none">
+                  <label class="col-sm-2 col-form-label text-muted" for="edad_paciente">Edad</label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="edad_paciente" class="input-group-text"><i class="bx bx-weight"></i></span>
+                      <input type="text" class="form-control" id="edad_paciente" name="edad_paciente" readonly value="0" style="background-color: #e9ecef;">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row d-none">
+                  <label class="col-sm-2 col-form-label text-muted" for="talle_paciente">Talle</label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="talle_paciente" class="input-group-text"><i class="bx bx-weight"></i></span>
+                      <input type="text" class="form-control" id="talle_paciente" name="talle_paciente" readonly value="0" style="background-color: #e9ecef;">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row d-none">
+                  <label class="col-sm-2 col-form-label text-muted" for="altura_paciente">Altura</label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="altura_paciente2" class="input-group-text"><i class="bx bx-up-arrow"></i></span>
+                      <input type="text" class="form-control" id="altura_paciente" value="0" name="altura_paciente" readonly style="background-color: #e9ecef;">
+                    </div>
+                  </div>
+                </div>
+                <!-- Resto de los campos ocultos -->
+              </div>
+              <div class="col-md-6">
+                <h4><i class="bx bx-calendar"></i> Datos del Turno</h4>
+                <div class="mb-3 row">
+                  <label for="html5-color-input" class="col-md-2 col-form-label">Color</label>
+                  <div class="col-md-10">
+                    {{#if agenda.0.color}}
+                        <input class="form-control" value="{{ agenda.0.color }}" id="color_agenda" name="color_agenda" type="color"  id="html5-color-input">
+                    {{else}}
+                       <input class="form-control"  id="color_agenda" name="color_agenda" type="color" value="#666EE8" id="html5-color-input">
+                     
+                      
+                    {{/if}}
+                    
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label" for="fecha_cita">Fecha </label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="fecha_cita2" class="input-group-text"><i class="bx bx-calendar-alt"></i></span>
+                      <input type="datetime-local" class="form-control" value="{{ agenda.0.fecha_cita_formateada }}" id="fecha_cita" name="fecha_cita" required onchange="asignarProximaCita()" aria-describedby="fecha_cita2">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row ">
+                  <label class="col-sm-2 col-form-label" for="proxima_cita">Próxima Turno</label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="proxima_cita2" class="input-group-text"><i class="bx bx-calendar-check"></i></span>
+                      <input type="datetime-local" value="{{ agenda.0.proxima_cita }}" class="form-control"  id="proxima_cita" name="proxima_cita" required readonly  >
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                 {{#if agenda.0.id_agenda}}
+                  <input type="text" class="form-control d-none"  id="id_agenda" name="id_agenda" value="{{ agenda.0.id_agenda }}"  readonly  >
+                   
+                {{else}}
+                 <input type="text" class="form-control d-none"  id="id_agenda" name="id_agenda" value="0"  readonly  >
+                   
+                {{/if}}
+                     
+                </div>
+                
+                <div class="form-group row d-none">
+                  <label class="col-sm-2 col-form-label" for="nacimiento_paciente">Fecha de Nacimiento</label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="nacimiento_paciente2" class="input-group-text"><i class="bx bx-calendar"></i></span>
+                      <input type="datetime-local" class="form-control" id="nacimiento_paciente" value="{{ agenda.0.nacimiento_paciente }}"  required name="nacimiento_paciente" readonly  style="background-color: #e9ecef;">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label " for="comentario_cita">Comentario</label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="comentario_cita2" class="input-group-text"><i class="bx bx-comment-square"></i></span>
+                      <textarea class="form-control" id="comentario_cita" name="comentario_cita" rows="4" >Sin comentarios</textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 col-form-label" for="contacto_paciente">Tel</label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="contacto_paciente2" class="input-group-text"><i class="bx bx-phone"></i></span>
+                      <input type="text" class="form-control" value="{{ agenda.0.contacto_paciente }}" id="contacto_paciente" name="contacto_paciente" required aria-describedby="contacto_paciente2">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row d-none">
+                  <label class="col-sm-2 col-form-label text-muted" for="email_paciente">Email</label>
+                  <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                      <span id="email_paciente2" class="input-group-text"><i class="bx bx-envelope"></i></span>
+                      <input type="email" class="form-control" id="email_paciente" value="0" name="email_paciente" readonly value="0" style="background-color: #e9ecef;">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-10 offset-sm-2">
+                    <button type="submit" class="btn btn-primary mt-4">Guardar Cita</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+        </div>
+    </div>  
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+
+<script src="../js/funcionesHtmlAgenda.js"></script>
+<script src="../js/main.js"></script>

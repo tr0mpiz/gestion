@@ -198,21 +198,24 @@ tareasHtmlRouter.get("/modificar", isUser, async (req, res) => {
    tareasHtmlRouter.post("/alta", async (req, res) => {
     try {
       // Obtener los valores del formulario
-        let {
-            id,
-            operadoralta,
-            fechadecumplimiento
-        } = req.body;
+        
         //aca crea la constante fechadecreacion que es la fecha de hoy formateada para mariadb
         const fechadecreacion = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        fechadecumplimiento = new Date(fechadecumplimiento).toISOString().slice(0, 19).replace('T', ' ');
+        let {
+            id,
+        } = req.body;
         // Realizar la inserción o actualización según el valor de 'id'
         if (id > 0) {
+            let {
+                operadoralta,
+                fechadecumplimiento
+            } = req.body;
+            fechadecumplimiento = new Date(fechadecumplimiento).toISOString().slice(0, 19).replace('T', ' ');
             const updateQuery = `UPDATE tareas SET acumplirpor  = ${operadoralta},fechadecreacion = "${fechadecreacion}",fechadecumplimiento = "${fechadecumplimiento}"  WHERE id = ${id}`;
             console.log(updateQuery);
             await ejecutarConsulta(updateQuery);
         } else {
-            const insertQuery = `INSERT INTO tareas SET id = 0, acumplirpor  = ${operadoralta}, fechadecreacion  = "${fechadecreacion}",estado = 1`;
+            const insertQuery = `INSERT INTO tareas (id,ordenadopor,acumplirpor,fechadecreacion,fechadecumplimiento,estado) VALUES (0,0,0,"${fechadecreacion}","${fechadecreacion}",1)`;
             console.log(insertQuery);
             await ejecutarConsulta(insertQuery);
         }
@@ -344,7 +347,10 @@ tareasHtmlRouter.get("/eliminatarea", isUser,async (req, res) => {
     let id=req.query.id;
          try {
                 //crea un query que updatee el estado del socio a 0
-                const updatesocio = await ejecutarConsulta(`UPDATE tareas SET estado = 0 WHERE id= ${id}`);
+                //crea la constante fecha de cumplimiento que es la fecha de hoy formateada para mariadb
+                const fechadecumplimiento = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+                const updatesocio = await ejecutarConsulta(`UPDATE tareas SET estado = 0 AND fechadecumplimiento = "${fechadecumplimiento}" WHERE id= ${id}`);
                 const tareas = await ejecutarConsulta("SELECT *,DATE_FORMAT(fechadecreacion, '%d/%m/%y %H:%i') AS fechadecreacion,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento FROM tareas");
 
                 const tareasModificadas = await Promise.all(

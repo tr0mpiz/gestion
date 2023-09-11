@@ -14,17 +14,7 @@ const storage = multer.diskStorage({
   }
 });
 
-function quitarEspacios(string) {
-    return string.replace(/\s/g, "");
-}
 
-function obtenerExtension(nombreArchivo) {
-    var partes = nombreArchivo.split(".");
-    if (partes.length === 1 || (partes[0] === "" && partes.length === 2)) {
-        return "";
-    }
-    return "." + partes.pop();
-}
 
 function showCustomToast(toastBody, toastHeader) {
   

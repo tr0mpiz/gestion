@@ -101,13 +101,13 @@
       <div class="modal-body">
         <div class="text-center mb-4">
           <h3>Alta de tarea</h3>
-          <p>Selecciona el operario para la tarea.</p>
+          <p>Dale al boton de alta para crear la tarea.</p>
         </div>
         <form id="addSocio" class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework" method="POST">
               <input type="hidden" id="id" name="id" value="0">
               <!-- Fin del campo oculto para el ID -->
 
-              <div class="col-12 col-md-12 fv-plugins-icon-container">
+              <div class="col-12 col-md-12 fv-plugins-icon-container d-none">
                 <label for="operadoralta" class="form-label">Operador:</label>
                 <select id="operadoralta" name="operadoralta" class="form-select" required>
                   <option value="-3">Seleccione un operador</option>
@@ -116,11 +116,11 @@
                     {{/each}}
                 </select>
               </div>
-              <div class="col-12 col-md-6 fv-plugins-icon-container">
+              <div class="col-12 col-md-6 fv-plugins-icon-container d-none">
                 <label for="fechadecreacion" class="form-label">Fecha de Creacion:</label>
                 <input type="date" id="fechadecreacion" name="fechadecreacion"  class="form-control" >
               </div>
-              <div class="col-12 col-md-6 fv-plugins-icon-container">
+              <div class="col-12 col-md-6 fv-plugins-icon-container d-none">
                 <label for="fechadecumplimiento" class="form-label">Fecha de Cumplimiento:</label>
                 <input type="date" id="fechadecumplimiento" name="fechadecumplimiento"  class="form-control" >
               </div>
@@ -147,7 +147,7 @@
                   <h5 class="card-title text-primary">GESTION </h5>
                   <p class="mb-4">En esta <span class="fw-bold">seccion</span> aparecen las tareas y sus detalles</p>
 
-                  <a href="/workout" class="btn btn-sm btn-outline-primary">Ver Productos</a>
+                  <a href="/workout" class="btn btn-sm btn-outline-primary disabled">Ver Productos (desactivado)</a>
                   <button type="button" class="btn btn-sm  btn-primary " data-bs-toggle="modal" data-bs-target="#modalagregasocio">Crear Tarea</button>
               </div>
               </div>
@@ -170,7 +170,7 @@
                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                       <thead>
                           <tr>
-                            <th>Tarea</th>
+                            <th class="text-center">Tarea</th>
                             <th>Cliente/s</th>
                             
                             <th>Fecha de creacion</th>
@@ -179,7 +179,7 @@
                       </thead>
                       <tfoot>
                         <tr>
-                          <th>Tarea</th>
+                          <th class="text-center">Tarea</th>
                           <th>Cliente/s</th>
                           
                           <th>Fecha de creacion</th>
@@ -190,24 +190,11 @@
                       <tbody id="table-product-body">
                         {{#each tareas}}
                             <tr id="tarea-{{this.id}}" class="" >
-                                <td>
-                                  <button class="btn btn-outline-warning btn-sm btn-open-edit-modal"
-                                          data-bs-toggle="modal"
-                                          data-bs-target="#modalagregasocio"
-                                          data-id="{{this.id}}"
-                                          data-acumplirpor="{{this.acumplirpor}}"
-                                          data-fechadecreacion="{{this.fechadecreacion}}"
-                                          data-fechadecumplimiento="{{this.fechadecumplimiento}}"
-                                          data-estado="{{this.estado}}"
-                                          >
-                                    <i class="bi bi-pencil"></i> {{this.id}}
-                                  </button>
-                                </td>
-
+                                <td class="text-center">{{this.id}}</td>
                                 <td><i class="clientes"></i> <strong>{{this.clientes}}</strong></td>
                                 <td>{{this.fechadecreacion}}</td>
                                 <td class="text-center">
-                                  {{#compare this.this.estado 1}} <button class=" btn btn-icon btn-outline-success ml-1" data-idtarea="{{this.id}}" data-bs-toggle="modal" data-bs-target="#tareasModal"><i class="bx bx-clipboard"></i></button> <button data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-trash bx-xs' ></i> <span>Dar de baja a la tarea {{this.id}}</span>" onclick="peticionAjax('/socios/eliminatarea?id={{this.id}}','GET','true','true')" class="btn btn-icon btn-outline-danger ml-1"><i class="bx bx-trash"></i></button> {{/compare}}
+                                  {{#compare this.this.estado 1}} <button class=" btn btn-icon btn-outline-info ml-1" data-idtarea="{{this.id}}" data-bs-toggle="modal" data-bs-target="#tareasModal"><i class="bx bx-clipboard"></i></button> <button data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-check bx-xs' ></i> <span>Tarea {{this.id}} cumplida </span>" onclick="peticionAjax('/socios/eliminatarea?id={{this.id}}','GET','true','true')" class="btn btn-icon btn-outline-success ml-1"><i class="bx bx-check"></i></button> {{/compare}}
                                    {{#compare this.this.estado 0 }} {{this.fechadecumplimiento}} {{/compare}}
                                 </td>
                             </tr>

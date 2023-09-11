@@ -1,0 +1,84 @@
+<div class="modal fade" id="youTubeModal" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <iframe height="350" src=""></iframe>
+    </div>
+  </div>
+</div>
+
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">GESTION /</span> PRODUCCION </h4>
+<div class="container agendacontenedor">
+ 
+  <div class="row">
+    <!-- Earnings (Monthly) Card Example -->
+  <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="d-flex align-items-end row">
+                <div class="col-sm-7">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">TAREAS </h5>
+                    <textarea class="form-control" readonly rows="6" >{{{isUser.info}}}</textarea>
+                    
+                </div>
+                </div>
+                <div class="col-sm-5 text-center text-sm-left d-none d-sm-block">
+                <div class="card-body pb-0 px-0 px-md-4 d-none d-sm-block">
+                    <img src="../../../storage/icono/pesa.png" height="140" alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png" data-app-light-img="illustrations/man-with-laptop-light.png">
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <!-- DataTales Example -->
+
+
+    <div class="accordion" id="accordionExample"></div>
+    {{#each tareas}}
+   
+    <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+         <tr id="tarea-{{this.id}}" class="" >
+                                <td class="text-center">{{this.id}}</td>
+                                <td><i class="clientes"></i> <strong>{{this.clientes}}</strong></td>
+                                <td>{{this.fechadecreacion}}</td>
+                                <td class="text-center">
+                                  {{#compare this.this.estado 1}} <button class=" btn btn-icon btn-outline-info ml-1" data-idtarea="{{this.id}}" data-bs-toggle="modal" data-bs-target="#tareasModal"><i class="bx bx-clipboard"></i></button> <button data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-check bx-xs' ></i> <span>Tarea {{this.id}} cumplida </span>" onclick="peticionAjax('/socios/eliminatarea?id={{this.id}}','GET','true','true')" class="btn btn-icon btn-outline-success ml-1"><i class="bx bx-check"></i></button> {{/compare}}
+                                   {{#compare this.this.estado 0 }} {{this.fechadecumplimiento}} {{/compare}}
+                                </td>
+                            </tr>
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        
+      </div>
+    </div>
+  </div>
+ 
+ 
+
+  
+{{/each}}
+</div>
+
+    
+    
+    
+</div>
+
+
+
+<script>
+  
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="../js/funcionesHtmlWorkout.js"></script>
+
+{{! <script></script> }}

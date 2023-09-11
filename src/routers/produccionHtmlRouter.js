@@ -9,9 +9,9 @@ import { socketServer } from "../app.js"; // Importa el objeto io desde app.js
 //import { agendaService } from "../services/agenda.services.js";
 //import { agendaModel } from "../DAO/models/agenda.model.js";
 
-export const workoutHtmlRouter = express.Router();
+export const produccionHtmlRouter = express.Router();
 
-workoutHtmlRouter.get("/recordatorios",isUser, async (req, res) => {
+produccionHtmlRouter.get("/recordatorios",isUser, async (req, res) => {
     try {
         //con el req.session.id_usuario obtengo la fecha_vencimiento DD /MM/ AAAA de la tabla socios cuando el id_usuario es igual al id del usuario logueado
         
@@ -26,7 +26,7 @@ workoutHtmlRouter.get("/recordatorios",isUser, async (req, res) => {
 
 
 
-workoutHtmlRouter.get("/ejercicios", isUser, async (req, res) => {
+produccionHtmlRouter.get("/ejercicios", isUser, async (req, res) => {
     let json=req.query.json;
     //console.log(json);
     if(json==1){
@@ -61,11 +61,11 @@ workoutHtmlRouter.get("/ejercicios", isUser, async (req, res) => {
    
 });
 
-workoutHtmlRouter.get("/", isUser,async (req, res) => {
+produccionHtmlRouter.get("/", isUser,async (req, res) => {
     let id=req.query.id;
     if(id){
         try {
-            const results = await ejecutarConsulta("SELECT c.*, a.*, b.*, DATE_FORMAT(fecha_cita,'%Y-%m-%d %H:%i:%s') AS fecha_cita, e.descripcion,b.contacto_paciente,a.primeravez FROM agenda a, paciente b, agenda_estados c, estados e WHERE a.id_paciente=b.id_paciente AND a.id_agenda=c.id_agenda AND c.id_estado=e.id_estado AND a.id_agenda = "+id);          
+            const results = await ejecutarConsulta("Select * from producvtos"+id);          
             return res.status(200).json(results);
         }  catch (error) {
             console.error(error);
@@ -74,10 +74,23 @@ workoutHtmlRouter.get("/", isUser,async (req, res) => {
     }else{
         try {
             
+
+            
             //con el req.session.id_usuario obtengo los ejercicios que le corresponden a ese usuario de la tabla rutinas cuando el id_usuario es igual al id del usuario logueado y n_activado es igual a 1
-            const results = await ejecutarConsulta(`SELECT * FROM rutinas a, ejercicios b WHERE a.id_ejercicio=b.id AND a.id_socio=${req.session.id_usuario} AND a.n_activado=1 ORDER BY a.n_descanso,a.n_peso ASC`);
-            console.log(req.session.info);
-            return res.status(200).render("workout", { ejercios: results ,isUser:req.session.usuario,info:req.session.info});
+            const tareas = await ejecutarConsulta("SELECT *,DATE_FORMAT(fechadecreacion, '%d/%m/%y %H:%i') AS fechadecreacion,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento FROM tareas");
+
+            const tareasModificadas = await Promise.all(
+                tareas.map(async (tarea) => {
+                    tarea.clientes = await ejecutarConsulta(
+                    `SELECT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado=1 AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
+                    );
+                    tarea.clientes = tarea.clientes.map((row) => row.razonsocial);
+                    tarea.clientes = tarea.clientes.join(", ");
+                    return tarea;
+                })
+            );
+
+            return res.status(200).render("produccion", { tareas: tareasModificadas ,isUser:req.session.usuario,info:req.session.info});
         }  catch (error) {
             console.error(error);
             return res.status(404).json({msg:"fallo",error:error});
@@ -90,7 +103,7 @@ workoutHtmlRouter.get("/", isUser,async (req, res) => {
 
 
 
-workoutHtmlRouter.delete("/eliminar", async (req, res) => {
+produccionHtmlRouter.delete("/eliminar", async (req, res) => {
     let id=req.query.id;
        try {
            const insertagendaestados = await ejecutarConsulta(`INSERT INTO agenda_estados (id_agenda, id_estado, observacion) VALUES (${id}, 6, 'Cancelada por el paciente')`);
@@ -106,7 +119,7 @@ workoutHtmlRouter.delete("/eliminar", async (req, res) => {
    });
   
 
-// workoutHtmlRouter.get("/:pid", async (req, res) => {
+// produccionHtmlRouter.get("/:pid", async (req, res) => {
 //     let pid = req.params.pid;
 //     let agenda = await Service.getById(pid);
 //     // let agenda = await Service.getAll();
@@ -122,7 +135,7 @@ workoutHtmlRouter.delete("/eliminar", async (req, res) => {
 
 
 
-workoutHtmlRouter.post('/alta',async (req, res) => {
+produccionHtmlRouter.post('/alta',async (req, res) => {
     // console.log(req)
     let obj = req.body;
    // console.log("hola")
@@ -260,7 +273,7 @@ workoutHtmlRouter.post('/alta',async (req, res) => {
   });
   
 
-workoutHtmlRouter.delete("/:pid", async (req, res) => {
+produccionHtmlRouter.delete("/:pid", async (req, res) => {
     let pid = req.params.pid;
     let agenda = await Service.getById(pid);
     agenda = JSON.parse(JSON.stringify(agenda));
@@ -283,7 +296,7 @@ workoutHtmlRouter.delete("/:pid", async (req, res) => {
     }
 });
 
-workoutHtmlRouter.put("/:pid", async (req, res) => {
+produccionHtmlRouter.put("/:pid", async (req, res) => {
     let pid = req.params.pid;
     let obj = req.body;
     let agenda = await Service.updateOne(pid, obj.agenda);

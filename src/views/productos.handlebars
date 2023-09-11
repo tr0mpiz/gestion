@@ -4,8 +4,8 @@
     <div class="modal-content p-3 p-md-5">
       <div class="modal-body">
         <div class="text-center mb-4">
-          <h3>Ejercicio</h3>
-          <p>En esta seccion toda la informacion del ejercicio</p>
+          <h3>Producto</h3>
+          <p>En esta seccion toda la informacion del producto</p>
         </div>
         <form id="modalagregaejercicioForm" class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework" method="POST" onsubmit="return false" novalidate="novalidate">
          <input type="hidden" id="id" name="id" value="0">
@@ -39,7 +39,7 @@
 </style> }}
 
 <h4 class="fw-bold py-3 mb-4">
-    <span class="text-muted fw-light">PERSONAL /</span> EJERCICIOS
+    <span class="text-muted fw-light">GESTION /</span> PRODUCTO
 </h4>       
 
 
@@ -54,11 +54,11 @@
           <div class="d-flex align-items-end row">
               <div class="col-sm-7">
               <div class="card-body">
-                  <h5 class="card-title text-primary">PERSONAL </h5>
-                  <p class="mb-4">En esta <span class="fw-bold">seccion</span> aparecen los ejercicios y su informacion</p>
+                  <h5 class="card-title text-primary">GESTION </h5>
+                  <p class="mb-4">En esta <span class="fw-bold">seccion</span> aparecen los productos y su informacion</p>
 
-                  <a href="/socios" class="btn btn-sm btn-outline-primary">Ver Socios</a>
-                  <button type="button" class="btn btn-sm  btn-primary " data-bs-toggle="modal" data-bs-target="#modalagregaejercicio">Agregar Ejercicio</button>
+                  <a href="/socios" class="btn btn-sm btn-outline-primary">Ver Tareas</a>
+                  <button type="button" class="btn btn-sm  btn-primary " data-bs-toggle="modal" data-bs-target="#modalagregaejercicio">Agregar Producto</button>
               </div>
               </div>
               <div class="col-sm-5 text-center text-sm-left d-none d-sm-block">
@@ -80,17 +80,17 @@
                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                       <thead>
                           <tr>
+                            <th>ID</th>
                             <th>Nombre</th>
-                            <th>Tecnicas</th>
-                            <th>Url</th>
+                            <th>Stock</th>
                             <th class="text-center">Baja</th>
                           </tr>
                       </thead>
                       <tfoot>
                         <tr>
+                          <th>ID</th>
                           <th>Nombre</th>
-                          <th>Tecnicas</th>
-                          <th>Url</th>
+                          <th>Stock</th>
                           <th class="text-center" >Baja</th>
                         </tr>
                       </tfoot>

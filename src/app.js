@@ -2,7 +2,8 @@ import express from "express";
 
 
 import session from "express-session";
-import { workoutHtmlRouter } from "./routers/workoutHtmlRouter.js";
+import { produccionHtmlRouter } from "./routers/produccionHtmlRouter.js";
+import { productosHtmlRouter } from "./routers/productosHtmlRouter.js";
 import { tareasHtmlRouter } from "./routers/sociosHtmlRouter.js";
 import { loginHtmlRouter } from "./routers/loginHtmlRouter.js";
 import handlebars from "express-handlebars";
@@ -69,7 +70,8 @@ app.use(session({
 // app.use("/api/products", productRouter);
 // app.use("/api/carts", cartRouter);
 //Rutas: HTML RENDER SERVER SIDE
-app.use("/workout", workoutHtmlRouter);
+app.use("/produccion", produccionHtmlRouter);
+app.use("/productos", productosHtmlRouter);
 app.use("/socios", tareasHtmlRouter);
 app.use("/login", loginHtmlRouter);
 

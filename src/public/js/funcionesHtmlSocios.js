@@ -293,7 +293,7 @@ idtarea.addEventListener('change', async () =>{
     ejercicios.forEach(ejercicio => {
 
       let iditemtarea = ejercicio.idtarea; // Asumiendo que tienes un atributo "id_rutina" en el objeto "ejercicio"
-      let botonEliminar = `<button  data-bs-toggle="tooltip"  data-bs-placement="top" data-bs-html="true" title=""  data-bs-original-title="<i class='bx bx-trash bx-xs' ></i> <span> Eliminar Ejercicio</span>"   onclick="eliminaItemActualizaTarea(${iditemtarea});" class="btn btn-icon btn-outline-danger ml-1 recaargaEjerciciosClik text-center"><i class="bx bx-trash"></i></button>`;
+      let botonEliminar = `<button  data-bs-toggle="tooltip"  data-bs-placement="top" data-bs-html="true" title=""  data-bs-original-title="<i class='bx bx-trash bx-xs' ></i> <span> Eliminar producto </span>"   onclick="eliminaItemActualizaTarea(${iditemtarea});" class="btn btn-icon btn-outline-danger ml-1 recaargaEjerciciosClik text-center"><i class="bx bx-trash"></i></button>`;
       if(ejercicio.n_completado == 1){
         let botonCompletado = `<button  data-bs-toggle="tooltip"  data-bs-placement="top" data-bs-html="true" title=""  data-bs-original-title="<i class='bx bx-x bx-xs' ></i> <span> Marcar como no completado</span>"  onclick="actualizaEstadoEstadoEjer(${iditemtarea});" class="btn btn-icon btn-outline-danger ml-1 recaargaEjerciciosClik text-center"><i class="bx bx-x"></i></button>`;
         botonEliminar = botonEliminar + botonCompletado;
@@ -304,10 +304,10 @@ idtarea.addEventListener('change', async () =>{
     
 
       dataTable.row.add([
+        ejercicio.razonsocial,
         ejercicio.producto,
         ejercicio.cantidad,
         ejercicio.idoperario,
-        ejercicio.razonsocial,
         botonEliminar
         //quiero agregarle un boton para que pueda eliminar el ejercicio
         

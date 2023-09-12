@@ -83,7 +83,7 @@ productosHtmlRouter.get("/", isUser,async (req, res) => {
                     `SELECT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado=1 AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
                     );
                     tarea.clientes = tarea.clientes.map((row) => row.razonsocial);
-                    tarea.clientes = tarea.clientes.join(", ");
+                    tarea.clientes = tarea.clientes.join("- ");
                     return tarea;
                 })
             );

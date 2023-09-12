@@ -65,7 +65,7 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
     let id=req.query.id;
     if(id){
         try {
-            const results = await ejecutarConsulta("Select * from producvtos"+id);          
+            const results = await ejecutarConsulta("Select * from productos"+id);          
             return res.status(200).json(results);
         }  catch (error) {
             console.error(error);
@@ -77,18 +77,43 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
 
             
             //con el req.session.id_usuario obtengo los ejercicios que le corresponden a ese usuario de la tabla rutinas cuando el id_usuario es igual al id del usuario logueado y n_activado es igual a 1
-            const tareas = await ejecutarConsulta("SELECT *,DATE_FORMAT(fechadecreacion, '%d/%m/%y %H:%i') AS fechadecreacion,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento FROM tareas");
+            const tareas = await ejecutarConsulta("SELECT *,DATE_FORMAT(fechadecreacion, '%d/%m/%y %H:%i') AS fechadecreacion,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento FROM tareas WHERE estado=1");
 
             const tareasModificadas = await Promise.all(
                 tareas.map(async (tarea) => {
-                    tarea.clientes = await ejecutarConsulta(
-                    `SELECT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado=1 AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
-                    );
+                  tarea.clientes = await ejecutarConsulta(
+                    `SELECT DISTINCT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado=1 AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
+                  );
+                  
+                    //si existe que busque el nombre del cliente y lo agregue a la tarea
+                    //si no existe que busque el nombre del cliente y lo agregue a la tarea
+                if(tarea.clientes.length > 0 ){
+                    //primero que busque si existe un cliente con el id en tarea.clientes
                     tarea.clientes = tarea.clientes.map((row) => row.razonsocial);
-                    tarea.clientes = tarea.clientes.join(", ");
-                    return tarea;
+                    tarea.clientes = tarea.clientes.join("- ");
+                }else{
+                    tarea.clientes = "Sin cliente";
+                }
+                  
+                  // Obtén todos los detalles de la tarea que incluyen el nombre del producto
+                  tarea.detallesTarea = await ejecutarConsulta(
+                    `SELECT a.*,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento, b.nombre AS nombre_producto ,c.razonsocial,d.descripcion AS nombre_estado
+                     FROM tareas_detalles a, productos b,clientes c,estados d
+                     WHERE a.idtarea = ${tarea.id}
+                     AND a.producto = b.id
+                     AND a.idcliente = c.id
+                     AND a.estado = d.estado `
+                  );
+              
+                  // Aquí puedes agregar cualquier otra información adicional que desees
+              
+                  return tarea;
                 })
-            );
+              );
+            
+              
+              console.log("tareasModificadas",tareasModificadas)
+              
 
             return res.status(200).render("produccion", { tareas: tareasModificadas ,isUser:req.session.usuario,info:req.session.info});
         }  catch (error) {
@@ -133,145 +158,30 @@ produccionHtmlRouter.delete("/eliminar", async (req, res) => {
 //     }
 // });
 
-
-
-produccionHtmlRouter.post('/alta',async (req, res) => {
-    // console.log(req)
-    let obj = req.body;
-   // console.log("hola")
-    //console.log("ksajhdkjahsd",obj)
-    //console.log("obj", JSON.parse(JSON.stringify(obj)));
-
-    const {
-      id_agenda,
-      fecha_cita,
-      fecha_fin_cita,
-      comentario_cita,
-      nombre_paciente,
-      apellido_paciente,
-      dni_paciente,
-      peso_paciente,
-      altura_paciente,
-      edad_paciente,
-      nacimiento_paciente,
-      talle_paciente,
-      contacto_paciente,
-      email_paciente,
-      color_agenda,
-      primeravez,
-  } = req.body;
-
-  //crea la variable proxima_cita que sea un año despues formato de la fecha tiene que ser asi '2023-07-17 06:30:00'
-    let proxima_cita = new Date(fecha_cita);
-    proxima_cita.setFullYear(proxima_cita.getFullYear() + 1);
-    proxima_cita = proxima_cita.getFullYear() + "-" + (proxima_cita.getMonth() + 1) + "-" + proxima_cita.getDate() + " " + proxima_cita.getHours() + ":" + proxima_cita.getMinutes() + ":" + proxima_cita.getSeconds();
-   // console.log("proxima_cita", proxima_cita);
-
-   
-  
-    
-  
-    //valida si tiene valor id_agenda
-    //io.emit('agregarFila', obj);
-
-    //crea un select donde busque en la tabla agenda si el id_agenda existe
-
-    function isChecked(voriable) {
+produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
+    let id=req.query.id;
+    let estado=req.query.estado;
+    try {
+      // Obtener los valores del formulario
         
-        if(voriable == "on"){
-            return 1;
-        }else{
-            return 0;
-        }
-
-      }
-      
-      // Ejemplo de uso
-    let isCheckboxChecked = isChecked(primeravez);
-    if( id_agenda == 0 ){
-
+        //aca crea la constante fechadecreacion que es la fecha de hoy formateada para mariadb
+        let fechadecumplimiento = new Date().toISOString().slice(0, 19).replace('T', ' ');
         
-        try {
-            
-            const sqlPacienteExiste = await ejecutarConsulta(`SELECT * FROM paciente WHERE dni_paciente = ${dni_paciente}`);
-            //console.log("sqlPacienteExiste", sqlPacienteExiste);
-            
-            if(sqlPacienteExiste.length > 0 ){
-                
-                const sqlAgenda = `INSERT INTO agenda (id_paciente, fecha_cita,fecha_fin_cita, proxima_cita, comentario_cita, color,primeravez) VALUES (${sqlPacienteExiste[0].id_paciente}, '${fecha_cita}','${fecha_fin_cita}', '${proxima_cita}', '${comentario_cita}', '${color_agenda}' , ${isCheckboxChecked})`;
-                const insertAgenda = await ejecutarConsulta(sqlAgenda);
-                console.log('INSERT agenda ');
-            }else{
-                const insertPaciente = await ejecutarConsulta(`INSERT INTO paciente (nombre_paciente, apellido_paciente, dni_paciente, peso_paciente, altura_paciente, edad_paciente, nacimiento_paciente, talle_paciente, contacto_paciente, email_paciente,comentario_paciente, alergia, diabetico, tobillo, rodilla, cadera, columna, calzados, patologia) VALUES ('${nombre_paciente}', '${apellido_paciente}', ${dni_paciente}, 0, 0,0, '2001-01-01 06:30:00',0, ${contacto_paciente}, 'ejemplo@ejemplo.com','', '', '', '', '', '', '', '', '')`);
-                const ultimoPaciente = await ejecutarConsulta("Select max(id_paciente) as ultimopaciente from paciente"); 
-                console.log("ultimo : "+ultimoPaciente[0].ultimopaciente);
-                const sqlAgenda = `INSERT INTO agenda (id_paciente, fecha_cita , fecha_fin_cita , proxima_cita, comentario_cita, color,primeravez) VALUES (${ultimoPaciente[0].ultimopaciente}, '${fecha_cita}', '${fecha_fin_cita}', '${proxima_cita}', '${comentario_cita}', '${color_agenda}' , ${isCheckboxChecked})`;
-                const insertAgenda = await ejecutarConsulta(sqlAgenda);
-                console.log('INSERT paciente y agenda');
-            }
-
-            
-        
-            const ultimoAgendaEstados = await ejecutarConsulta("Select max(id_agenda) as ultimoagendaEstados from agenda");
-            console.log("ultimo : "+ultimoAgendaEstados[0].ultimoagendaEstados);
-            const sqlAgendaEstados = `INSERT INTO agenda_estados (id_agenda, id_estado, observacion) VALUES (${ultimoAgendaEstados[0].ultimoagendaEstados},1, '');`;
-            const insertAgendaEstado = await ejecutarConsulta(sqlAgendaEstados);
-            console.log('INSERT agenda_estados');
-            
-            
-           
-          } catch (error) {
-            console.error('Error al guardar el paciente: ', error);
-           
-          }
-
-         
-        
-    }else{
-        console.log("entro al else");
-        console.log("color_agenda",color_agenda);
-        if(color_agenda == undefined){
-            console.log("entro al if");
-            console.log("fecha_cita",fecha_cita);
-            console.log("fecha_fin_cita",fecha_fin_cita);
-            console.log("id_agenda",id_agenda);
-
-                //crea un query que updatee la fecha de inicio y de fin de la cita
-                let sqlAgendaUpdate = await ejecutarConsulta(`UPDATE agenda SET fecha_cita = '${fecha_cita}',fecha_fin_cita = '${ fecha_fin_cita }' WHERE id_agenda = ${id_agenda}`);
-                console.log(`UPDATE agenda SET fecha_cita = '${fecha_cita}',fecha_fin_cita = '${ fecha_fin_cita }' WHERE id_agenda = ${id_agenda}`);
-                //const sqlAgendaUpdate = await ejecutarConsulta(`UPDATE agenda SET fecha_cita = '${fecha_cita}',comentario_cita = '${ comentario_cita }',duracion = '${ duracion }' WHERE id_agenda = ${id_agenda}`);
-               
-            
-        }else{
-            console.log("entro al else");
-            //crea la variable fecha_fin_cita que sea media hora despues que fecha_cita formato de la fecha tiene que ser asi '2023-07-17 06:30:00'
-            let fecha_fin_cita = new Date(fecha_cita);
-            fecha_fin_cita.setMinutes(fecha_fin_cita.getMinutes() + 30);
-            fecha_fin_cita = fecha_fin_cita.getFullYear() + "-" + (fecha_fin_cita.getMonth() + 1) + "-" + fecha_fin_cita.getDate() + " " + fecha_fin_cita.getHours() + ":" + fecha_fin_cita.getMinutes() + ":" + fecha_fin_cita.getSeconds();
-            //console.log("fecha_fin_cita",fecha_fin_cita);
-
-            //crea un query que updatee la fecha de inicio y de fin de la cita
-        
-           
-
-
-            let sqlAgendaUpdate = await ejecutarConsulta(`UPDATE agenda SET fecha_cita = '${fecha_cita}',fecha_fin_cita = '${fecha_fin_cita}',comentario_cita = '${ comentario_cita }',color ='${ color_agenda}' WHERE id_agenda = ${id_agenda}`);
-        }
-           
-       
-            
-            //console.log("sqlAgendaUpdate", sqlAgendaUpdate);
-        
+        // Realizar la inserción o actualización según el valor de 'id'
+        if (id > 0) {
+            // Actualizar
+            const updateQuery = `UPDATE tareas_detalles SET estado  = ${estado},fechadecumplimiento = "${fechadecumplimiento}"  WHERE id = ${id}`;
+            console.log(updateQuery);
+            await ejecutarConsulta(updateQuery);
+        } 
+    } catch (error) {
+      console.error(error);
+      return res.status(404).json({ msg: "fallo" });
     }
-    
-    //socketServer.emit('mensaje', 'Se agrego una cita nueva');
-    return res.redirect("/agenda/calendario");
-
-   
-
-    
   });
-  
+
+
+
 
 produccionHtmlRouter.delete("/:pid", async (req, res) => {
     let pid = req.params.pid;

@@ -61,11 +61,27 @@ productosHtmlRouter.get("/ejercicios", isUser, async (req, res) => {
    
 });
 
+
+productosHtmlRouter.get("/eliminaItemProducto", isUser,async (req, res) => {
+    let id=req.query.id;
+    if(id){
+        try {
+            const results = await ejecutarConsulta("UPDATE productos set baja = 0 WHERE id="+id);   
+            return res.status(200).json(results);
+        }  catch (error) {
+            console.error(error);
+            return res.status(404).json({msg:"fallo",error:error});
+          }
+    }
+    
+
+   
+});
 productosHtmlRouter.get("/", isUser,async (req, res) => {
     let id=req.query.id;
     if(id){
         try {
-            const results = await ejecutarConsulta("Select * from producvtos"+id);          
+            const results = await ejecutarConsulta("Select * from productos WHERE baja=0 AND id = "+id);          
             return res.status(200).json(results);
         }  catch (error) {
             console.error(error);
@@ -75,20 +91,10 @@ productosHtmlRouter.get("/", isUser,async (req, res) => {
         try {
             
             //con el req.session.id_usuario obtengo los ejercicios que le corresponden a ese usuario de la tabla rutinas cuando el id_usuario es igual al id del usuario logueado y n_activado es igual a 1
-            const tareas = await ejecutarConsulta("SELECT *,DATE_FORMAT(fechadecreacion, '%d/%m/%y %H:%i') AS fechadecreacion,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento FROM tareas");
+            const productos = await ejecutarConsulta("Select * from productos WHERE baja=0 ");
 
-            const tareasModificadas = await Promise.all(
-                tareas.map(async (tarea) => {
-                    tarea.clientes = await ejecutarConsulta(
-                    `SELECT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado=1 AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
-                    );
-                    tarea.clientes = tarea.clientes.map((row) => row.razonsocial);
-                    tarea.clientes = tarea.clientes.join("- ");
-                    return tarea;
-                })
-            );
 
-            return res.status(200).render("productos", { ejercios: tareasModificadas ,isUser:req.session.usuario,info:req.session.info});
+            return res.status(200).render("productos", { productos: productos ,isUser:req.session.usuario,info:req.session.info});
         }  catch (error) {
             console.error(error);
             return res.status(404).json({msg:"fallo",error:error});

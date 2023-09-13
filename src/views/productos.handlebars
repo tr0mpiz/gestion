@@ -96,16 +96,14 @@
                       </tfoot>
                       
                       <tbody id="table-product-body">
-                        {{#each ejercicios}}
-                            <tr id="ejercicio-{{this.id}}">
-                                <td><button type="button" data-bs-url="{{this.url}}" data-bs-id="{{this.id}}" data-bs-nombre="{{this.nombre}}" data-bs-tecnica="{{this.tecnica}}"   class="btn btn-outline-warning btn-sm btn-open-edit-modal" data-bs-toggle="modal" data-bs-target="#modalagregaejercicio"><i class="bi bi-pencil"></i> <strong>{{this.nombre}}</strong></button></td>
-                                <td><i class=""></i>{{this.tecnica}}</td>
-                                <td><a href="{{this.url}}" target="_blank" >  {{this.url}}<i class="bi bi-youtube"></i> </a></td>
-
-                                
+                        {{#each productos}}
+                            <tr id="producto-{{this.id}}">
+                                <td>{{this.id}}</td>
+                                <td>{{this.descripcion}}</td>
+                                <td>0</td>
                                 <td class="text-center" style="width: 50px;">
                                   
-                                  <button data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-trash bx-xs' ></i> <span>Eliminar producto</span>" onclick="peticionAjax('/socios/eliminaejer?id={{this.id}}','GET','true','true')" class="btn btn-icon btn-outline-danger"><i class="bx bx-trash"></i></button>
+                                  <button data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-trash bx-xs' ></i> <span>Eliminar producto</span>" onclick="peticionAjax('/productos/eliminaItemProducto?id={{this.id}}','GET','true','true')" class="btn btn-icon btn-outline-danger"><i class="bx bx-trash"></i></button>
                                    
                                 </td>
                             </tr>

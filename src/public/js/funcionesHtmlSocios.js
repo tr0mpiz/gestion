@@ -284,48 +284,53 @@ idtarea.addEventListener('change', async () =>{
     const url = `/socios/tareas?idtarea=${id}`;
     const method = 'GET';
     const ejercicios = await peticionAjax(url, method);
-    console.log(ejercicios);
-    //ahora empuja en el id cantejercicios la cantidad de ejercicios que tiene que valide si es 1 que lo ponga en singular el texto ejercicios
-    const cantEjercicios = document.getElementById('cantEjercicios');
-    
-    if(ejercicios.length == 1){
-      cantEjercicios.innerHTML = ejercicios.length+' producto en la tarea';
-    }else{
-      cantEjercicios.innerHTML = ejercicios.length+' productos en la tarea';
-    }
     
     
     
-    const dataTable = $('#dataTableEjercicios').DataTable();
+    const dataTable = $('#dataTableTareas').DataTable();
     dataTable.clear().draw();
 
     // Agregar cada fila de ejercicio a la tabla
     console.log(ejercicios);
     ejercicios.forEach(ejercicio => {
-
-      let iditemtarea = ejercicio.idtarea; // Asumiendo que tienes un atributo "id_rutina" en el objeto "ejercicio"
-      let botonEliminar = `<button  data-bs-toggle="tooltip"  data-bs-placement="top" data-bs-html="true" title=""  data-bs-original-title="<i class='bx bx-trash bx-xs' ></i> <span> Eliminar producto </span>"   onclick="eliminaItemActualizaTarea(${iditemtarea});" class="btn btn-icon btn-outline-danger ml-1 recaargaEjerciciosClik text-center"><i class="bx bx-trash"></i></button>`;
-      if(ejercicio.n_completado == 1){
-        let botonCompletado = `<button  data-bs-toggle="tooltip"  data-bs-placement="top" data-bs-html="true" title=""  data-bs-original-title="<i class='bx bx-x bx-xs' ></i> <span> Marcar como no completado</span>"  onclick="actualizaEstadoEstadoEjer(${iditemtarea});" class="btn btn-icon btn-outline-danger ml-1 recaargaEjerciciosClik text-center"><i class="bx bx-x"></i></button>`;
-        botonEliminar = botonEliminar + botonCompletado;
-      }else{
-        let botonCompletado = `<button  data-bs-toggle="tooltip"  data-bs-placement="top" data-bs-html="true" title=""  data-bs-original-title="<i class='bx bx-check bx-check' ></i> <span> Marcar como  completado</span>"  onclick="actualizaEstadoEstadoEjer(${iditemtarea});" class="btn btn-icon btn-outline-success ml-1 recaargaEjerciciosClik text-center"><i class="bx bx-check"></i></button>`;
-        botonEliminar = botonEliminar + botonCompletado;
-      }
+      
+      webSocket.emit('alerta', ejercicio);
+      alert("asdasd")
+      console.log(ejercicio);
+      let iditemtarea = ejercicio.idtarea;
+      let opcionesHtml = `
+        <ul class="list-group">
+          <li class="list-group-item pl-4">
+            <input id="estacionado-${iditemtarea}" class="form-check-input pl-2" data-campo="estacionado" data-id="${iditemtarea}" type="checkbox" ${ejercicio.estacionado == 1 ? 'checked' : ''} aria-label="...">
+            Estacionado
+          </li>
+          <li class="list-group-item pl-4">
+            <input id="terminado-${iditemtarea}" class="form-check-input pl-2" data-campo="terminado" data-id="${iditemtarea}" type="checkbox" ${ejercicio.terminado == 1 ? 'checked' : ''} aria-label="...">
+            Terminado
+          </li>
+          <li class="list-group-item pl-4">
+            <input id="facturado-${iditemtarea}" class="form-check-input pl-2" data-campo="facturado" data-id="${iditemtarea}" type="checkbox" ${ejercicio.facturado == 1 ? 'checked' : ''} aria-label="...">
+            Facturado
+          </li>
+          <li class="list-group-item pl-4">
+            <input id="entregado-${iditemtarea}" class="form-check-input pl-2" data-campo="entregado" data-id="${iditemtarea}" type="checkbox" ${ejercicio.entregado == 1 ? 'checked' : ''} aria-label="...">
+            Entregado
+          </li>
+        </ul>
+      `;
     
-
       dataTable.row.add([
         ejercicio.razonsocial,
         ejercicio.producto,
         ejercicio.cantidad,
         ejercicio.idoperario,
-        botonEliminar
-        //quiero agregarle un boton para que pueda eliminar el ejercicio
-        
-        // Agrega más celdas según tus necesidades
-      ]).draw(false); // Dibuja la fila sin refrescar la tabla
-      
+        opcionesHtml
+      ]).draw(false);
     });
+    
+    // ...
+    
+    
     $('[data-bs-toggle="tooltip"]').tooltip();
   
 

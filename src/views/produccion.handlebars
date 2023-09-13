@@ -57,6 +57,7 @@
                     <h5 class="card-title text-primary">TAREAS </h5>
                     <div id="accordionTareas">
                       {{#each tareas}}
+                      
                         <div class="accordion-item card mb-1">
                           <h2 class="accordion-header" id="tareatitle-{{this.id}}">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tarea-{{this.id}}" aria-expanded="false" aria-controls="tarea-{{this.id}}">
@@ -75,19 +76,19 @@
                                           <p class="card-text"> <b><u> {{ nombre_producto }} - {{ cantidad }} UNIDADES </u></b> </p>
                                           <ul class="list-group">
                                             <li class="list-group-item pl-4 ">
-                                              <input  id="estacionado-{{id}}" class="form-check-input pl-2" type="checkbox"  {{#compare this.this.estado 1 }} checked {{/compare}} aria-label="...">
+                                              <input  id="estacionado-{{id}}" class="form-check-input pl-2" data-campo="estacionado" data-id="{{id}}" type="checkbox"  {{#compare estacionado 1 }} checked {{/compare}} aria-label="...">
                                               Estacionado
                                             </li>
                                             <li class="list-group-item pl-4 ">
-                                              <input  id="terminado-{{id}}" class="form-check-input pl-2" type="checkbox"  {{#compare this.this.estado 1 }} checked {{/compare}} aria-label="...">
+                                              <input  id="terminado-{{id}}" class="form-check-input pl-2" data-campo="terminado" data-id="{{id}}" type="checkbox"  {{#compare terminado 1 }} checked {{/compare}} aria-label="...">
                                               Terminado
                                             </li>
                                             <li class="list-group-item pl-4 ">
-                                              <input  id="facturado-{{id}}" class="form-check-input pl-2" type="checkbox"  {{#compare this.this.estado 1 }} checked {{/compare}} aria-label="...">
+                                              <input  id="facturado-{{id}}" class="form-check-input pl-2" data-campo="facturado" data-id="{{id}}" type="checkbox"  {{#compare facturado 1 }} checked {{/compare}} aria-label="...">
                                               Facturado
                                             </li>
                                             <li class="list-group-item pl-4 ">
-                                              <input  id="entregado-{{id}}" class="form-check-input pl-2" type="checkbox"  {{#compare this.this.estado 1 }} checked {{/compare}} aria-label="...">
+                                              <input  id="entregado-{{id}}" class="form-check-input pl-2" data-campo="entregado" data-id="{{id}}" type="checkbox"  {{#compare entregado 1 }} checked {{/compare}} aria-label="...">
                                               Entregado
                                             </li>
                                           </ul>
@@ -136,5 +137,6 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <script src="../js/funcionesHtmlProduccion.js"></script>
+
 
 {{! <script></script> }}

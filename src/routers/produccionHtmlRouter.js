@@ -106,7 +106,7 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
                      AND a.estado = d.estado `
                   );
                   
-
+                console.log(tarea.detallesTarea)
               
                   // Aquí puedes agregar cualquier otra información adicional que desees
               
@@ -115,7 +115,7 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
               );
             
               
-              console.log("tareasModificadas",tareasModificadas)
+              
               
 
             return res.status(200).render("produccion", { tareas: tareasModificadas ,isUser:req.session.usuario,info:req.session.info});
@@ -164,6 +164,7 @@ produccionHtmlRouter.delete("/eliminar", async (req, res) => {
 produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
     let id=req.query.id;
     let estado=req.query.estado;
+    let campo=req.query.campo;
     try {
       // Obtener los valores del formulario
         
@@ -171,9 +172,10 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
         let fechadecumplimiento = new Date().toISOString().slice(0, 19).replace('T', ' ');
         
         // Realizar la inserción o actualización según el valor de 'id'
+        
         if (id > 0) {
             // Actualizar
-            const updateQuery = `UPDATE tareas_detalles SET estado  = ${estado},fechadecumplimiento = "${fechadecumplimiento}"  WHERE id = ${id}`;
+            const updateQuery = `UPDATE tareas_detalles SET ${campo} = ${estado},fechadecumplimiento = "${fechadecumplimiento}"  WHERE id = ${id}`;
             console.log(updateQuery);
             await ejecutarConsulta(updateQuery);
         } 

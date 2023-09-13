@@ -116,7 +116,7 @@ tareasHtmlRouter.get("/tareas",  isUser,async (req, res) => {
        try {
             //hace el query para detalles de la tarea
             const tareas = await ejecutarConsulta(`SELECT estacionado,terminado,facturado,entregado,c.descripcion as producto,cantidad,idoperario, idcliente , razonsocial ,a.id as idtarea FROM tareas_detalles a, tareas b, productos c, clientes d where a.estado NOT IN (-1) AND idtarea =   ${idtarea} AND a.idtarea = b.id AND a.producto = c.id  AND a.idcliente = d.id;`);
-            console.log(`SELECT c.descripcion as producto,cantidad,idoperario, idcliente , razonsocial ,idtarea FROM tareas_detalles a, tareas b, productos c, clientes d where a.estado NOT IN (-1) AND idtarea =   ${idtarea} AND a.idtarea = b.id AND a.producto = c.id  AND a.idcliente = d.id;`);
+            console.log(`SELECT estacionado,terminado,facturado,entregado,c.descripcion as producto,cantidad,idoperario, idcliente , razonsocial ,a.id as idtarea FROM tareas_detalles a, tareas b, productos c, clientes d where a.estado NOT IN (-1) AND idtarea =   ${idtarea} AND a.idtarea = b.id AND a.producto = c.id  AND a.idcliente = d.id;`);
                 
             return res.status(200).json(tareas);
        }  catch (error) {

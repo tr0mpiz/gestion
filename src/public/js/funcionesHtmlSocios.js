@@ -248,7 +248,7 @@ function actualizaVistaTareas() {
           // Agregar cada fila de ejercicio a la tabla
         
           console.log(data)
-          alert("asdasd")
+          //alert("asdasd")
           data.forEach(tarea => {
             let idtarea = tarea.id; // Asumiendo que tienes un atributo "id_rutina" en el objeto "ejercicio"
             
@@ -294,8 +294,8 @@ idtarea.addEventListener('change', async () =>{
     console.log(ejercicios);
     ejercicios.forEach(ejercicio => {
       
-      webSocket.emit('alerta', ejercicio);
-      alert("asdasd")
+      //webSocket.emit('alerta', ejercicio);
+      //alert("asdasd")
       console.log(ejercicio);
       let iditemtarea = ejercicio.idtarea;
       let opcionesHtml = `

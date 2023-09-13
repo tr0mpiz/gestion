@@ -102,9 +102,12 @@ function eliminaItemActualizaTarea(id){
       type: 'POST',
       success: function (data) {
           console.log(data);
-          showBootstrapToast("Notificacion","Se elimino correctamente el producto",1000,"bg-success");
+          showBootstrapToast("Notificacion","Se elimino correctamente el producto se actualizara la pagina",2000,"bg-success");
           
           actualizaVistaEjercicios();
+          setTimeout(function() {
+            location.reload();
+            }, 2000); // 2000 milisegundos = 2 segundo
       },
       error: function (data) {
           console.log(data);
@@ -121,8 +124,11 @@ function actualizaEstadoEstadoEjer(id){
       type: 'POST',
       success: function (data) {
           console.log(data);
-          showBootstrapToast("Notificacion","Se actualizo correctamente el ejercicio",1000,"bg-success");
+          showBootstrapToast("Notificacion","Se actualizo correctamente el ejercicio se actualizara la pagina",2000,"bg-success");
           actualizaVistaEjercicios();
+          setTimeout(function() {
+            location.reload();
+            }, 2000); // 2000 milisegundos = 2 segundo
       },
       error: function (data) {
           console.log(data);
@@ -152,12 +158,15 @@ document.getElementById("agregarItemTareaForm").addEventListener("submit", funct
       contentType: 'application/json',
       success: function (data) {
           console.log(data);
-          showBootstrapToast("Notificacion","Se actualizo correctamente la tarea",2000,"bg-success");
+          showBootstrapToast("Notificacion","Se actualizo correctamente la tarea se actualizara la pagina",2000,"bg-success");
           // setTimeout(function() {
           //     location.reload();
           // }, 1000); // 1000 milisegundos = 1 segundo
           // //cerra el modal
           actualizaVistaEjercicios();
+          setTimeout(function() {
+            location.reload();
+            }, 2000); // 2000 milisegundos = 2 segundo
           $('#modalagregasocio').modal('hide');
           //alert('Socio creado correctamente');
           //location.reload();
@@ -207,8 +216,10 @@ document.getElementById("addSocio").addEventListener("submit", function (event) 
           $('#modalagregasocio').modal('hide');
           //actualizaVistaTareas();
           //alert('Socio creado correctamente');
-          
+          // que espere 2 segundos antes de hacer el reload
+          setTimeout(function() {
           location.reload();
+          }, 2000); // 2000 milisegundos = 2 segundo
       },
       error: function (error) {
         console.log(data);

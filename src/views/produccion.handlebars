@@ -65,24 +65,33 @@
                           </h2>
                           <div id="tarea-{{this.id}}" class="accordion-collapse collapse" aria-labelledby="tareatitle-{{this.id}}" data-bs-parent="#accordionTareas">
                             <div class="accordion-body">
-                              <h6>Productos</h6>
                                 <div class="row">
                                   {{#each this.detallesTarea}}
                                     <div class="col-sm-3">
                                       <div class="card pallet-{{id}}">
                                         <div class="card-body">
-                                          <h5 class="card-title">{{ this.razonsocial }} </h5>
+                                          <h5 class="card-title"> <b>{{ this.razonsocial }} </b> </h5>
                                           
-                                          {{#compare this.this.estado 1 }}  <span class="badge bg-primary mb-4 estado">{{ this.nombre_estado }}</span> {{/compare}}
-                                          {{#compare this.this.estado 2 }}  <span class="badge bg-info mb-4 estado">{{ this.nombre_estado }}</span> {{/compare}}
-                                          {{#compare this.this.estado 3 }} <span  class="badge bg-success mb-4 estado">{{ this.nombre_estado }}</span>  {{/compare}}
-                                          <p id="fecha">{{this.fechadecumplimiento}}</p>
-                                          <p class="card-text"> {{ nombre_producto }} - {{ cantidad }} UNIDADES </p>
-                                          <button type="button" class="btn btn-outline-success ml-1 mt-4"
-                                                  data-bs-toggle="modal" data-bs-target="#cerrarPallet"
-                                                  data-id="{{id}}" data-producto="{{nombre_producto}}" data-cliente="{{this.razonsocial}}" data-cantidad="{{cantidad}}">
-                                            <i class="bx bx-check"></i> Cambiar estado
-                                          </button>
+                                          <p class="card-text"> <b><u> {{ nombre_producto }} - {{ cantidad }} UNIDADES </u></b> </p>
+                                          <ul class="list-group">
+                                            <li class="list-group-item pl-4 ">
+                                              <input  id="estacionado-{{id}}" class="form-check-input pl-2" type="checkbox"  {{#compare this.this.estado 1 }} checked {{/compare}} aria-label="...">
+                                              Estacionado
+                                            </li>
+                                            <li class="list-group-item pl-4 ">
+                                              <input  id="terminado-{{id}}" class="form-check-input pl-2" type="checkbox"  {{#compare this.this.estado 1 }} checked {{/compare}} aria-label="...">
+                                              Terminado
+                                            </li>
+                                            <li class="list-group-item pl-4 ">
+                                              <input  id="facturado-{{id}}" class="form-check-input pl-2" type="checkbox"  {{#compare this.this.estado 1 }} checked {{/compare}} aria-label="...">
+                                              Facturado
+                                            </li>
+                                            <li class="list-group-item pl-4 ">
+                                              <input  id="entregado-{{id}}" class="form-check-input pl-2" type="checkbox"  {{#compare this.this.estado 1 }} checked {{/compare}} aria-label="...">
+                                              Entregado
+                                            </li>
+                                          </ul>
+                                        
 
 
                                         </div>

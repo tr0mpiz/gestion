@@ -51,7 +51,7 @@ tareasHtmlRouter.get("/", isUser, async (req, res) => {
         const tareasModificadas = await Promise.all(
             tareas.map(async (tarea) => {
                 tarea.clientes = await ejecutarConsulta(
-                `SELECT DISTINCT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado=1 AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
+                `SELECT DISTINCT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado NOT IN (-1) AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
                 );
                 tarea.clientes = tarea.clientes.map((row) => row.razonsocial);
                 tarea.clientes = tarea.clientes.join("- ");
@@ -96,7 +96,7 @@ tareasHtmlRouter.get("/tareas",  isUser,async (req, res) => {
             const tareasModificadas = await Promise.all(
                 tareas.map(async (tarea) => {
                     tarea.clientes = await ejecutarConsulta(
-                    `SELECT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado=1 AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
+                    `SELECT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado NOT IN (-1) AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
                     );
                     tarea.clientes = tarea.clientes.map((row) => row.razonsocial);
                     tarea.clientes = tarea.clientes.join("- ");
@@ -115,8 +115,8 @@ tareasHtmlRouter.get("/tareas",  isUser,async (req, res) => {
  
        try {
             //hace el query para detalles de la tarea
-            const tareas = await ejecutarConsulta(`SELECT c.descripcion as producto,cantidad,idoperario, idcliente , razonsocial ,a.id as idtarea FROM tareas_detalles a, tareas b, productos c, clientes d where a.estado=1 AND idtarea =   ${idtarea} AND a.idtarea = b.id AND a.producto = c.id  AND a.idcliente = d.id;`);
-            console.log(`SELECT c.descripcion as producto,cantidad,idoperario, idcliente , razonsocial ,idtarea FROM tareas_detalles a, tareas b, productos c, clientes d where a.estado=1 AND idtarea =   ${idtarea} AND a.idtarea = b.id AND a.producto = c.id  AND a.idcliente = d.id;`);
+            const tareas = await ejecutarConsulta(`SELECT c.descripcion as producto,cantidad,idoperario, idcliente , razonsocial ,a.id as idtarea FROM tareas_detalles a, tareas b, productos c, clientes d where a.estado NOT IN (-1) AND idtarea =   ${idtarea} AND a.idtarea = b.id AND a.producto = c.id  AND a.idcliente = d.id;`);
+            console.log(`SELECT c.descripcion as producto,cantidad,idoperario, idcliente , razonsocial ,idtarea FROM tareas_detalles a, tareas b, productos c, clientes d where a.estado NOT IN (-1) AND idtarea =   ${idtarea} AND a.idtarea = b.id AND a.producto = c.id  AND a.idcliente = d.id;`);
             return res.status(200).json(tareas);
        }  catch (error) {
            console.error(error);
@@ -327,7 +327,7 @@ tareasHtmlRouter.post("/eliminaItemTarea", isUser,async (req, res) => {
         const fecha = new Date().toISOString().slice(0, 19).replace('T', ' ');
         //inserta en la tabla rutinas los datos del objeto
 
-        const insertEjercicio = await ejecutarConsulta(`INSERT INTO tareas_detalles(id, idtarea, producto, cantidad, estado, fechadecreacion, fechadecumplimiento, idoperario, kilogramoscumplidos,idcliente) VALUES ('0','${idtarea}','${producto}','${cantidad}','1','${fecha}','${fecha}','${operador}','0','${cliente}')`);
+        const insertEjercicio = await ejecutarConsulta(`INSERT INTO tareas_detalles(id, idtarea, producto, cantidad, estado, fechadecreacion, fechadecumplimiento, idoperario, kilogramoscumplidos,idcliente,estacionado,terminado,facturado,entregado) VALUES ('0','${idtarea}','${producto}','${cantidad}','1','${fecha}','${fecha}','${operador}','0','${cliente}',0,0,0,0)`);
 
         return res.status(200).json({msg:"ok"});
         // const results = await ejecutarConsulta('select * from rutinas WHERE n_activado = 1');
@@ -356,7 +356,7 @@ tareasHtmlRouter.get("/eliminatarea", isUser,async (req, res) => {
                 const tareasModificadas = await Promise.all(
                     tareas.map(async (tarea) => {
                         tarea.clientes = await ejecutarConsulta(
-                        `SELECT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado=1 AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
+                        `SELECT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado NOT IN (-1) AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
                         );
                         tarea.clientes = tarea.clientes.map((row) => row.razonsocial);
                         tarea.clientes = tarea.clientes.join("- ");

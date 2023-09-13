@@ -82,7 +82,7 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
             const tareasModificadas = await Promise.all(
                 tareas.map(async (tarea) => {
                   tarea.clientes = await ejecutarConsulta(
-                    `SELECT DISTINCT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado=1 AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
+                    `SELECT DISTINCT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado NOT IN (-1) AND a.idcliente = b.id AND a.idtarea = ${tarea.id} AND a.estado != -1`
                   );
                   
                     //si existe que busque el nombre del cliente y lo agregue a la tarea
@@ -90,9 +90,9 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
                 if(tarea.clientes.length > 0 ){
                     //primero que busque si existe un cliente con el id en tarea.clientes
                     tarea.clientes = tarea.clientes.map((row) => row.razonsocial);
-                    tarea.clientes = tarea.clientes.join("- ");
+                    tarea.clientes = tarea.clientes.join(" - ");
                 }else{
-                    tarea.clientes = "Sin cliente";
+                    tarea.clientes = "Sin tareas asignadas";
                 }
                   
                   // Obtén todos los detalles de la tarea que incluyen el nombre del producto
@@ -100,10 +100,13 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
                     `SELECT a.*,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento, b.nombre AS nombre_producto ,c.razonsocial,d.descripcion AS nombre_estado
                      FROM tareas_detalles a, productos b,clientes c,estados d
                      WHERE a.idtarea = ${tarea.id}
+                     AND a.estado != -1
                      AND a.producto = b.id
                      AND a.idcliente = c.id
                      AND a.estado = d.estado `
                   );
+                  
+
               
                   // Aquí puedes agregar cualquier otra información adicional que desees
               

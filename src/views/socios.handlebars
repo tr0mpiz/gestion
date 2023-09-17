@@ -39,10 +39,9 @@
               <label for="cantidad" class="form-label">Cantidad:</label>
               <input type="number" id="cantidad" name="cantidad" class="form-control" required>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-12 d-none">
               <label for="operador" class="form-label">Operador:</label>
               <select id="operador" name="operador" class="form-select" required>
-                <option value="-3">Seleccione un operador</option>
                   {{#each operadores}}
                       <option value="{{this.id}}">{{this.nombre}} {{this.apellido}}</option>
                   {{/each}}
@@ -56,6 +55,11 @@
           <div class="col-12 text-center">
               <button type="submit" class="btn btn-success">Agregar 
                 <i class="bi bi-arrow-down-circle"></i>
+              </button>
+          </div>
+          <div class="col-12 text-center">
+              <button class="btn btn-info text-white " id="recargarTareas">Cerrar y actualizar 
+                <i class="bi bi-bootstrap-reboot"></i>
               </button>
           </div>
 
@@ -193,7 +197,7 @@
                                 <td class="text-center">{{this.id}}</td>
                                 <td><i class="clientes"></i> <strong>{{this.clientes}}</strong></td>
                                 <td>{{this.fechadecreacion}}</td>
-                                <td class="text-center">
+                                <td class="text-center" style="width: 100px;">
                                   {{#compare this.this.estado 1}} <button class=" btn btn-icon btn-outline-info ml-1" data-idtarea="{{this.id}}" data-bs-toggle="modal" data-bs-target="#tareasModal"><i class="bx bx-clipboard"></i></button> <button data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-check bx-xs' ></i> <span>Tarea {{this.id}} cumplida </span>" onclick="peticionAjax('/socios/eliminatarea?id={{this.id}}','GET','true','true')" class="btn btn-icon btn-outline-success ml-1"><i class="bx bx-check"></i></button> {{/compare}}
                                    {{#compare this.this.estado 0 }} {{this.fechadecumplimiento}} {{/compare}}
                                 </td>
@@ -206,9 +210,48 @@
       </div>
   </div> 
 </div>
-{{! <style>
-    .form-group{ flex-basis: 50% !important; box-sizing: border-box !important; }img{width: 5rem;height: 3rem;}td{vertical-align: middle; }
-</style> }}
+ <style>
+     /* Estilos para el contenedor del select con checkboxes */
+      .select-checkboxes {
+          position: relative;
+          display: inline-block;
+          cursor: pointer;
+      }
+
+      /* Estilos para el cuadro de texto que muestra las opciones seleccionadas */
+      .selected-options {
+          border: 1px solid #ccc;
+          padding: 5px;
+          width: 200px;
+      }
+
+      /* Estilos para el cuadro de diálogo que muestra las opciones */
+      .options-dialog {
+          display: none;
+          position: absolute;
+          border: 1px solid #ccc;
+          max-height: 150px;
+          overflow-y: auto;
+          width: 200px;
+          background-color: #fff;
+          z-index: 100;
+          
+      }
+
+      /* Estilos para las casillas de verificación en el cuadro de diálogo 
+      .options-dialog input[type="checkbox"] {
+          margin-right: 5px;
+      }
+      */
+      .form-check-input input[type="checkbox"] {
+          margin-right: 5px;
+      }
+      .options-dialog  .form-check-input{
+        position: relative !important;
+        margin-top: 0px !important;
+        margin-left: 0px !important;
+      }
+</style> 
 
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>

@@ -22,6 +22,12 @@ modalRutinas.addEventListener("show.bs.modal", function (event) {
 
 });
 
+const recargarTareas = document.getElementById("recargarTareas");
+recargarTareas.addEventListener("click", function (event) {
+  //que recarge la pagina
+  location.reload();
+});
+
 
 
 const asignarVencimiento = () => {
@@ -164,10 +170,7 @@ document.getElementById("agregarItemTareaForm").addEventListener("submit", funct
           // }, 1000); // 1000 milisegundos = 1 segundo
           // //cerra el modal
           actualizaVistaEjercicios();
-          setTimeout(function() {
-            location.reload();
-            }, 2000); // 2000 milisegundos = 2 segundo
-          $('#modalagregasocio').modal('hide');
+          
           //alert('Socio creado correctamente');
           //location.reload();
       },
@@ -298,7 +301,7 @@ idtarea.addEventListener('change', async () =>{
       //alert("asdasd")
       console.log(ejercicio);
       let iditemtarea = ejercicio.idtarea;
-      let opcionesHtml = `
+      let opcionesHtml2 = `
         <ul class="list-group">
           <li class="list-group-item pl-4">
             <input id="estacionado-${iditemtarea}" class="form-check-input pl-2" data-campo="estacionado" data-id="${iditemtarea}" type="checkbox" ${ejercicio.estacionado == 1 ? 'checked' : ''} aria-label="...">
@@ -318,6 +321,17 @@ idtarea.addEventListener('change', async () =>{
           </li>
         </ul>
       `;
+      
+
+      let opcionesHtml = `<div class="select-checkboxes">
+                              <div class="selected-options" onclick="toggleOptionsState(${iditemtarea})">Seleccionar Estado</div>
+                              <div class="options-dialog" id="optionsDialog-${iditemtarea}">
+                                  <label><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.estacionado == 1 ? 'checked' : ''} /> Estacionado </label><br />
+                                  <label><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.terminado == 1 ? 'checked' : ''} /> Terminado</label><br />
+                                  <label><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.facturado == 1 ? 'checked' : ''} /> Facturado</label><br />
+                                  <label><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.entregado == 1 ? 'checked' : ''} /> Entregado</label><br />
+                              </div>
+                          </div>`
     
       dataTable.row.add([
         ejercicio.razonsocial,
@@ -339,5 +353,14 @@ idtarea.addEventListener('change', async () =>{
     
     });
 
+}
+
+function toggleOptionsState(id) {
+  var optionsDialog = document.getElementById("optionsDialog-"+id);
+  if (optionsDialog.style.display === "block") {
+      optionsDialog.style.display = "none";
+  } else {
+      optionsDialog.style.display = "block";
+  }
 }
 

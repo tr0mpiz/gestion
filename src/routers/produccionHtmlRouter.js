@@ -178,6 +178,11 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
             const updateQuery = `UPDATE tareas_detalles SET ${campo} = ${estado},fechadecumplimiento = "${fechadecumplimiento}"  WHERE id = ${id}`;
             console.log(updateQuery);
             await ejecutarConsulta(updateQuery);
+            let estadonombre="pendiente";
+            if(estado==1){
+                estadonombre="Confirmada"
+            }
+            socketServer.emit('mensaje',  `Cambio el estado  ${campo} de la tarea con ID ${id} a ${estadonombre} `);
         } 
     } catch (error) {
       console.error(error);

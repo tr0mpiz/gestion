@@ -71,6 +71,7 @@ productosHtmlRouter.get("/eliminaItemProducto", isUser,async (req, res) => {
         }  catch (error) {
             console.error(error);
             return res.status(404).json({msg:"fallo",error:error});
+            
           }
     }
     
@@ -147,120 +148,41 @@ productosHtmlRouter.post('/alta',async (req, res) => {
     //console.log("obj", JSON.parse(JSON.stringify(obj)));
 
     const {
-      id_agenda,
-      fecha_cita,
-      fecha_fin_cita,
-      comentario_cita,
-      nombre_paciente,
-      apellido_paciente,
-      dni_paciente,
-      peso_paciente,
-      altura_paciente,
-      edad_paciente,
-      nacimiento_paciente,
-      talle_paciente,
-      contacto_paciente,
-      email_paciente,
-      color_agenda,
-      primeravez,
+        id,nombre,sku,descripcion,alto,ancho,peso
   } = req.body;
-
-  //crea la variable proxima_cita que sea un año despues formato de la fecha tiene que ser asi '2023-07-17 06:30:00'
-    let proxima_cita = new Date(fecha_cita);
-    proxima_cita.setFullYear(proxima_cita.getFullYear() + 1);
-    proxima_cita = proxima_cita.getFullYear() + "-" + (proxima_cita.getMonth() + 1) + "-" + proxima_cita.getDate() + " " + proxima_cita.getHours() + ":" + proxima_cita.getMinutes() + ":" + proxima_cita.getSeconds();
-   // console.log("proxima_cita", proxima_cita);
-
-   
-  
+    console.log("obj",obj);
     
-  
-    //valida si tiene valor id_agenda
-    //io.emit('agregarFila', obj);
+    console.log("id",id);
+    console.log("nombre",nombre);
+    console.log("sku",sku);
 
-    //crea un select donde busque en la tabla agenda si el id_agenda existe
+ let precio = 0;
 
-    function isChecked(voriable) {
-        
-        if(voriable == "on"){
-            return 1;
-        }else{
-            return 0;
-        }
-
-      }
-      
-      // Ejemplo de uso
-    let isCheckboxChecked = isChecked(primeravez);
-    if( id_agenda == 0 ){
+    if( id == 0 ){
 
         
         try {
             
-            const sqlPacienteExiste = await ejecutarConsulta(`SELECT * FROM paciente WHERE dni_paciente = ${dni_paciente}`);
-            //console.log("sqlPacienteExiste", sqlPacienteExiste);
-            
-            if(sqlPacienteExiste.length > 0 ){
-                
-                const sqlAgenda = `INSERT INTO agenda (id_paciente, fecha_cita,fecha_fin_cita, proxima_cita, comentario_cita, color,primeravez) VALUES (${sqlPacienteExiste[0].id_paciente}, '${fecha_cita}','${fecha_fin_cita}', '${proxima_cita}', '${comentario_cita}', '${color_agenda}' , ${isCheckboxChecked})`;
-                const insertAgenda = await ejecutarConsulta(sqlAgenda);
-                console.log('INSERT agenda ');
-            }else{
-                const insertPaciente = await ejecutarConsulta(`INSERT INTO paciente (nombre_paciente, apellido_paciente, dni_paciente, peso_paciente, altura_paciente, edad_paciente, nacimiento_paciente, talle_paciente, contacto_paciente, email_paciente,comentario_paciente, alergia, diabetico, tobillo, rodilla, cadera, columna, calzados, patologia) VALUES ('${nombre_paciente}', '${apellido_paciente}', ${dni_paciente}, 0, 0,0, '2001-01-01 06:30:00',0, ${contacto_paciente}, 'ejemplo@ejemplo.com','', '', '', '', '', '', '', '', '')`);
-                const ultimoPaciente = await ejecutarConsulta("Select max(id_paciente) as ultimopaciente from paciente"); 
-                console.log("ultimo : "+ultimoPaciente[0].ultimopaciente);
-                const sqlAgenda = `INSERT INTO agenda (id_paciente, fecha_cita , fecha_fin_cita , proxima_cita, comentario_cita, color,primeravez) VALUES (${ultimoPaciente[0].ultimopaciente}, '${fecha_cita}', '${fecha_fin_cita}', '${proxima_cita}', '${comentario_cita}', '${color_agenda}' , ${isCheckboxChecked})`;
-                const insertAgenda = await ejecutarConsulta(sqlAgenda);
-                console.log('INSERT paciente y agenda');
-            }
+            const sqlProductos = `INSERT INTO productos (id, sku, nombre, alto, ancho, peso, descripcion, precio, asociados, baja)  VALUES ('0','${sku}','${nombre}','${alto}','${ancho}','${peso}','${descripcion}','${precio}','0','0') `;
+            console.log("sqlProductos",sqlProductos);
+            const insertsqlProductos = await ejecutarConsulta(sqlProductos);
 
-            
-        
-            const ultimoAgendaEstados = await ejecutarConsulta("Select max(id_agenda) as ultimoagendaEstados from agenda");
-            console.log("ultimo : "+ultimoAgendaEstados[0].ultimoagendaEstados);
-            const sqlAgendaEstados = `INSERT INTO agenda_estados (id_agenda, id_estado, observacion) VALUES (${ultimoAgendaEstados[0].ultimoagendaEstados},1, '');`;
-            const insertAgendaEstado = await ejecutarConsulta(sqlAgendaEstados);
-            console.log('INSERT agenda_estados');
-            
+            const productos = await ejecutarConsulta("Select * from productos WHERE baja=0 ");   
+            socketServer.emit('mensaje', 'Se agrego un producto');       
+            return res.status(200).json(productos);
             
            
           } catch (error) {
-            console.error('Error al guardar el paciente: ', error);
+            console.error('Error al guardar el producto: ', error);
            
           }
-
          
         
     }else{
-        console.log("entro al else");
-        console.log("color_agenda",color_agenda);
-        if(color_agenda == undefined){
-            console.log("entro al if");
-            console.log("fecha_cita",fecha_cita);
-            console.log("fecha_fin_cita",fecha_fin_cita);
-            console.log("id_agenda",id_agenda);
-
-                //crea un query que updatee la fecha de inicio y de fin de la cita
-                let sqlAgendaUpdate = await ejecutarConsulta(`UPDATE agenda SET fecha_cita = '${fecha_cita}',fecha_fin_cita = '${ fecha_fin_cita }' WHERE id_agenda = ${id_agenda}`);
-                console.log(`UPDATE agenda SET fecha_cita = '${fecha_cita}',fecha_fin_cita = '${ fecha_fin_cita }' WHERE id_agenda = ${id_agenda}`);
-                //const sqlAgendaUpdate = await ejecutarConsulta(`UPDATE agenda SET fecha_cita = '${fecha_cita}',comentario_cita = '${ comentario_cita }',duracion = '${ duracion }' WHERE id_agenda = ${id_agenda}`);
-               
-            
-        }else{
-            console.log("entro al else");
-            //crea la variable fecha_fin_cita que sea media hora despues que fecha_cita formato de la fecha tiene que ser asi '2023-07-17 06:30:00'
-            let fecha_fin_cita = new Date(fecha_cita);
-            fecha_fin_cita.setMinutes(fecha_fin_cita.getMinutes() + 30);
-            fecha_fin_cita = fecha_fin_cita.getFullYear() + "-" + (fecha_fin_cita.getMonth() + 1) + "-" + fecha_fin_cita.getDate() + " " + fecha_fin_cita.getHours() + ":" + fecha_fin_cita.getMinutes() + ":" + fecha_fin_cita.getSeconds();
-            //console.log("fecha_fin_cita",fecha_fin_cita);
-
-            //crea un query que updatee la fecha de inicio y de fin de la cita
         
-           
-
-
-            let sqlAgendaUpdate = await ejecutarConsulta(`UPDATE agenda SET fecha_cita = '${fecha_cita}',fecha_fin_cita = '${fecha_fin_cita}',comentario_cita = '${ comentario_cita }',color ='${ color_agenda}' WHERE id_agenda = ${id_agenda}`);
-        }
+          let sqUpdateProductos = `UPDATE productos SET sku='${sku}', nombre='${nombre}', alto='${alto}', ancho='${ancho}', peso='${peso}', descripcion='${descripcion}' WHERE id=${id}`;
+          let insertsqlProductos = await ejecutarConsulta(sqUpdateProductos);
+          socketServer.emit('mensaje', 'Se actualizo el producto');
            
        
             

@@ -8,23 +8,72 @@
           <p>En esta seccion toda la informacion del producto</p>
         </div>
         <form id="modalagregaejercicioForm" class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework" method="POST" onsubmit="return false" novalidate="novalidate">
-         <input type="hidden" id="id" name="id" value="0">
-         <div class="col-12 col-md-12 fv-plugins-icon-container">
-            <label class="form-label" for="modalmodalagregaejercicioFirstName">Nombre: </label>
-            <input type="text" id="modalmodalagregaejercicioFirstName" name="modalmodalagregaejercicioFirstName" class="form-control">
-          <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div></div>
-          <div class="col-12 col-md-12 fv-plugins-icon-container">
+
+         <div class="form-group  col-md-2   d-none">
+            <label>ID</label>
+            <input class="requerido  text-uppercase form-control"  type="number" name="id" id="id" value="0">
             
-            <label class="form-label" for="">Tecnica: </label>
-            <textarea class="form-control" aria-label="With textarea" id="tecnica" name="tecnica" placeholder=""></textarea>
-        </div>
-        <div class="col-12 col-md-12 fv-plugins-icon-container">
+            <div class="invalid-feedback">
+              Complete el campo!
+            </div>
+          </div>
+          <div class="form-group  col-md-3   ">
+            <label>SKU</label>
+            <input type="number" class="requerido  text-uppercase form-control sincaracteresespeciales" name="informacionfiscalingresosbrutos" id="sku" placeholder="" >
+            <div class="invalid-feedback">
+              Complete el campo!
+            </div>
+          </div>
+          <div class="form-group  col-md-2   d-none">
+            <label>Materia Prima</label>
+            <input type="text" id="materiaprima" value="0">
+          </div>
+           <div class="form-group  col-md-8">
+            <label>NOMBRE</label>
+            <input type="text" id="nombre" placeholder="" required class="requerido  text-uppercase form-control">
+            <div class="invalid-feedback">
+              Complete el campo!
+            </div>
+          </div>
+          <div class="form-group  col-md-3 ">
+            <label>ALTO</label>
             
-            <label class="form-label" for="">Link: </label>
-            <input type="text" id="link" name="link" class="form-control">
+              <div class="input-group ">
+                
+                  <input type="number" id="alto" placeholder="" required class="requerido  text-uppercase form-control">
+                  <div class="input-group-prepend">
+                  <div class="input-group-text">CM</div>
+                </div>
+              </div>
             
-        </div>
+          </div>
+          <div class="form-group  col-md-3   ">
+            <label>ANCHO</label>
+            <div class="input-group ">
+                  <input type="number" id="ancho" placeholder="" required class="requerido  text-uppercase form-control">
+                  <div class="input-group-prepend">
+                  <div class="input-group-text">CM</div>
+                </div>
+              </div>
+          </div>
+
           
+         
+          
+          <div class="form-group  col-md-3   ">
+            <label>PESO </label>
+            <div class="input-group">  
+                <input type="number" id="peso" placeholder="" required class="requerido  text-uppercase form-control">
+                <div class="input-group-prepend">
+                <div class="input-group-text">KG</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group  col-md-6 ">
+            <label>DESCRIPCION</label>
+            <textarea style="margin-top: 0px; margin-bottom: 0px; height: 150px;" name="descripcion" id="descripcion"  class="requerido  text-uppercase form-control"></textarea>
+            
+          </div>
           <div class="col-12 text-center">
             <button type="submit" class="btn btn-success me-sm-3 me-1">Confirmar</button>
             <button type="reset" class="btn btn-secondary me-sm-3 me-1" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
@@ -82,16 +131,18 @@
                           <tr>
                             <th>ID</th>
                             <th>Nombre</th>
+                            <th>Descripcion</th>
                             <th>Stock</th>
-                            <th class="text-center">Baja</th>
+                            <th class="text-center">Opciones</th>
                           </tr>
                       </thead>
                       <tfoot>
                         <tr>
                           <th>ID</th>
                           <th>Nombre</th>
+                          <th>Descripcion</th>
                           <th>Stock</th>
-                          <th class="text-center" >Baja</th>
+                          <th class="text-center" >Opciones</th>
                         </tr>
                       </tfoot>
                       
@@ -99,12 +150,14 @@
                         {{#each productos}}
                             <tr id="producto-{{this.id}}">
                                 <td>{{this.id}}</td>
+                                <td>{{this.nombre}}</td>
                                 <td>{{this.descripcion}}</td>
                                 <td>0</td>
-                                <td class="text-center" style="width: 50px;">
+                                <td class="text-center" style="width: 100px;">
                                   
                                   <button data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-trash bx-xs' ></i> <span>Eliminar producto</span>" onclick="peticionAjax('/productos/eliminaItemProducto?id={{this.id}}','GET','true','true')" class="btn btn-icon btn-outline-danger"><i class="bx bx-trash"></i></button>
-                                   
+
+                                  <button class=" btn btn-icon btn-outline-info ml-1" data-bs-peso="{{this.peso}}" data-bs-descripcion="{{this.descripcion}}" data-bs-alto="{{this.alto}}" data-bs-ancho="{{this.ancho}}" data-bs-nombre="{{this.nombre}}" data-bs-id="{{this.id}}" data-bs-sku="{{this.sku}}"  data-bs-toggle="modal" data-bs-target="#modalagregaejercicio"><i class="bx bx-plus"></i></button>
                                 </td>
                             </tr>
                         {{/each}}
@@ -124,6 +177,6 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="../js/funcionesHtmlEjercicios.js"></script>
-<script src="../js/main.js"></script>
+<script src="../js/funcionesHtmlProductos.js"></script>
+
 {{! <script></script> }}

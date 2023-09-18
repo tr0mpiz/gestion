@@ -78,7 +78,7 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
             
             //con el req.session.id_usuario obtengo los ejercicios que le corresponden a ese usuario de la tabla rutinas cuando el id_usuario es igual al id del usuario logueado y n_activado es igual a 1
             const tareas = await ejecutarConsulta("SELECT *,DATE_FORMAT(fechadecreacion, '%d/%m/%y %H:%i') AS fechadecreacion,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento FROM tareas WHERE estado=1");
-
+            
             const tareasModificadas = await Promise.all(
                 tareas.map(async (tarea) => {
                   tarea.clientes = await ejecutarConsulta(

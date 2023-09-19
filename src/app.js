@@ -4,6 +4,7 @@ import express from "express";
 import session from "express-session";
 import { produccionHtmlRouter } from "./routers/produccionHtmlRouter.js";
 import { productosHtmlRouter } from "./routers/productosHtmlRouter.js";
+import { clientesHtmlRouter } from "./routers/clientesHtmlRouter.js";
 import { tareasHtmlRouter } from "./routers/sociosHtmlRouter.js";
 import { loginHtmlRouter } from "./routers/loginHtmlRouter.js";
 import handlebars from "express-handlebars";
@@ -72,6 +73,7 @@ app.use(session({
 //Rutas: HTML RENDER SERVER SIDE
 app.use("/produccion", produccionHtmlRouter);
 app.use("/productos", productosHtmlRouter);
+app.use("/clientes", clientesHtmlRouter);
 app.use("/socios", tareasHtmlRouter);
 app.use("/login", loginHtmlRouter);
 

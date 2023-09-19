@@ -1,0 +1,49 @@
+document.getElementById("modalagregaejercicioForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // Evita que se envíe el formulario de forma tradicional
+
+   
+    let id = document.getElementById("id").value;
+    let nombre = document.getElementById("nombre").value;
+    
+
+    let formData = { id, nombre };
+    console.log("FormData", formData);
+    let url = '/clientes/alta';
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: formData,
+        success: function (response) {
+            //
+            showBootstrapToast("Notificacion","Se actualizo correctamente el cliente",2000,"bg-success");
+            setTimeout(function() {
+                location.reload();
+            }, 2000); // 2000 milisegundos = 2 segundo
+            //cerra el modal
+            $('#modalagregaejercicio').modal('hide');
+            //desactiva el boton
+  
+        },
+        error: function (error) {
+            console.log(error)
+            showBootstrapToast("Notificacion","Ocurrio un error al cargar el cliente ",3000,"bg-danger");
+            // Manejar errores de la solicitud
+        },
+    });
+});
+
+let ejerciciosModal = document.getElementById('modalagregaejercicio')
+ejerciciosModal.addEventListener('show.bs.modal', function (event) {
+  // Button that triggered the modal
+  let button = event.relatedTarget
+  // Extract info from data-bs-* attributes
+    console.log(button)
+  let id = button.getAttribute('data-bs-id')
+  let inputid = ejerciciosModal.querySelector('#id')
+  inputid.value = id
+  let nombre = button.getAttribute('data-bs-nombre')
+  let inputnombre = ejerciciosModal.querySelector('#nombre')
+  inputnombre.value = nombre
+ 
+
+})

@@ -108,12 +108,9 @@ function eliminaItemActualizaTarea(id){
       type: 'POST',
       success: function (data) {
           console.log(data);
-          showBootstrapToast("Notificacion","Se elimino correctamente el producto se actualizara la pagina",2000,"bg-success");
+          showBootstrapToast("Notificacion","Se elimino correctamente el producto",2000,"bg-success");
           
           actualizaVistaEjercicios();
-          setTimeout(function() {
-            location.reload();
-            }, 2000); // 2000 milisegundos = 2 segundo
       },
       error: function (data) {
           console.log(data);
@@ -130,15 +127,12 @@ function actualizaEstadoEstadoEjer(id){
       type: 'POST',
       success: function (data) {
           console.log(data);
-          showBootstrapToast("Notificacion","Se actualizo correctamente el ejercicio se actualizara la pagina",2000,"bg-success");
+          showBootstrapToast("Notificacion","Se actualizo correctamente el producto ",2000,"bg-success");
           actualizaVistaEjercicios();
-          setTimeout(function() {
-            location.reload();
-            }, 2000); // 2000 milisegundos = 2 segundo
       },
       error: function (data) {
           console.log(data);
-          showBootstrapToast("Error","No sepudo actalizar el ejercicio",1000,"bg-danger");
+          showBootstrapToast("Error","No sepudo actalizar el producto",1000,"bg-danger");
       }
   });
 }
@@ -164,7 +158,7 @@ document.getElementById("agregarItemTareaForm").addEventListener("submit", funct
       contentType: 'application/json',
       success: function (data) {
           console.log(data);
-          showBootstrapToast("Notificacion","Se actualizo correctamente la tarea se actualizara la pagina",2000,"bg-success");
+          showBootstrapToast("Notificacion","Se actualizo correctamente la tarea ",2000,"bg-success");
           // setTimeout(function() {
           //     location.reload();
           // }, 1000); // 1000 milisegundos = 1 segundo
@@ -324,7 +318,7 @@ idtarea.addEventListener('change', async () =>{
       
 
       let opcionesHtml = `<div class="select-checkboxes">
-                              <div class="selected-options" onclick="toggleOptionsState(${iditemtarea})">Seleccionar Estado</div>
+                              <div class="selected-options" onclick="toggleOptionsState(${iditemtarea})">Ver estados <i class="bx bx-chevron-down"></i></div>
                               <div class="options-dialog" id="optionsDialog-${iditemtarea}">
                                   <label><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.estacionado == 1 ? 'checked' : ''} /> Estacionado </label><br />
                                   <label><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.terminado == 1 ? 'checked' : ''} /> Terminado</label><br />
@@ -332,13 +326,14 @@ idtarea.addEventListener('change', async () =>{
                                   <label><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.entregado == 1 ? 'checked' : ''} /> Entregado</label><br />
                               </div>
                           </div>`
+      let botonEliminar = `<button data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-trash bx-xs' ></i> <span>Dar de baja a la tarea ${ejercicio.id}</span>" onclick="eliminaItemActualizaTarea(${iditemtarea})" class="btn btn-icon btn-outline-danger ml-1"><i class="bx bx-trash"></i></button>`;
     
       dataTable.row.add([
         ejercicio.razonsocial,
         ejercicio.producto,
         ejercicio.cantidad,
         ejercicio.idoperario,
-        opcionesHtml
+        opcionesHtml+botonEliminar
       ]).draw(false);
     });
     

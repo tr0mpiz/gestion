@@ -320,10 +320,10 @@ idtarea.addEventListener('change', async () =>{
       let opcionesHtml = `<div class="select-checkboxes">
                               <div class="selected-options" onclick="toggleOptionsState(${iditemtarea})">Ver estados <i class="bx bx-chevron-down"></i></div>
                               <div class="options-dialog" id="optionsDialog-${iditemtarea}">
-                                  <label><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.estacionado == 1 ? 'checked' : ''} /> Estacionado </label><br />
-                                  <label><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.terminado == 1 ? 'checked' : ''} /> Terminado</label><br />
-                                  <label><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.facturado == 1 ? 'checked' : ''} /> Facturado</label><br />
-                                  <label><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.entregado == 1 ? 'checked' : ''} /> Entregado</label><br />
+                                  <label class="estado-tareas"><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.estacionado == 1 ? 'checked' : ''} /> Estacionado </label>
+                                  <label class="estado-tareas"><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.terminado == 1 ? 'checked' : ''} /> Terminado</label>
+                                  <label class="estado-tareas"><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.facturado == 1 ? 'checked' : ''} /> Facturado</label>
+                                  <label class="estado-tareas"><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.entregado == 1 ? 'checked' : ''} /> Entregado</label>
                               </div>
                           </div>`
       let botonEliminar = `<button data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-trash bx-xs' ></i> <span>Dar de baja a la tarea ${ejercicio.id}</span>" onclick="eliminaItemActualizaTarea(${iditemtarea})" class="btn btn-icon btn-outline-danger ml-1"><i class="bx bx-trash"></i></button>`;

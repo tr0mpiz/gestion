@@ -191,45 +191,48 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
             // Crear el PDF
             // Generar el PDF
             const pdf = new PDFDocument();
-            pdf.fontSize(43);
-            pdf.text('Información de Tarea', {
-                align: 'center'
-              });
-            pdf.moveDown();
+           
             // Agregar la información de la tarea al PDF
             if (tareas.length > 0) {
             const tarea = tareas[0]; // Supongamos que solo obtenemos un resultado
             //crea un archivo decente que sea como una tabla o archivo de facil entendimiento con los datos de la tarea y el cliente
             //setea la fuente y el tamaño de la letra
+            pdf.fontSize(43);
+            pdf.text(`Tarea º ${tarea.idtarea}`, {
+                align: 'center'
+              });
+            pdf.moveDown();
             pdf.fontSize(28);
             //agregale un fondo que sea una imagen de fondo
             //que imprima la tarea y un salto de linea tipo br o n
             //imagend e fondo fullwidt
             pdf.image(path.join(__dirname, 'public', 'logo.png'), 200, 600, { width: 200 });
+            //crea una variable fecha y hora dd/mm/a  HH:MM:SS
+            const fecha = new Date().toLocaleDateString();
+            const hora = new Date().toLocaleTimeString();
 
-            pdf.text(`TAREA ID  -  ${tarea.idtarea}`, {
+            //imprime la fecha y hora
+            
+            pdf.text(`${fecha} -  ${hora}`, {
                 align: 'center'
             });
             //simula un salto de linea
-            pdf.moveDown();
-            pdf.text(`SUB-TAREA  -  ${tarea.id}`, {
-                align: 'center'
-            });
+           
             //simula un salto de linea
             pdf.moveDown();
-            pdf.text(`CLIENTE  -  ${tarea.razonsocial}`, {
+            pdf.text(`Cliente  -  ${tarea.razonsocial}`, {
                 align: 'center'
             });
             pdf.moveDown();
-            pdf.text(`PRODUCTO  -  ${tarea.nombre}`, {
+            pdf.text(`Producto  -  ${tarea.nombre}  Cantidad - ${tarea.cantidad}`, {
                 align: 'center'
             });
             pdf.moveDown();
-            pdf.text(`CANTIDAD  -  ${tarea.cantidad}`, {
+            pdf.text(``, {
                 align: 'center'
             });
             pdf.moveDown();
-            pdf.text(`ACCION  -  ${campo}`, {
+            pdf.text(`Acción  -  ${campo}`, {
                 align: 'center'
             });
             pdf.moveDown();

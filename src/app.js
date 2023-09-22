@@ -54,6 +54,25 @@ hbs.handlebars.registerHelper("compare", function (a, b, options) {
   return options.inverse(this);
 });
 
+hbs.handlebars.registerHelper("buscarNumeroEnTexto", function (texto, numero, options) {
+  // Escapamos el número para que sea seguro usarlo en una expresión regular
+  var numeroEscapado = numero.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  
+  // Construimos una expresión regular con el número
+  var regex = new RegExp(numeroEscapado, 'g');
+  
+  // Ejecuta la búsqueda en el texto
+  var matches = texto.match(regex);
+  
+  // Si se encuentra una coincidencia, devuelve true
+  if (matches) {
+    return options.fn(this);
+  } else {
+    return options.inverse(this);
+  }
+});
+
+
 // Asigna el motor de plantillas
 app.engine("handlebars", hbs.engine);
 app.set("views", path.join(__dirname, "views"));
@@ -78,6 +97,7 @@ app.use("/socios", tareasHtmlRouter);
 app.use("/login", loginHtmlRouter);
 
 
+
 //Rutas: SOCKETS
 // app.use("/realtimeproducts", SocketRouter);
 // Inicialización del socket.io
@@ -87,4 +107,5 @@ app.use("/login", loginHtmlRouter);
 app.get("/*", async (req, res) => {
     return res.status(404).json({ status: "error", msg: "no encontrado", data: {} });
 });
+
 

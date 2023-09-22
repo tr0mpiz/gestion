@@ -5,6 +5,9 @@ import fs from "fs";
 import { __dirname, __filename,ejecutarConsulta } from "../utils.js";
 import e from "express";
 import { socketServer } from "../app.js"; // Importa el objeto io desde app.js
+import PDFDocument from 'pdfkit';
+import path from "path";
+
 
 //import { agendaService } from "../services/agenda.services.js";
 //import { agendaModel } from "../DAO/models/agenda.model.js";
@@ -182,7 +185,71 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
             if(estado==1){
                 estadonombre="Confirmada"
             }
-            socketServer.emit('mensaje',  `Cambio el estado  ${campo} de la tarea con ID ${id} a ${estadonombre} `);
+            //trae todos los campos de la tarea con el id que se le pasa por parametro
+            const tareas = await ejecutarConsulta(`SELECT * FROM tareas_detalles a, clientes b, productos c WHERE a.idcliente = b.id AND a.producto = c.id AND a.id = ${id}`);
+            console.log("tareas",tareas);
+            // Crear el PDF
+            // Generar el PDF
+            const pdf = new PDFDocument();
+            pdf.fontSize(43);
+            pdf.text('Información de Tarea', {
+                align: 'center'
+              });
+            pdf.moveDown();
+            // Agregar la información de la tarea al PDF
+            if (tareas.length > 0) {
+            const tarea = tareas[0]; // Supongamos que solo obtenemos un resultado
+            //crea un archivo decente que sea como una tabla o archivo de facil entendimiento con los datos de la tarea y el cliente
+            //setea la fuente y el tamaño de la letra
+            pdf.fontSize(28);
+            //agregale un fondo que sea una imagen de fondo
+            //que imprima la tarea y un salto de linea tipo br o n
+            //imagend e fondo fullwidt
+            pdf.image(path.join(__dirname, 'public', 'logo.png'), 200, 600, { width: 200 });
+
+            pdf.text(`TAREA  -  ${tarea.id}`, {
+                align: 'center'
+            });
+            //simula un salto de linea
+            pdf.moveDown();
+            pdf.text(`CLIENTE  -  ${tarea.razonsocial}`, {
+                align: 'center'
+            });
+            pdf.moveDown();
+            pdf.text(`PRODUCTO  -  ${tarea.nombre}`, {
+                align: 'center'
+            });
+            pdf.moveDown();
+            pdf.text(`CANTIDAD  -  ${tarea.cantidad}`, {
+                align: 'center'
+            });
+            pdf.moveDown();
+            pdf.text(`ACCION  -  ${campo}`, {
+                align: 'center'
+            });
+            pdf.moveDown();
+            pdf.text(`ESTADO  -  ${estadonombre}`, {
+                align: 'center'
+            });
+            }
+
+            
+
+            // Guardar el PDF en el servidor
+            const random = Math.floor(Math.random() * 1000);
+            const pdfFileName = `tarea_${id}_${campo}_${estado}_${random}.pdf`;
+            const pdfFilePath = __dirname + `/public/${pdfFileName}`;
+            console.log(pdfFilePath);
+            pdf.pipe(fs.createWriteStream(pdfFilePath));
+            pdf.end();
+
+            const pdfFileLink = `/produccion/descargar-pdf/${pdfFileName}`;
+            const messageWithLink = `Cambio el estado ${campo} de la tarea con ID ${id} a ${estadonombre} <a href="${pdfFileLink}" target="_blank">Ver PDF</a>`;
+
+            // Emitir el mensaje con el enlace al PDF a través del socket
+            socketServer.emit('mensaje', messageWithLink);
+            // Construye el mensaje con el enlace al PDF
+            
         } 
     } catch (error) {
       console.error(error);
@@ -190,6 +257,18 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
     }
   });
 
+  produccionHtmlRouter.get("/descargar-pdf/:pdfFileName", (req, res) => {
+
+    const pdfFileName = req.params.pdfFileName;
+    const pdfFilePath = __dirname + `/public/${pdfFileName}`;
+  
+    // Verifica que el archivo PDF exista antes de enviarlo
+    if (fs.existsSync(pdfFilePath)) {
+      res.sendFile(pdfFilePath);
+    } else {
+      res.status(404).json({ status: 'error', msg: 'Archivo no encontrado' });
+    }
+  });
 
 
 

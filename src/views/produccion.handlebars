@@ -56,6 +56,7 @@
                   <div class="card-body">
                     <h5 class="card-title text-primary">TAREAS </h5>
                     <div id="accordionTareas">
+
                       {{#each tareas}}
                       
                         <div class="accordion-item card mb-1">
@@ -67,8 +68,9 @@
                           <div id="tarea-{{this.id}}" class="accordion-collapse collapse" aria-labelledby="tareatitle-{{this.id}}" data-bs-parent="#accordionTareas">
                             <div class="accordion-body">
                                 <div class="row">
+                                  
                                   {{#each this.detallesTarea}}
-                                    <div class="col-sm-3">
+                                    <div class="col-3">
                                       <div class="card pallet-{{id}}">
                                         <div class="card-body">
                                           <h5 class="card-title"> <b>{{ this.razonsocial }} </b> </h5>

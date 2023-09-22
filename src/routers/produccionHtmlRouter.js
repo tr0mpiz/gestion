@@ -207,7 +207,12 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
             //imagend e fondo fullwidt
             pdf.image(path.join(__dirname, 'public', 'logo.png'), 200, 600, { width: 200 });
 
-            pdf.text(`TAREA  -  ${tarea.id}`, {
+            pdf.text(`TAREA ID  -  ${tarea.idtarea}`, {
+                align: 'center'
+            });
+            //simula un salto de linea
+            pdf.moveDown();
+            pdf.text(`SUB-TAREA  -  ${tarea.id}`, {
                 align: 'center'
             });
             //simula un salto de linea

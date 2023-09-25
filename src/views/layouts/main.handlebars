@@ -98,26 +98,23 @@
 
             
             {{#if isUser.permisos}}
+
                 <li class="menu-item">
                   <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-clipboard"></i>
-                    <div data-i18n="Authentications">GESTION DE PVC</div>
+                    <div data-i18n="Authentications">BASE DE DATOS</div>
                   </a>
-
+                  
                   <ul class="menu-sub">
                     {{!-- <li class="menu-item">
                       <a href="/paciente/alta" class="menu-link" >
                         <div data-i18n="Basic">Alta</div>
                       </a>
                     </li> --}}
+                    
                     <li class="menu-item">
                       <a href="/socios" class="menu-link" >
                         <div data-i18n="Basic">Tareas</div>
-                      </a>
-                    </li>
-                    <li class="menu-item">
-                      <a href="/produccion" class="menu-link" >
-                        <div data-i18n="Basic">Produccion</div>
                       </a>
                     </li>
                     <li class="menu-item">
@@ -130,46 +127,44 @@
                         <div data-i18n="Basic">Clientes</div>
                       </a>
                     </li>
+                    <li class="menu-item">
+                      <a href="/reportes" class="menu-link" >
+                        <div data-i18n="Basic">Reportes</div>
+                      </a>
+                    </li>
                     
                     <li class="menu-item disabled">
                       <a href="" class="menu-link" >
                         <div data-i18n="Basic">Ventas</div>
                       </a>
                     </li>
-                    <li class="menu-item disabled">
-                      <a href="" class="menu-link" >
-                        <div data-i18n="Basic">Reportes</div>
-                      </a>
-                    </li>
+                    
                   </ul>
-                </li>
-            {{else}}
-                <li class="menu-header small text-uppercase">
-                  <span class="menu-header-text">Gestion</span>
                 </li>
                 <li class="menu-item">
                   <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                    <div data-i18n="Account Settings">Entrenamiento</div>
+                    <i class="menu-icon tf-icons bx bx-clipboard"></i>
+                    <div data-i18n="Authentications">GESTION DE TAREAS</div>
                   </a>
+
                   <ul class="menu-sub">
                     {{!-- <li class="menu-item">
-                      <a href="/agenda/alta" class="menu-link">
-                        <div data-i18n="Account">Alta</div>
+                      <a href="/paciente/alta" class="menu-link" >
+                        <div data-i18n="Basic">Alta</div>
                       </a>
                     </li> --}}
+                    
                     <li class="menu-item">
-                      <a href="/workout" class="menu-link">
-                        <div data-i18n="Notifications">Rutina</div>
+                      <a href="/produccion" class="menu-link" >
+                        <div data-i18n="Basic">Produccion</div>
                       </a>
                     </li>
-                    <li class="menu-item">
-                      <a href="" class="menu-link disabled">
-                        <div data-i18n="Notifications">Calendario</div>
-                      </a>
-                    </li>
+                   
+                    
                   </ul>
                 </li>
+            {{else}}
+               
             {{/if}} 
             
             {{!-- <li class="menu-item">

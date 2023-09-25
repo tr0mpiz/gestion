@@ -297,6 +297,10 @@ idtarea.addEventListener('change', async () =>{
       let iditemtarea = ejercicio.idtarea;
       let opcionesHtml2 = `
         <ul class="list-group">
+        <li class="list-group-item pl-4">
+            <input id="produccion-${iditemtarea}" class="form-check-input pl-2" data-campo="produccion" data-id="${iditemtarea}" type="checkbox" ${ejercicio.produccion == 1 ? 'checked' : ''} aria-label="...">
+            Produccion
+          </li>
           <li class="list-group-item pl-4">
             <input id="estacionado-${iditemtarea}" class="form-check-input pl-2" data-campo="estacionado" data-id="${iditemtarea}" type="checkbox" ${ejercicio.estacionado == 1 ? 'checked' : ''} aria-label="...">
             Estacionado
@@ -320,10 +324,11 @@ idtarea.addEventListener('change', async () =>{
       let opcionesHtml = `<div class="select-checkboxes">
                               <div class="selected-options" onclick="toggleOptionsState(${iditemtarea})">Ver estados <i class="bx bx-chevron-down"></i></div>
                               <div class="options-dialog" id="optionsDialog-${iditemtarea}">
-                                  <label class="estado-tareas"><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.estacionado == 1 ? 'checked' : ''} /> Estacionado </label>
-                                  <label class="estado-tareas"><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.terminado == 1 ? 'checked' : ''} /> Terminado</label>
-                                  <label class="estado-tareas"><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.facturado == 1 ? 'checked' : ''} /> Facturado</label>
-                                  <label class="estado-tareas"><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.entregado == 1 ? 'checked' : ''} /> Entregado</label>
+                              <label class="estado-tareas"><input type="checkbox" id="produccion-${iditemtarea}" class="form-check-input pl-2" data-campo="produccion" data-id="${iditemtarea}"  ${ejercicio.produccion == 1 ? 'checked' : ''} /> Produccion </label>
+                                  <label class="estado-tareas"><input type="checkbox" id="estacionado-${iditemtarea}" class="form-check-input pl-2" data-campo="estacionado" data-id="${iditemtarea}"  ${ejercicio.estacionado == 1 ? 'checked' : ''} /> Estacionado </label>
+                                  <label class="estado-tareas"><input type="checkbox" id="terminado-${iditemtarea}" class="form-check-input pl-2" data-campo="terminado" data-id="${iditemtarea}"  ${ejercicio.terminado == 1 ? 'checked' : ''} /> Terminado</label>
+                                  <label class="estado-tareas"><input type="checkbox" id="facturado-${iditemtarea}" class="form-check-input pl-2" data-campo="facturado" data-id="${iditemtarea}"  ${ejercicio.facturado == 1 ? 'checked' : ''} /> Facturado</label>
+                                  <label class="estado-tareas"><input type="checkbox" id="entregado-${iditemtarea}" class="form-check-input pl-2" data-campo="entregado" data-id="${iditemtarea}"  ${ejercicio.entregado == 1 ? 'checked' : ''} /> Entregado</label>
                               </div>
                           </div>`
       let botonEliminar = `<button data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-trash bx-xs' ></i> <span>Dar de baja a la tarea ${ejercicio.id}</span>" onclick="eliminaItemActualizaTarea(${iditemtarea})" class="btn btn-icon btn-outline-danger ml-1"><i class="bx bx-trash"></i></button>`;
@@ -341,14 +346,99 @@ idtarea.addEventListener('change', async () =>{
     
     
     $('[data-bs-toggle="tooltip"]').tooltip();
-  
+    
+    $('input[type="checkbox"]').on('click', function () {
+      const id = $(this).data('id'); // Obtén el ID del registro desde el atributo `data-id`
+      const estado = this.checked ? 1 : 0; // Cambia el estado según si el checkbox está marcado o desmarcado
+      const campo = $(this).data('campo'); // Obtén el valor del atributo `data-campo`
+      //que oculte el modal
+      $('#tareasModal').modal('hide');
+      // Muestra una SweetAlert para confirmar la acción del usuario
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, confirmar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // El usuario confirmó la acción, realiza la solicitud AJAX al servidor
+          $.ajax({
+            url: '/produccion/cambiaestado?id=' + id + '&estado=' + estado + '&campo=' + campo,
+            method: 'POST',
+            success: function (response) {
+              // Maneja la respuesta del servidor, si es necesario
+              console.log(response);
+          
+              $('input[type="checkbox"]').on('click', function () {
+                const id = $(this).data('id'); // Obtén el ID del registro desde el atributo `data-id`
+                const estado = this.checked ? 1 : 0; // Cambia el estado según si el checkbox está marcado o desmarcado
+                const campo = $(this).data('campo'); // Obtén el valor del atributo `data-campo`
+              
+                // Muestra una SweetAlert para confirmar la acción del usuario
+                Swal.fire({
+                  title: '¿Estás seguro?',
+                  text: 'Esta acción no se puede deshacer',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Sí, confirmar',
+                  cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    // El usuario confirmó la acción, realiza la solicitud AJAX al servidor
+                    $.ajax({
+                      url: '/produccion/cambiaestado?id=' + id + '&estado=' + estado + '&campo=' + campo,
+                      method: 'POST',
+                      success: function (response) {
+                        // Maneja la respuesta del servidor, si es necesario
+                        console.log(response);
+                        //que muestre el modal
+                        
 
+                    
+                        
+                    },
+                    
+                      error: function (xhr, textStatus, errorThrown) {
+                        // Maneja errores si es necesario
+                        console.log(textStatus);
+                      }
+                    });
+                  } else {
+                    
+                    // El usuario canceló la acción, desmarca el checkbox
+                    $(this).prop('checked', !this.checked);
+                    
+                  }
+                });
+              });
+          },
+          
+            error: function (xhr, textStatus, errorThrown) {
+              // Maneja errores si es necesario
+              console.log(textStatus);
+            }
+          });
+        } else {
+          // El usuario canceló la acción, desmarca el checkbox
+          $(this).prop('checked', !this.checked);
+        }
+      });
+    });
 
           
     
     });
 
 }
+
+
+
 
 function toggleOptionsState(id) {
   var optionsDialog = document.getElementById("optionsDialog-"+id);

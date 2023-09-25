@@ -6,6 +6,7 @@ import { produccionHtmlRouter } from "./routers/produccionHtmlRouter.js";
 import { productosHtmlRouter } from "./routers/productosHtmlRouter.js";
 import { clientesHtmlRouter } from "./routers/clientesHtmlRouter.js";
 import { tareasHtmlRouter } from "./routers/sociosHtmlRouter.js";
+import { reportesHtmlRouter } from "./routers/reportesHtmlRouter.js";
 import { loginHtmlRouter } from "./routers/loginHtmlRouter.js";
 import handlebars from "express-handlebars";
 import path from "path";
@@ -91,6 +92,7 @@ app.use(session({
 // app.use("/api/carts", cartRouter);
 //Rutas: HTML RENDER SERVER SIDE
 app.use("/produccion", produccionHtmlRouter);
+app.use("/reportes", reportesHtmlRouter);
 app.use("/productos", productosHtmlRouter);
 app.use("/clientes", clientesHtmlRouter);
 app.use("/socios", tareasHtmlRouter);

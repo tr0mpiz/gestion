@@ -77,6 +77,10 @@
                                           
                                           <p class="card-text"> <b><u> {{ nombre_producto }} - {{ cantidad }} UNIDADES </u></b> </p>
                                           <ul class="list-group">
+                                             <li class="list-group-item pl-5 ">
+                                              <input  id="produccion-{{id}}" class="form-check-input pl-2" data-campo="produccion" data-id="{{id}}" type="checkbox"  {{#compare produccion 1 }} checked {{/compare}} aria-label="...">
+                                              Produccion
+                                            </li>
                                             <li class="list-group-item pl-5 ">
                                               <input  id="estacionado-{{id}}" class="form-check-input pl-2" data-campo="estacionado" data-id="{{id}}" type="checkbox"  {{#compare estacionado 1 }} checked {{/compare}} aria-label="...">
                                               Estacionado

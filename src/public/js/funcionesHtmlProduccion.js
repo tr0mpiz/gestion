@@ -26,7 +26,45 @@ $(document).ready(function () {
             // Maneja la respuesta del servidor, si es necesario
             console.log(response);
         
+            $('input[type="checkbox"]').on('click', function () {
+              const id = $(this).data('id'); // Obtén el ID del registro desde el atributo `data-id`
+              const estado = this.checked ? 1 : 0; // Cambia el estado según si el checkbox está marcado o desmarcado
+              const campo = $(this).data('campo'); // Obtén el valor del atributo `data-campo`
             
+              // Muestra una SweetAlert para confirmar la acción del usuario
+              Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, confirmar',
+                cancelButtonText: 'Cancelar'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  // El usuario confirmó la acción, realiza la solicitud AJAX al servidor
+                  $.ajax({
+                    url: '/produccion/cambiaestado?id=' + id + '&estado=' + estado + '&campo=' + campo,
+                    method: 'POST',
+                    success: function (response) {
+                      // Maneja la respuesta del servidor, si es necesario
+                      console.log(response);
+                  
+                      
+                  },
+                  
+                    error: function (xhr, textStatus, errorThrown) {
+                      // Maneja errores si es necesario
+                      console.log(textStatus);
+                    }
+                  });
+                } else {
+                  // El usuario canceló la acción, desmarca el checkbox
+                  $(this).prop('checked', !this.checked);
+                }
+              });
+            });
         },
         
           error: function (xhr, textStatus, errorThrown) {

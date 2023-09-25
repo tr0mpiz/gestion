@@ -9,12 +9,12 @@ import { socketServer } from "../app.js"; // Importa el objeto io desde app.js
 //import { agendaService } from "../services/agenda.services.js";
 //import { agendaModel } from "../DAO/models/agenda.model.js";
 
-export const tareasHtmlRouter = express.Router();
+export const reportesHtmlRouter = express.Router();
 
 
 
 
-tareasHtmlRouter.get("/ejercicios", isUser, async (req, res) => {
+reportesHtmlRouter.get("/ejercicios", isUser, async (req, res) => {
     try {
         const results = await ejecutarConsulta('select * from ejercicios WHERE activado = 1');
         
@@ -29,7 +29,7 @@ tareasHtmlRouter.get("/ejercicios", isUser, async (req, res) => {
 
 
 
-tareasHtmlRouter.get("/", isUser, async (req, res) => {
+reportesHtmlRouter.get("/", isUser, async (req, res) => {
     
     // console.log("entro a admin");
     // try {
@@ -63,14 +63,14 @@ tareasHtmlRouter.get("/", isUser, async (req, res) => {
         const productos = await ejecutarConsulta('SELECT * FROM productos where baja = 0');
         const clientes = await ejecutarConsulta('SELECT * FROM clientes');
         const operadores = await ejecutarConsulta('SELECT * FROM usuarios');
-        return res.status(200).render("socios", {tareas: tareas, isUser:req.session.usuario,productos:productos,clientes:clientes,operadores:operadores});
+        return res.status(200).render("reportes", {tareas: tareas, isUser:req.session.usuario,productos:productos,clientes:clientes,operadores:operadores});
     } catch (error) {
         console.error(error);
         return res.status(404).json({msg:"fallo"});
     }
 });
 
-tareasHtmlRouter.get("/siguiente", isUser, async (req, res) => {
+reportesHtmlRouter.get("/siguiente", isUser, async (req, res) => {
     
     try {
         
@@ -85,25 +85,13 @@ tareasHtmlRouter.get("/siguiente", isUser, async (req, res) => {
    
 });
 
-tareasHtmlRouter.get("/tareas",  isUser,async (req, res) => {
+reportesHtmlRouter.get("/tareas",  isUser,async (req, res) => {
     let idtarea=req.query.idtarea;
     if(!idtarea)
     {
 
         try {
-            const tareas = await ejecutarConsulta("SELECT *,DATE_FORMAT(fechadecreacion, '%d/%m/%y %H:%i') AS fechadecreacion,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento FROM tareas");
-
-            const tareasModificadas = await Promise.all(
-                tareas.map(async (tarea) => {
-                    tarea.clientes = await ejecutarConsulta(
-                    `SELECT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado NOT IN (-1) AND a.idcliente = b.id AND a.idtarea = ${tarea.id}`
-                    );
-                    tarea.clientes = tarea.clientes.map((row) => row.razonsocial);
-                    tarea.clientes = tarea.clientes.join("- ");
-                    return tarea;
-                })
-            );
-            console.log("tareas",tareasModificadas);
+            const tareasModificadas = await ejecutarConsulta(`SELECT produccion,estacionado,terminado,facturado,entregado,c.nombre as producto,cantidad,idoperario, idcliente , razonsocial ,a.id as idtarea FROM tareas_detalles a, tareas b, productos c, clientes d where a.estado NOT IN (-1)  AND a.idtarea = b.id AND a.producto = c.id  AND a.idcliente = d.id;`);
             return res.status(200).json(tareasModificadas);
             
         }  catch (error) {
@@ -126,7 +114,7 @@ tareasHtmlRouter.get("/tareas",  isUser,async (req, res) => {
     }
    });
 
-tareasHtmlRouter.get("/consulta",  isUser,async (req, res) => {
+reportesHtmlRouter.get("/consulta",  isUser,async (req, res) => {
  let id=req.query.id;
     try {
        
@@ -141,7 +129,7 @@ tareasHtmlRouter.get("/consulta",  isUser,async (req, res) => {
     
 });
 
-tareasHtmlRouter.get("/modificar", isUser, async (req, res) => {
+reportesHtmlRouter.get("/modificar", isUser, async (req, res) => {
     let id=req.query.id;
 
        try {
@@ -196,7 +184,7 @@ tareasHtmlRouter.get("/modificar", isUser, async (req, res) => {
        
    });
 
-   tareasHtmlRouter.post("/alta", async (req, res) => {
+   reportesHtmlRouter.post("/alta", async (req, res) => {
     try {
       // Obtener los valores del formulario
         
@@ -231,7 +219,7 @@ tareasHtmlRouter.get("/modificar", isUser, async (req, res) => {
   });
 
 
-  tareasHtmlRouter.post("/altaeje", isUser, async (req, res) => {
+  reportesHtmlRouter.post("/altaeje", isUser, async (req, res) => {
     let obj = req.body;
     console.log("obj", obj);
 
@@ -261,7 +249,7 @@ tareasHtmlRouter.get("/modificar", isUser, async (req, res) => {
 });
 
 
-tareasHtmlRouter.delete("/:pid", async (req, res) => {
+reportesHtmlRouter.delete("/:pid", async (req, res) => {
     let pid = req.params.pid;
     let agenda = await Service.getById(pid);
     agenda = JSON.parse(JSON.stringify(agenda));
@@ -284,7 +272,7 @@ tareasHtmlRouter.delete("/:pid", async (req, res) => {
     }
 });
 
-tareasHtmlRouter.post("/eliminaItemTarea", isUser,async (req, res) => {
+reportesHtmlRouter.post("/eliminaItemTarea", isUser,async (req, res) => {
     let id=req.query.id;
        try {
              //crea un query para obtener los datos del paciente y la fecha de la cita formateada DD/MM/YYYY y hora HH:MM
@@ -297,7 +285,7 @@ tareasHtmlRouter.post("/eliminaItemTarea", isUser,async (req, res) => {
          }
        
    });
-   tareasHtmlRouter.post("/completaejerruti", isUser,async (req, res) => {
+   reportesHtmlRouter.post("/completaejerruti", isUser,async (req, res) => {
     let id=req.query.id;
        try {
              //crea el query para ver que estado tiene primero si tiene 0 le pones 1 si tiene 1 le pones 0
@@ -310,7 +298,7 @@ tareasHtmlRouter.post("/eliminaItemTarea", isUser,async (req, res) => {
          }
        
    });
-   tareasHtmlRouter.post("/altaItemRutina", isUser,async (req, res) => {
+   reportesHtmlRouter.post("/altaItemRutina", isUser,async (req, res) => {
     // obtene la informacion del body de la peticion y crea un insert a la tabla de rutinas
     let obj = req.body;
     console.log("obj", obj);
@@ -344,7 +332,7 @@ tareasHtmlRouter.post("/eliminaItemTarea", isUser,async (req, res) => {
 
 
 
-tareasHtmlRouter.get("/eliminatarea", isUser,async (req, res) => {
+reportesHtmlRouter.get("/eliminatarea", isUser,async (req, res) => {
     let id=req.query.id;
          try {
                 //crea un query que updatee el estado del socio a 0
@@ -377,7 +365,7 @@ tareasHtmlRouter.get("/eliminatarea", isUser,async (req, res) => {
 
         });
 
-tareasHtmlRouter.put("/:pid", async (req, res) => {
+reportesHtmlRouter.put("/:pid", async (req, res) => {
     let obj = req.body;
     console.log("obj", obj);
     console.log("PUT");

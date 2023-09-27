@@ -4,6 +4,7 @@ import express from "express";
 import session from "express-session";
 import { produccionHtmlRouter } from "./routers/produccionHtmlRouter.js";
 import { productosHtmlRouter } from "./routers/productosHtmlRouter.js";
+import { stockHtmlRouter } from "./routers/stockHtmlRouter.js";
 import { clientesHtmlRouter } from "./routers/clientesHtmlRouter.js";
 import { tareasHtmlRouter } from "./routers/sociosHtmlRouter.js";
 import { reportesHtmlRouter } from "./routers/reportesHtmlRouter.js";
@@ -94,6 +95,7 @@ app.use(session({
 app.use("/produccion", produccionHtmlRouter);
 app.use("/reportes", reportesHtmlRouter);
 app.use("/productos", productosHtmlRouter);
+app.use("/stock", stockHtmlRouter);
 app.use("/clientes", clientesHtmlRouter);
 app.use("/socios", tareasHtmlRouter);
 app.use("/login", loginHtmlRouter);

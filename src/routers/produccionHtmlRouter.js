@@ -185,6 +185,28 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
             if(estado==1){
                 estadonombre="Confirmada"
             }
+            if(campo=="terminado" && estado==1){
+                const selectStock = await ejecutarConsulta(`SELECT * FROM tareas_detalles WHERE id = ${id}`);
+                let tarea = await selectStock[0];
+                //creame una fecha de hot para myqsl
+                let fechadecumplimiento = new Date().toISOString().slice(0, 19).replace('T', ' ');
+                const sqlStock = `INSERT INTO stock (id, idproducto, cantidad, tipomovimiento, idtarea, fecha,baja) VALUES (NULL, ${tarea.producto}, ${tarea.cantidad}, '99', ${tarea.idtarea}, '${fechadecumplimiento}', '0')`;
+                console.log("sqlStock",sqlStock);
+                await ejecutarConsulta(sqlStock);
+            }
+            if(campo =="entregado" && estado==1){
+                const selectStock = await ejecutarConsulta(`SELECT * FROM tareas_detalles WHERE id = ${id}`);
+                let tarea = await selectStock[0];
+                //creame una fecha de hot para myqsl
+                let fechadecumplimiento = new Date().toISOString().slice(0, 19).replace('T', ' ');
+                //como el estado es entregado tiene que hacer cantidad * -1 
+                let cantidadBaja = tarea.cantidad * -1;
+
+                const sqlStock = `INSERT INTO stock (id, idproducto, cantidad, tipomovimiento, idtarea, fecha,baja) VALUES (NULL, ${tarea.producto}, ${cantidadBaja}, '98', ${tarea.idtarea}, '${fechadecumplimiento}', '0')`;
+                console.log("sqlStock",sqlStock);
+                await ejecutarConsulta(sqlStock);
+            }
+
             //trae todos los campos de la tarea con el id que se le pasa por parametro
             const tareas = await ejecutarConsulta(`SELECT * FROM tareas_detalles a, clientes b, productos c WHERE a.idcliente = b.id AND a.producto = c.id AND a.id = ${id}`);
             console.log("tareas",tareas);

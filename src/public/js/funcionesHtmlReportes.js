@@ -1,5 +1,99 @@
 document.addEventListener("DOMContentLoaded", function() {
     
+// Cargar la biblioteca Google Charts de manera asincrónica
+google.charts.load('current', { 'packages': ['corechart', 'table'] });
+// Callback cuando la biblioteca Google Charts se cargue
+google.charts.setOnLoadCallback(function () {
+    // URL para la solicitud AJAX
+    const urlStock = '/reportes/stock';
+
+    // Realizar una petición GET a la ruta '/reportes/stock' en tu servidor Express
+    $.ajax({
+        url: urlStock,
+        method: 'GET',
+        success: function (stockData) {
+            // Los datos de stock se encuentran en la variable "stockData"
+            console.log(stockData);
+
+            // Procesa tus datos de stock aquí
+            // Dibuja el primer gráfico (acumuladores por producto)
+            drawStockByProductChart(stockData);
+
+            // Dibujar la tabla de stock utilizando la nueva función con DataTables
+            drawTableStock(stockData, 'table_div_stock_product');
+        },
+        error: function (error) {
+            console.log('Error al obtener datos de stock:', error);
+        }
+    });
+
+    // Función para dibujar el primer gráfico (acumuladores por producto)
+    function drawStockByProductChart(stockData) {
+        const productData = [['Producto', 'Cantidad acumulada']];
+        const productMap = new Map();
+
+        stockData.forEach(item => {
+            const { nombre, cantidad } = item;
+
+            if (!productMap.has(nombre)) {
+                productMap.set(nombre, []);
+            }
+
+            productMap.get(nombre).push({ nombre, cantidad });
+        });
+
+        for (const [producto, movimientos] of productMap) {
+            let totalCantidad = 0;
+            for (const movimiento of movimientos) {
+                totalCantidad += movimiento.cantidad;
+            }
+            productData.push([producto, totalCantidad]);
+        }
+
+        // Crear los datos del gráfico
+        const chartData = google.visualization.arrayToDataTable(productData);
+
+        // Opciones del gráfico
+        const options = {
+            title: 'Cantidad de Productos',
+            hAxis: { title: 'Producto' },
+            vAxis: { title: 'Cantidad acumulada' },
+            seriesType: 'bars',
+            series: { 0: { type: 'bars' } },
+        };
+
+        // Crear el gráfico
+        const chart = new google.visualization.BarChart(document.getElementById('chart_div_stock_product'));
+        chart.draw(chartData, options);
+    }
+
+    // Función para dibujar la tabla de stock con DataTables
+    function drawTableStock(data, containerId) {
+        const tableDiv = document.getElementById(containerId);
+        tableDiv.innerHTML = ''; // Limpia el contenido anterior de la tabla
+
+        // Crear la tabla con DataTables
+        
+        const table = $('<table id="tabla_tareas_stock" class="display table table-bordered" style="width:100%"></table>');
+        $(tableDiv).append(table);
+
+        $('#tabla_tareas_stock').DataTable({
+            language: {
+                "url": "../assets/vendor/libs/datatables/datatables.es.json"
+            },
+            data: data,
+            columns: [
+                { data: 'nombre', title: 'Producto' },
+                { data: 'cantidad', title: 'Cantidad' },
+                { data : 'idtarea', title: 'Tarea' },
+                { data: 'fecha', title: 'Fecha' },
+                { data: 'descripcion', title: 'Movimiento' },
+            ]
+        });
+    }
+});
+   
+    
     // URL para la solicitud AJAX
     const url = '/reportes/tareas';
 
@@ -12,9 +106,9 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log(data);
 
             // Procesa tus datos aquí
-            const tareasProduccion = data.filter(tarea => tarea.produccion === 1);
-            const tareasProyectado = data.filter(tarea => tarea.produccion === 0);
+            const tareasProduccion = data.filter(tarea => tarea.terminado === 1);
             const tareasEntregado = data.filter(tarea => tarea.entregado === 1);
+            const tareasProyectado = data.filter(tarea => tarea.produccion === 0);
 
             const sumaProduccion = tareasProduccion.reduce((total, tarea) => total + tarea.cantidad, 0);
             const sumaProyectado = tareasProyectado.reduce((total, tarea) => total + tarea.cantidad, 0);
@@ -27,7 +121,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (!tareasPorProducto[tarea.producto]) {
                     tareasPorProducto[tarea.producto] = {
                         produccion: 0,
-                        proyectado: 0
+                        proyectado: 0,
+                        entregado: 0
                     };
                 }
                 if (tarea.produccion === 1) {
@@ -35,6 +130,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     tareasPorProducto[tarea.producto].proyectado += tarea.cantidad;
                 }
+                if (tarea.entregado === 1) {
+                    tareasPorProducto[tarea.producto].entregado += tarea.cantidad;
+                }
+
             });
 
             // Cargar la biblioteca Google Charts
@@ -45,27 +144,31 @@ document.addEventListener("DOMContentLoaded", function() {
                 // Dibuja el gráfico principal
                 drawChart();
 
+                // Dibuja la tabla DataTable por defecto en "Proyectado"
+                drawDataTable(tareasProyectado);
+                
                 // Dibuja el gráfico de producto inicialmente
-                drawProductChart(tareasPorProducto, 'Produccion');
+                drawProductChart(tareasPorProducto, 'Proyectado');
             });
 
             function drawChart() {
                 // Calcula la suma de tareas para cada categoría
                 const sumaProduccion = tareasProduccion.reduce((total, tarea) => total + tarea.cantidad, 0);
                 const sumaProyectado = tareasProyectado.reduce((total, tarea) => total + tarea.cantidad, 0);
+                const sumaEntregado = tareasEntregado.reduce((total, tarea) => total + tarea.cantidad, 0);
             
                 
                 var data = google.visualization.arrayToDataTable([
                     ['Estado', 'Total'],
-                    ['Produccion', sumaProduccion],
                     ['Proyectado', sumaProyectado],
-                    ['Entregado', sumaEntregado] // Nueva categoría
+                    ['Fabricado', sumaProduccion],
+                    ['Entregado', sumaEntregado]
                 ]);
             
                 var options = {
                     chart: {
-                        title: 'Productos en Producción vs. Productos Proyectados vs. Productos Entregados',
-                        subtitle: 'Cantidad de Producción, Proyectadas y Entregadas',
+                        title: 'Productos en Producción vs. Productos Proyectados ',
+                        subtitle: 'Cantidad de Producción, Proyectadas ',
                     },
                     bars: 'horizontal', // Barras horizontales
                     hAxis: { title: 'Total' },
@@ -81,26 +184,29 @@ document.addEventListener("DOMContentLoaded", function() {
                     const selection = chart.getSelection();
                     if (selection.length === 1) {
                         const selectedItem = data.getValue(selection[0].row, 0);
-                        if (selectedItem === 'Produccion') {
-                            drawProductChart(tareasPorProducto, 'Produccion');
+                        if (selectedItem === 'Fabricado') {
+                            drawProductChart(tareasPorProducto, 'Fabricado');
+                            drawDataTable(tareasProduccion);
                         } else if (selectedItem === 'Proyectado') {
                             drawProductChart(tareasPorProducto, 'Proyectado');
+                            drawDataTable(tareasProyectado);
                         } else if (selectedItem === 'Entregado') {
-                            // Lógica para mostrar detalles de "Entregado" (si es necesario)
+                            drawProductChart(tareasPorProducto, 'Entregado');
+                            drawDataTable(tareasEntregado);
                         }
                     }
                 });
             }
             
-
             // Función para dibujar el gráfico de producto
             function drawProductChart(tareasPorProducto, estado) {
                 var productData = [['Producto', 'Total']];
                 for (const producto in tareasPorProducto) {
                     if (tareasPorProducto.hasOwnProperty(producto)) {
-                        const cantidad = estado === 'Produccion' ?
-                            tareasPorProducto[producto].produccion :
-                            tareasPorProducto[producto].proyectado;
+                        const cantidad = estado === 'Fabricado' ? tareasPorProducto[producto].produccion :
+                            estado === 'Proyectado' ? tareasPorProducto[producto].proyectado :
+                            estado === 'Entregado' ? tareasPorProducto[producto].entregado : 0;
+                            
 
                         // Agregar productos solo si la cantidad es mayor que 0
                         if (cantidad > 0) {
@@ -122,18 +228,28 @@ document.addEventListener("DOMContentLoaded", function() {
                 var productChart = new google.charts.Bar(document.getElementById('product_chart_div'));
 
                 productChart.draw(productDataTable, google.charts.Bar.convertOptions(productOptions));
-
-                // Llama a la función para dibujar el gráfico de clientes
-                drawClientChart(productData);
             }
 
-            // Función para dibujar el gráfico de clientes
-            function drawClientChart(productData) {
-                // Utiliza los datos de productos para dibujar el gráfico de clientes aquí
-                // Puedes acceder a los datos del producto seleccionado desde productData
-                // Crea un gráfico de clientes en el elemento con el ID 'client_chart_div'
-                // Ajusta la estructura y el contenido del gráfico según tus necesidades
-                // Puedes utilizar la biblioteca Google Charts u otra biblioteca de visualización de datos
+            // Función para dibujar la tabla DataTable
+            function drawDataTable(data) {
+                const tableDiv = document.getElementById('table_div');
+                tableDiv.innerHTML = ''; // Limpia el contenido anterior de la tabla
+
+                $(tableDiv).append('<table id="tabla_tareas" class="display table table-bordered" style="width:100%"></table>');
+
+                $('#tabla_tareas').DataTable({
+                    language: {
+                        "url": "../assets/vendor/libs/datatables/datatables.es.json"
+                    },
+                    data: data,
+                    columns: [
+                        { data: 'idtarea', title: 'Id' },
+                        { data: 'razonsocial', title: 'Cliente' },
+                        { data: 'producto', title: 'Producto' },
+                        { data: 'cantidad', title: 'Cantidad' },
+                    ]
+                });
+                
             }
 
         },

@@ -114,19 +114,17 @@ reportesHtmlRouter.get("/tareas",  isUser,async (req, res) => {
     }
    });
 
-reportesHtmlRouter.get("/consulta",  isUser,async (req, res) => {
- let id=req.query.id;
+   reportesHtmlRouter.get("/stock",isUser, async (req, res) => {
     try {
-       
-        const results = await ejecutarConsulta("SELECT DATE_FORMAT(nacimiento_paciente, '%d/%m/%Y') AS fecha_formateada_nacimiento, paciente.* FROM socio WHERE id_paciente="+id);
-         //
-        
-        return res.status(200).render("sociosalta", { paciente: results,modificar:false,isUser:req.session.usuario});
-    }  catch (error) {
+        //con el req.session.id_usuario obtengo la fecha_vencimiento DD /MM/ AAAA de la tabla socios cuando el id_usuario es igual al id del usuario logueado
+        const stock = await ejecutarConsulta("Select a.*,b.nombre,c.descripcion from stock a, productos b, estados c WHERE a.baja=0 AND a.tipomovimiento = c.estado AND a.idproducto=b.id ");    
+        return res.status(200).json(stock);
+        //console.log(results);
+        //return res.status(200).json({results,subnick:req.session.subnick});
+    } catch (error) {
         console.error(error);
         return res.status(404).json({msg:"fallo"});
-      }
-    
+        }
 });
 
 reportesHtmlRouter.get("/modificar", isUser, async (req, res) => {

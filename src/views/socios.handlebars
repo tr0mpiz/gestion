@@ -17,7 +17,7 @@
               {{/each}}
           </select>
           </div>
-           <div class="col-md-5">
+           <div class="col-md-4">
               <label for="serie" class="form-label">Cliente:</label>
               <select id="cliente" name="cliente" class="form-select" required>
                   <option value="-3">Seleccione un cliente</option>
@@ -26,7 +26,7 @@
                   {{/each}}
               </select>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-4">
               <label for="producto" class="form-label">Productos:</label>
               <select id="producto" name="producto" class="form-select" required>
                 <option value="-3">Seleccione un producto</option>
@@ -39,12 +39,13 @@
               <label for="cantidad" class="form-label">Cantidad:</label>
               <input type="number" id="cantidad" name="cantidad" class="form-control" required>
           </div>
-          <div class="col-md-12 d-none">
-              <label for="operador" class="form-label">Operador:</label>
+          <div class="col-md-2">
+              <label for="operador" class="form-label">Maquina:</label>
               <select id="operador" name="operador" class="form-select" required>
-                  {{#each operadores}}
-                      <option value="{{this.id}}">{{this.nombre}} {{this.apellido}}</option>
-                  {{/each}}
+                  
+                      <option value="1">Extrusora</option>
+                      <option value="2">Rebobinadora</option>
+                  
               </select>
           </div>
           
@@ -71,7 +72,7 @@
                 <th>Cliente</th>
                 <th>Producto</th>
                 <th>Cantidad</th>
-                <th>Operador</th>
+                <th>Maquina</th>
                 <th class="text-center">Acciones</th>
               </tr>
           </thead>
@@ -80,7 +81,7 @@
               <th>Cliente</th>
               <th>Producto</th>
               <th>Cantidad</th>
-              <th>Operador</th>
+              <th>Maquina</th>
               <th class="text-center">Acciones</th>
             </tr>
           </tfoot>

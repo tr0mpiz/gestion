@@ -1,98 +1,98 @@
 document.addEventListener("DOMContentLoaded", function() {
     
-// Cargar la biblioteca Google Charts de manera asincrónica
-google.charts.load('current', { 'packages': ['corechart', 'table'] });
-// Callback cuando la biblioteca Google Charts se cargue
-google.charts.setOnLoadCallback(function () {
-    // URL para la solicitud AJAX
-    const urlStock = '/reportes/stock';
+    // Cargar la biblioteca Google Charts de manera asincrónica
+    google.charts.load('current', { 'packages': ['corechart', 'table'] });
+    // Callback cuando la biblioteca Google Charts se cargue
+    google.charts.setOnLoadCallback(function () {
+        // URL para la solicitud AJAX
+        const urlStock = '/reportes/stock';
 
-    // Realizar una petición GET a la ruta '/reportes/stock' en tu servidor Express
-    $.ajax({
-        url: urlStock,
-        method: 'GET',
-        success: function (stockData) {
-            // Los datos de stock se encuentran en la variable "stockData"
-            console.log(stockData);
+        // Realizar una petición GET a la ruta '/reportes/stock' en tu servidor Express
+        $.ajax({
+            url: urlStock,
+            method: 'GET',
+            success: function (stockData) {
+                // Los datos de stock se encuentran en la variable "stockData"
+                console.log(stockData);
 
-            // Procesa tus datos de stock aquí
-            // Dibuja el primer gráfico (acumuladores por producto)
-            drawStockByProductChart(stockData);
+                // Procesa tus datos de stock aquí
+                // Dibuja el primer gráfico (acumuladores por producto)
+                drawStockByProductChart(stockData);
 
-            // Dibujar la tabla de stock utilizando la nueva función con DataTables
-            drawTableStock(stockData, 'table_div_stock_product');
-        },
-        error: function (error) {
-            console.log('Error al obtener datos de stock:', error);
+                // Dibujar la tabla de stock utilizando la nueva función con DataTables
+                drawTableStock(stockData, 'table_div_stock_product');
+            },
+            error: function (error) {
+                console.log('Error al obtener datos de stock:', error);
+            }
+        });
+
+        // Función para dibujar el primer gráfico (acumuladores por producto)
+        function drawStockByProductChart(stockData) {
+            const productData = [['Producto', 'Cantidad acumulada']];
+            const productMap = new Map();
+
+            stockData.forEach(item => {
+                const { nombre, cantidad } = item;
+
+                if (!productMap.has(nombre)) {
+                    productMap.set(nombre, []);
+                }
+
+                productMap.get(nombre).push({ nombre, cantidad });
+            });
+
+            for (const [producto, movimientos] of productMap) {
+                let totalCantidad = 0;
+                for (const movimiento of movimientos) {
+                    totalCantidad += movimiento.cantidad;
+                }
+                productData.push([producto, totalCantidad]);
+            }
+
+            // Crear los datos del gráfico
+            const chartData = google.visualization.arrayToDataTable(productData);
+
+            // Opciones del gráfico
+            const options = {
+                title: 'Cantidad de Productos',
+                hAxis: { title: 'Producto' },
+                vAxis: { title: 'Cantidad acumulada' },
+                seriesType: 'bars',
+                series: { 0: { type: 'bars' } },
+            };
+
+            // Crear el gráfico
+            const chart = new google.visualization.BarChart(document.getElementById('chart_div_stock_product'));
+            chart.draw(chartData, options);
+        }
+
+        // Función para dibujar la tabla de stock con DataTables
+        function drawTableStock(data, containerId) {
+            const tableDiv = document.getElementById(containerId);
+            tableDiv.innerHTML = ''; // Limpia el contenido anterior de la tabla
+
+            // Crear la tabla con DataTables
+            
+            const table = $('<table id="tabla_tareas_stock" class="display table table-bordered" style="width:100%"></table>');
+            $(tableDiv).append(table);
+
+            $('#tabla_tareas_stock').DataTable({
+                language: {
+                    "url": "../assets/vendor/libs/datatables/datatables.es.json"
+                },
+                data: data,
+                columns: [
+                    { data: 'nombre', title: 'Producto' },
+                    { data: 'cantidad', title: 'Cantidad' },
+                    { data : 'idtarea', title: 'Tarea' },
+                    { data: 'fecha', title: 'Fecha' },
+                    { data: 'descripcion', title: 'Movimiento' },
+                ]
+            });
         }
     });
 
-    // Función para dibujar el primer gráfico (acumuladores por producto)
-    function drawStockByProductChart(stockData) {
-        const productData = [['Producto', 'Cantidad acumulada']];
-        const productMap = new Map();
-
-        stockData.forEach(item => {
-            const { nombre, cantidad } = item;
-
-            if (!productMap.has(nombre)) {
-                productMap.set(nombre, []);
-            }
-
-            productMap.get(nombre).push({ nombre, cantidad });
-        });
-
-        for (const [producto, movimientos] of productMap) {
-            let totalCantidad = 0;
-            for (const movimiento of movimientos) {
-                totalCantidad += movimiento.cantidad;
-            }
-            productData.push([producto, totalCantidad]);
-        }
-
-        // Crear los datos del gráfico
-        const chartData = google.visualization.arrayToDataTable(productData);
-
-        // Opciones del gráfico
-        const options = {
-            title: 'Cantidad de Productos',
-            hAxis: { title: 'Producto' },
-            vAxis: { title: 'Cantidad acumulada' },
-            seriesType: 'bars',
-            series: { 0: { type: 'bars' } },
-        };
-
-        // Crear el gráfico
-        const chart = new google.visualization.BarChart(document.getElementById('chart_div_stock_product'));
-        chart.draw(chartData, options);
-    }
-
-    // Función para dibujar la tabla de stock con DataTables
-    function drawTableStock(data, containerId) {
-        const tableDiv = document.getElementById(containerId);
-        tableDiv.innerHTML = ''; // Limpia el contenido anterior de la tabla
-
-        // Crear la tabla con DataTables
-        
-        const table = $('<table id="tabla_tareas_stock" class="display table table-bordered" style="width:100%"></table>');
-        $(tableDiv).append(table);
-
-        $('#tabla_tareas_stock').DataTable({
-            language: {
-                "url": "../assets/vendor/libs/datatables/datatables.es.json"
-            },
-            data: data,
-            columns: [
-                { data: 'nombre', title: 'Producto' },
-                { data: 'cantidad', title: 'Cantidad' },
-                { data : 'idtarea', title: 'Tarea' },
-                { data: 'fecha', title: 'Fecha' },
-                { data: 'descripcion', title: 'Movimiento' },
-            ]
-        });
-    }
-});
-   
     
     // URL para la solicitud AJAX
     const url = '/reportes/tareas';
@@ -146,9 +146,18 @@ google.charts.setOnLoadCallback(function () {
 
                 // Dibuja la tabla DataTable por defecto en "Proyectado"
                 drawDataTable(tareasProyectado);
-                
+
                 // Dibuja el gráfico de producto inicialmente
                 drawProductChart(tareasPorProducto, 'Proyectado');
+                
+                // Calcular las sumas de kilogramoscumplidos e idoperario por tipo de operario
+                const sumasTareas = calcularSumaPorTipoOperario(data);
+
+                // Dibujar el gráfico de sumas
+                drawSumaTareasChart(sumasTareas);
+
+                // Dibujar la tabla de sumas
+                drawSumaTareasTable(sumasTareas);
             });
 
             function drawChart() {
@@ -249,9 +258,74 @@ google.charts.setOnLoadCallback(function () {
                         { data: 'cantidad', title: 'Cantidad' },
                     ]
                 });
-                
             }
 
+            // Función para calcular la suma de kilogramoscumpliso e idoperario por tipo de operario
+            function calcularSumaPorTipoOperario(data) {
+                const sumas = {
+                    extrusora: { kilogramosCumplidos: 0, idOperario: 0 },
+                    rebobinadora: { kilogramosCumplidos: 0, idOperario: 0 }
+                };
+
+                data.forEach(tarea => {
+                    console.log(tarea);
+                    if (tarea.idoperario === 1) {
+                        sumas.extrusora.kilogramosCumplidos += tarea.kilogramoscumplidos;
+                        sumas.extrusora.idOperario += tarea.idoperario;
+                    } else {
+                        sumas.rebobinadora.kilogramosCumplidos += tarea.kilogramoscumplidos;
+                        sumas.rebobinadora.idOperario += tarea.idoperario;
+                    }
+                });
+
+                return sumas;
+            }
+
+        // Función para dibujar el gráfico de sumas por tipo de operario
+        function drawSumaTareasChart(sumasTareas) {
+            var sumaData = google.visualization.arrayToDataTable([
+                ['Maquina', 'Kilogramos Cumplidos'],
+                ['Extrusora', sumasTareas.extrusora.kilogramosCumplidos],
+                ['Rebobinadora', sumasTareas.rebobinadora.kilogramosCumplidos]
+            ]);
+
+            var sumaOptions = {
+                title: 'Suma de Kilogramos Cumplidos por Maquina',
+                bars: 'horizontal', // Barras horizontales
+                hAxis: { title: 'Total' },
+                colors: ['#3366CC'] // Asigna colores a las barras
+            };
+
+            var sumaChart = new google.charts.Bar(document.getElementById('chart_div_kg'));
+
+            sumaChart.draw(sumaData, google.charts.Bar.convertOptions(sumaOptions));
+        }
+
+
+            // Función para dibujar la tabla de sumas por tipo de operario
+            function drawSumaTareasTable(sumasTareas) {
+                const tableDiv = document.getElementById('table_div_kg');
+                tableDiv.innerHTML = ''; // Limpia el contenido anterior de la tabla
+
+                $(tableDiv).append('<table id="tabla_suma" class="display table table-bordered" style="width:100%"></table>');
+
+                const sumaTableData = [
+                    ['Tipo de Operario', 'Kilogramos Cumplidos', 'ID Operario'],
+                    ['Extrusora', sumasTareas.extrusora.kilogramosCumplidos, sumasTareas.extrusora.idOperario],
+                    ['Rebobinadora', sumasTareas.rebobinadora.kilogramosCumplidos, sumasTareas.rebobinadora.idOperario]
+                ];
+
+                $('#tabla_suma').DataTable({
+                    language: {
+                        "url": "../assets/vendor/libs/datatables/datatables.es.json"
+                    },
+                    data: sumaTableData,
+                    columns: [
+                        { title: 'Maquina' },
+                        { title: 'Kilogramos Cumplidos' },
+                    ]
+                });
+            }
         },
         error: function (error) {
             console.log('Error al obtener datos de tareas:', error);

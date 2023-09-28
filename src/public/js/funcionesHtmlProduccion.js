@@ -2,82 +2,85 @@ $(document).ready(function () {
 
 
   $('input[type="checkbox"]').on('click', function () {
-    const id = $(this).data('id'); // Obtén el ID del registro desde el atributo `data-id`
-    const estado = this.checked ? 1 : 0; // Cambia el estado según si el checkbox está marcado o desmarcado
-    const campo = $(this).data('campo'); // Obtén el valor del atributo `data-campo`
-  
-    // Muestra una SweetAlert para confirmar la acción del usuario
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: 'Esta acción no se puede deshacer',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, confirmar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // El usuario confirmó la acción, realiza la solicitud AJAX al servidor
-        $.ajax({
-          url: '/produccion/cambiaestado?id=' + id + '&estado=' + estado + '&campo=' + campo,
-          method: 'POST',
-          success: function (response) {
-            // Maneja la respuesta del servidor, si es necesario
-            console.log(response);
-        
-            $('input[type="checkbox"]').on('click', function () {
-              const id = $(this).data('id'); // Obtén el ID del registro desde el atributo `data-id`
-              const estado = this.checked ? 1 : 0; // Cambia el estado según si el checkbox está marcado o desmarcado
-              const campo = $(this).data('campo'); // Obtén el valor del atributo `data-campo`
-            
-              // Muestra una SweetAlert para confirmar la acción del usuario
-              Swal.fire({
-                title: '¿Estás seguro?',
-                text: 'Esta acción no se puede deshacer',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, confirmar',
-                cancelButtonText: 'Cancelar'
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  // El usuario confirmó la acción, realiza la solicitud AJAX al servidor
-                  $.ajax({
+    const checkbox = this;
+    const id = $(checkbox).data('id');
+    const estado = checkbox.checked ? 1 : 0;
+    const campo = $(checkbox).data('campo');
+
+    if (estado == 1 && campo == 'terminado') {
+        // El estado es "terminado", solicita los kilos y la selección
+        Swal.fire({
+            title: 'Registro Terminado',
+            html:
+                '<input type="number" id="kilos" class="swal2-input" placeholder="Kilos">' +
+                '<select id="extrusoraRebobinadora" class="swal2-select form-select">' +
+                '<option value="1">EXTRUSORA</option>' +
+                '<option value="2">REBOBINADORA</option>' +
+                '</select>',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Cancelar',
+            preConfirm: () => {
+                const kilos = $('#kilos').val();
+                const maquina = $('#extrusoraRebobinadora').val();
+
+                // Realiza la solicitud AJAX al servidor con los datos recopilados
+                $.ajax({
+                    url: '/produccion/cambiaestado?id=' + id + '&estado=' + estado + '&campo=' + campo + '&kilos=' + kilos + '&maquina=' + maquina,
+                    method: 'POST',
+                    success: function (response) {
+                        // Maneja la respuesta del servidor, si es necesario
+                        console.log(response);
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        // Maneja errores si es necesario
+                        console.log(textStatus);
+                    }
+                });
+            }
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                // El usuario canceló la acción, restaura el estado del checkbox
+                checkbox.checked = !checkbox.checked;
+            }
+        });
+    } else {
+        // El estado no es "terminado", pregunta al usuario si está seguro
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción no se puede deshacer',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, confirmar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // El usuario confirmó la acción, realiza la solicitud AJAX al servidor
+                $.ajax({
                     url: '/produccion/cambiaestado?id=' + id + '&estado=' + estado + '&campo=' + campo,
                     method: 'POST',
                     success: function (response) {
-                      // Maneja la respuesta del servidor, si es necesario
-                      console.log(response);
-                  
-                      
-                  },
-                  
+                        // Maneja la respuesta del servidor, si es necesario
+                        console.log(response);
+                    },
                     error: function (xhr, textStatus, errorThrown) {
-                      // Maneja errores si es necesario
-                      console.log(textStatus);
+                        // Maneja errores si es necesario
+                        console.log(textStatus);
                     }
-                  });
-                } else {
-                  // El usuario canceló la acción, desmarca el checkbox
-                  $(this).prop('checked', !this.checked);
-                }
-              });
-            });
-        },
-        
-          error: function (xhr, textStatus, errorThrown) {
-            // Maneja errores si es necesario
-            console.log(textStatus);
-          }
+                });
+            } else {
+                // El usuario canceló la acción, restaura el estado del checkbox
+                checkbox.checked = !checkbox.checked;
+            }
         });
-      } else {
-        // El usuario canceló la acción, desmarca el checkbox
-        $(this).prop('checked', !this.checked);
-      }
-    });
-  });
+    }
+});
+
+
+
   
   
   

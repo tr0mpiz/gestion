@@ -186,6 +186,8 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
                 estadonombre="Confirmada"
             }
             if(campo=="terminado" && estado==1){
+                let kilos=req.query.kilos;
+                let maquina=req.query.maquina;
                 const selectStock = await ejecutarConsulta(`SELECT * FROM tareas_detalles WHERE id = ${id}`);
                 let tarea = await selectStock[0];
                 //creame una fecha de hot para myqsl
@@ -193,6 +195,9 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
                 const sqlStock = `INSERT INTO stock (id, idproducto, cantidad, tipomovimiento, idtarea, fecha,baja) VALUES (NULL, ${tarea.producto}, ${tarea.cantidad}, '99', ${tarea.idtarea}, '${fechadecumplimiento}', '0')`;
                 console.log("sqlStock",sqlStock);
                 await ejecutarConsulta(sqlStock);
+                const sqlUpdateKilosMaquin = `UPDATE tareas_detalles SET kilogramoscumplidos = ${kilos},idoperario = '${maquina}' WHERE id = ${id}`;
+                console.log("sqlUpdateKilosMaquin",sqlUpdateKilosMaquin);
+                await ejecutarConsulta(sqlUpdateKilosMaquin);
             }
             if(campo =="entregado" && estado==1){
                 const selectStock = await ejecutarConsulta(`SELECT * FROM tareas_detalles WHERE id = ${id}`);

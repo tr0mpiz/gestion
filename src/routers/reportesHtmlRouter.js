@@ -91,7 +91,7 @@ reportesHtmlRouter.get("/tareas",  isUser,async (req, res) => {
     {
 
         try {
-            const tareasModificadas = await ejecutarConsulta(`SELECT produccion,estacionado,terminado,facturado,entregado,c.nombre as producto,cantidad,idoperario, idcliente , razonsocial ,a.id as idtarea FROM tareas_detalles a, tareas b, productos c, clientes d where a.estado NOT IN (-1)  AND a.idtarea = b.id AND a.producto = c.id  AND a.idcliente = d.id;`);
+            const tareasModificadas = await ejecutarConsulta(`SELECT kilogramoscumplidos,idoperario,produccion,estacionado,terminado,facturado,entregado,c.nombre as producto,cantidad,idoperario, idcliente , razonsocial ,a.id as idtarea FROM tareas_detalles a, tareas b, productos c, clientes d where a.estado NOT IN (-1)  AND a.idtarea = b.id AND a.producto = c.id  AND a.idcliente = d.id;`);
             return res.status(200).json(tareasModificadas);
             
         }  catch (error) {

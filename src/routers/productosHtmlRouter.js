@@ -11,62 +11,14 @@ import { socketServer } from "../app.js"; // Importa el objeto io desde app.js
 
 export const productosHtmlRouter = express.Router();
 
-productosHtmlRouter.get("/recordatorios",isUser, async (req, res) => {
-    try {
-        //con el req.session.id_usuario obtengo la fecha_vencimiento DD /MM/ AAAA de la tabla socios cuando el id_usuario es igual al id del usuario logueado
-        
-       // const results = await ejecutarConsulta(`SELECT DATE_FORMAT(fecha_vencimiento,'%d/%m/%Y') AS fecha_vencimiento FROM socios WHERE id=${req.session.id_usuario}`);
-        //console.log(results);
-        //return res.status(200).json({results,subnick:req.session.subnick});
-    } catch (error) {
-        console.error(error);
-        return res.status(404).json({msg:"fallo"});
-        }
-});
 
-
-
-productosHtmlRouter.get("/ejercicios", isUser, async (req, res) => {
-    let json=req.query.json;
-    //console.log(json);
-    if(json==1){
-        
-        const citas = await ejecutarConsulta("SELECT  CONCAT(nombre_paciente, ' ', apellido_paciente) AS title, a.comentario_cita AS description, DATE_FORMAT(fecha_cita,'%Y-%m-%d %H:%i:%s') AS start, DATE_FORMAT(fecha_fin_cita,'%Y-%m-%d %H:%i:%s') AS end ,color ,'#ffffff' AS textColor,a.id_agenda AS id   FROM agenda a, paciente b, agenda_estados c, estados e WHERE a.id_paciente=b.id_paciente AND a.id_agenda=c.id_agenda AND c.id_estado=e.id_estado AND a.id_agenda NOT IN (SELECT id_agenda FROM agenda_estados WHERE id_estado IN (6)) GROUP BY title, a.comentario_cita, DATE_FORMAT(fecha_cita,'%Y-%m-%d %H:%i:%s'),DATE_FORMAT(fecha_fin_cita,'%Y-%m-%d %H:%i:%s'),color, a.id_agenda;");
-        
-        //console.log(citas);
-        return res.status(200).json(citas);
-    }else{
-        
-        try {
-            const results = await ejecutarConsulta("SELECT c.*, a.*, b.*, DATE_FORMAT(fecha_cita,'%Y-%m-%d %H:%i:%s') AS fecha_cita, e.descripcion FROM agenda a, paciente b, agenda_estados c, estados e WHERE a.id_paciente=b.id_paciente AND a.id_agenda=c.id_agenda AND c.id_estado=e.id_estado AND a.id_agenda NOT IN (SELECT id_agenda FROM agenda_estados WHERE id_estado IN (2,3,5,6));");
-            const pactadas = await ejecutarConsulta("SELECT count(*) AS pactadas FROM agenda_estados WHERE id_estado = 1");
-            const fechaCita = new Date();
-            fechaCita.setDate(fechaCita.getDate() + 1);
-            const fechaFormateada = fechaCita.toISOString().slice(0, 10);
-            const maniana = await ejecutarConsulta(`SELECT count(*) as maniana FROM agenda WHERE DATE(fecha_cita) = '${fechaFormateada}' AND id_agenda NOT IN (SELECT id_agenda FROM agenda_estados WHERE id_estado IN (3,5,6))`);
-            const hoy = await ejecutarConsulta(`SELECT count(*) as hoy FROM agenda WHERE DATE(fecha_cita) = CURDATE() AND id_agenda NOT IN (SELECT id_agenda FROM agenda_estados WHERE id_estado IN (3,5,6))`);
-            let fecha = new Date();
-            // formate la fecha en dd/mm/yyyy hh:mm:ss
-            fecha = fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + " " + fecha.getHours() + ":" + fecha.getMinutes() ;
-    
-    
-            return res.status(200).render("calendario", { pacientes: results ,fecha:fecha,maniana:maniana,pactadas:pactadas,hoy:hoy,isUser:req.session.usuario});
-        }  catch (error) {
-            console.error(error);
-            return res.status(404).json({msg:"fallo"});
-          }
-    }
-    
-
-   
-});
 
 
 productosHtmlRouter.get("/eliminaItemProducto", isUser,async (req, res) => {
     let id=req.query.id;
     if(id){
         try {
-            const results = await ejecutarConsulta("UPDATE productos set baja = 0 WHERE id="+id);   
+            const results = await ejecutarConsulta("UPDATE productos set baja = 1 WHERE id="+id);   
             return res.status(200).json(results);
         }  catch (error) {
             console.error(error);
@@ -78,6 +30,30 @@ productosHtmlRouter.get("/eliminaItemProducto", isUser,async (req, res) => {
 
    
 });
+
+productosHtmlRouter.post("/eliminarproductoasociado", isUser,async (req, res) => {
+    let idproducto=req.query.idproducto;
+    let idproductoasociado=req.query.idproductoasociado;
+    let cantidad=req.query.cantidad;
+    if(idproducto){
+        try {
+            const sql = `UPDATE producto_asociado set baja = 1 WHERE idproducto=${idproductoasociado} AND id=${idproducto} AND cantidad=${cantidad}`;
+            console.log(sql);
+            const results = await ejecutarConsulta(sql);
+            console.log(results);
+
+            return res.status(200).json(results);
+        }  catch (error) {
+            console.error(error);
+            return res.status(404).json({msg:"fallo",error:error});
+            
+          }
+    }
+    
+
+   
+});
+
 productosHtmlRouter.get("/", isUser,async (req, res) => {
     let id=req.query.id;
     if(id){
@@ -93,9 +69,9 @@ productosHtmlRouter.get("/", isUser,async (req, res) => {
             
             //con el req.session.id_usuario obtengo los ejercicios que le corresponden a ese usuario de la tabla rutinas cuando el id_usuario es igual al id del usuario logueado y n_activado es igual a 1
             const productos = await ejecutarConsulta("Select * from productos WHERE baja=0 ");
+            const insumos = await ejecutarConsulta("Select * from insumos WHERE baja=0 ");
 
-
-            return res.status(200).render("productos", { productos: productos ,isUser:req.session.usuario,info:req.session.info});
+            return res.status(200).render("productos", { insumos,productos ,isUser:req.session.usuario,info:req.session.info});
         }  catch (error) {
             console.error(error);
             return res.status(404).json({msg:"fallo",error:error});
@@ -105,6 +81,41 @@ productosHtmlRouter.get("/", isUser,async (req, res) => {
 
    
 });
+
+productosHtmlRouter.get("/obtenerproductosasociados", isUser,async (req, res) => {
+    let id=req.query.id;
+    if(id){
+        try {
+            const productos = await ejecutarConsulta("SELECT * FROM producto_asociado a, insumos b WHERE idproducto="+id+" AND a.id=b.id AND a.baja=0");      
+            return res.status(200).json(productos);
+        }  catch (error) {
+            console.error(error);
+            return res.status(404).json({msg:"fallo",error:error});
+          }
+    }
+    
+
+   
+});
+productosHtmlRouter.post("/agregarinsumo", isUser,async (req, res) => {
+    let idinsumo=req.body.idinsumo;
+    let idproducto=req.body.idproducto;
+    let cantidad=req.body.cantidad;
+    if(idinsumo){
+        try {
+            const productos = await ejecutarConsulta("INSERT INTO producto_asociado (id,idproducto , cantidad,baja) VALUES ("+idinsumo+","+idproducto+","+cantidad+",0)");
+            return res.status(200).json(productos);
+        }  catch (error) {
+            console.error(error);
+            return res.status(404).json({msg:"fallo",error:error});
+            }
+    }
+});
+
+
+
+
+
 
 
 

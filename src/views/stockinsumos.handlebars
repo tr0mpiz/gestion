@@ -4,7 +4,7 @@
     <div class="modal-content p-3 p-md-5">
       <div class="modal-body">
         <div class="text-center mb-4">
-          <h3>Movimiento a Stock de productos</h3>
+          <h3>Movimiento a Stock de insumos</h3>
           <p>En esta seccion toda la informacion del movimiento</p>
         </div>
         <form id="modalagregaejercicioForm" class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework" method="POST" onsubmit="return false" novalidate="novalidate">
@@ -68,7 +68,7 @@
 </style> }}
 
 <h4 class="fw-bold py-3 mb-4">
-    <span class="text-muted fw-light">GESTION /</span> INVENTARIO DE PRODUCTOS
+    <span class="text-muted fw-light">GESTION /</span> INVENTARIO DE INSUMOS
 </h4>       
 
 
@@ -76,6 +76,7 @@
 
 <div class="container">
 <div class="row">
+
     <!-- Earnings (Monthly) Card Example -->
  
   <div class="col-md-12 mb-4">
@@ -84,7 +85,7 @@
               <div class="col-sm-7">
               <div class="card-body">
                   <h5 class="card-title text-primary">GESTION </h5>
-                  <p class="mb-4">En esta <span class="fw-bold">seccion</span> aparece el inventario de productos y su informacion </p>
+                  <p class="mb-4">En esta <span class="fw-bold">seccion</span> aparece el inventario de insumos y su informacion </p>
 
                   <a href="/socios" class="btn btn-sm btn-outline-primary">Ver Tareas</a>
                   <button type="button" class="btn btn-sm  btn-primary " data-bs-toggle="modal" data-bs-target="#modalagregaejercicio">Actualizar Stock</button>
@@ -98,11 +99,10 @@
           </div>
       </div>
   </div>
-    <!-- DataTales Example -->
-    <div class="col-md-12 mb-4">
+      <div class="col-md-12 mb-4">
       <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary text-uppercase">Totales por producto</h6>
+                <h6 class="m-0 font-weight-bold text-primary text-uppercase">Totales por insumos</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -136,12 +136,11 @@
             </div>
         </div>
     </div> 
-
-
+    <!-- DataTales Example -->
   <div class="col-md-12 mb-4">
     <div class="card shadow mb-4">
           <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary text-uppercase">Movimientos de Stock-productos</h6>
+              <h6 class="m-0 font-weight-bold text-primary text-uppercase">Movimientos de Stock-Insumos</h6>
           </div>
           <div class="card-body">
               <div class="table-responsive">
@@ -188,10 +187,6 @@
           </div>
       </div>
   </div> 
-
-
-
-
 </div>
 {{! <style>
     .form-group{ flex-basis: 50% !important; box-sizing: border-box !important; }img{width: 5rem;height: 3rem;}td{vertical-align: middle; }

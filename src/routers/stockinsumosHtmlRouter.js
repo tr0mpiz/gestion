@@ -9,11 +9,12 @@ import { socketServer } from "../app.js"; // Importa el objeto io desde app.js
 //import { agendaService } from "../services/agenda.services.js";
 //import { agendaModel } from "../DAO/models/agenda.model.js";
 
-export const stockHtmlRouter = express.Router();
+export const stockinsumosHtmlRouter = express.Router();
 
 
 
-stockHtmlRouter.get("/eliminaItemProducto", isUser,async (req, res) => {
+
+stockinsumosHtmlRouter.get("/eliminaItemProducto", isUser,async (req, res) => {
     let id=req.query.id;
     if(id){
         try {
@@ -30,7 +31,7 @@ stockHtmlRouter.get("/eliminaItemProducto", isUser,async (req, res) => {
 
    
 });
-stockHtmlRouter.get("/", isUser,async (req, res) => {
+stockinsumosHtmlRouter.get("/", isUser,async (req, res) => {
     let id=req.query.id;
     if(id){
         try {
@@ -44,13 +45,12 @@ stockHtmlRouter.get("/", isUser,async (req, res) => {
         try {
             
             //con el req.session.id_usuario obtengo los ejercicios que le corresponden a ese usuario de la tabla rutinas cuando el id_usuario es igual al id del usuario logueado y n_activado es igual a 1
-            const stock = await ejecutarConsulta("Select a.*,b.nombre,c.descripcion from stock a, productos b, estados c WHERE a.baja=0 AND a.tipomovimiento = c.estado AND a.idproducto=b.id ");    
+            const stock = await ejecutarConsulta("Select a.*,b.nombre,c.descripcion from stock a, insumos b, estados c WHERE a.baja=0 AND a.tipomovimiento = c.estado AND a.idproducto=b.id ");    
             const estados = await ejecutarConsulta("Select * from estados");
-            const productos = await ejecutarConsulta("Select * from productos WHERE baja=0 ");
-            const totales = await ejecutarConsulta("SELECT a.idproducto, b.nombre, SUM(a.cantidad) as cantidad FROM stock a, productos b WHERE a.idproducto = b.id AND a.baja=0 GROUP BY a.idproducto");
+            const productos = await ejecutarConsulta("Select * from insumos WHERE baja=0 ");   
+            const totales = await ejecutarConsulta("SELECT a.idproducto, b.nombre, SUM(a.cantidad) as cantidad FROM stock a, insumos b WHERE a.idproducto = b.id AND a.baja=0 GROUP BY a.idproducto");
 
-
-            return res.status(200).render("stock", { totales,productos,stock ,estados ,isUser:req.session.usuario,info:req.session.info});
+            return res.status(200).render("stockinsumos", { totales,productos,stock ,estados ,isUser:req.session.usuario,info:req.session.info});
         }  catch (error) {
             console.error(error);
             return res.status(404).json({msg:"fallo",error:error});
@@ -65,7 +65,7 @@ stockHtmlRouter.get("/", isUser,async (req, res) => {
 
 
 
-stockHtmlRouter.post('/alta',async (req, res) => {
+stockinsumosHtmlRouter.post('/alta',async (req, res) => {
     // console.log(req)
     let obj = req.body;
    // console.log("hola")
@@ -114,7 +114,7 @@ stockHtmlRouter.post('/alta',async (req, res) => {
   });
   
 
-stockHtmlRouter.delete("/:pid", async (req, res) => {
+stockinsumosHtmlRouter.delete("/:pid", async (req, res) => {
     let pid = req.params.pid;
     let agenda = await Service.getById(pid);
     agenda = JSON.parse(JSON.stringify(agenda));
@@ -137,7 +137,7 @@ stockHtmlRouter.delete("/:pid", async (req, res) => {
     }
 });
 
-stockHtmlRouter.put("/:pid", async (req, res) => {
+stockinsumosHtmlRouter.put("/:pid", async (req, res) => {
     let pid = req.params.pid;
     let obj = req.body;
     let agenda = await Service.updateOne(pid, obj.agenda);

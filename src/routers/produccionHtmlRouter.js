@@ -195,6 +195,17 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
                 const sqlStock = `INSERT INTO stock (id, idproducto, cantidad, tipomovimiento, idtarea, fecha,baja) VALUES (NULL, ${tarea.producto}, ${tarea.cantidad}, '99', ${tarea.idtarea}, '${fechadecumplimiento}', '0')`;
                 console.log("sqlStock",sqlStock);
                 await ejecutarConsulta(sqlStock);
+                //busca los productos asociados al producto que se termino idproducto
+                const selectProductosAsociados = await ejecutarConsulta(`SELECT * FROM producto_asociado WHERE idproducto = ${tarea.producto} AND baja = 0`);
+                let productosAsociados = await selectProductosAsociados;
+                //ahora hace un insert en stock por cada producto asociado
+                productosAsociados.forEach(async (productoAsociado) => {
+                    let cantidad = productoAsociado.cantidad * tarea.cantidad;
+                    const sqlStock = `INSERT INTO stock (id, idproducto, cantidad, tipomovimiento, idtarea, fecha,baja) VALUES (NULL, ${productoAsociado.id}, ${-cantidad}, '98', ${tarea.idtarea}, '${fechadecumplimiento}', '0')`;
+                    console.log("sqlStock",sqlStock);
+                    await ejecutarConsulta(sqlStock);
+                });
+                
                 const sqlUpdateKilosMaquin = `UPDATE tareas_detalles SET kilogramoscumplidos = ${kilos},idoperario = '${maquina}' WHERE id = ${id}`;
                 console.log("sqlUpdateKilosMaquin",sqlUpdateKilosMaquin);
                 await ejecutarConsulta(sqlUpdateKilosMaquin);

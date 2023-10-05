@@ -11,6 +11,7 @@
     <!-- Bootstrap CSS -->
     
    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/dataTables.bootstrap5.min.css">
+
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"  />
     
@@ -39,8 +40,6 @@
     <!-- Page CSS -->
 
 
-    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
-  
     <!-- Helpers -->
    
 
@@ -101,22 +100,12 @@
 
                 <li class="menu-item">
                   <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons bx bx-clipboard"></i>
+                    <i class="menu-icon tf-icons bi bi-database"></i>
                     <div data-i18n="Authentications">BASE DE DATOS</div>
                   </a>
                   
                   <ul class="menu-sub">
-                    {{!-- <li class="menu-item">
-                      <a href="/paciente/alta" class="menu-link" >
-                        <div data-i18n="Basic">Alta</div>
-                      </a>
-                    </li> --}}
                     
-                    <li class="menu-item">
-                      <a href="/socios" class="menu-link" >
-                        <div data-i18n="Basic">Tareas</div>
-                      </a>
-                    </li>
                     <li class="menu-item">
                       <a href="/productos" class="menu-link" >
                         <div data-i18n="Basic">Productos</div>
@@ -127,14 +116,37 @@
                         <div data-i18n="Basic">Insumos</div>
                       </a>
                     </li>
-                    <li class="menu-item">
-                      <a href="/stock" class="menu-link" >
-                        <div data-i18n="Basic">Stock</div>
-                      </a>
-                    </li>
+                    
                     <li class="menu-item">
                       <a href="/clientes" class="menu-link" >
                         <div data-i18n="Basic">Clientes</div>
+                      </a>
+                    </li>
+                    
+                    
+                    
+                  </ul>
+                </li>
+                <li class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bi bi-clipboard2-check"></i>
+                    <div data-i18n="Authentications">PRODUCCIÓN</div>
+                  </a>
+
+                  <ul class="menu-sub">
+                    <li class="menu-item">
+                      <a href="/produccion" class="menu-link" >
+                        <div data-i18n="Basic">Tareas</div>
+                      </a>
+                    </li>
+                    <li class="menu-item">
+                      <a href="/stock" class="menu-link" >
+                        <div data-i18n="Basic">Inventario de Productos</div>
+                      </a>
+                    </li>
+                    <li class="menu-item">
+                      <a href="/stockinsumos" class="menu-link" >
+                        <div data-i18n="Basic">Inventario de Insumos</div>
                       </a>
                     </li>
                     <li class="menu-item">
@@ -142,6 +154,19 @@
                         <div data-i18n="Basic">Reportes</div>
                       </a>
                     </li>
+                    
+                   
+                    
+                  </ul>
+                </li>
+
+                <li class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bi bi-cash-stack"></i>
+                    <div data-i18n="Authentications">ADMINISTRACION</div>
+                  </a>
+
+                  <ul class="menu-sub">
                     
                     <li class="menu-item disabled">
                       <a href="" class="menu-link" >
@@ -153,26 +178,38 @@
                 </li>
                 <li class="menu-item">
                   <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bi bi-droplet-half"></i>
+                    <div data-i18n="Authentications">FORMULACIONES</div>
+                  </a>
+
+                  <ul class="menu-sub">
+                    
+                    <li class="menu-item disabled">
+                      <a href="" class="menu-link" >
+                        <div data-i18n="Basic">Formulas</div>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                </li>
+
+                <li class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-clipboard"></i>
                     <div data-i18n="Authentications">GESTION DE TAREAS</div>
                   </a>
 
                   <ul class="menu-sub">
-                    {{!-- <li class="menu-item">
-                      <a href="/paciente/alta" class="menu-link" >
-                        <div data-i18n="Basic">Alta</div>
-                      </a>
-                    </li> --}}
-                    
                     <li class="menu-item">
-                      <a href="/produccion" class="menu-link" >
-                        <div data-i18n="Basic">Produccion</div>
+                      <a href="/socios" class="menu-link" >
+                        <div data-i18n="Basic">Crear Tarea</div>
                       </a>
                     </li>
                    
                     
                   </ul>
                 </li>
+
             {{else}}
                
             {{/if}} 
@@ -404,6 +441,11 @@
 
     <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     
    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -421,27 +463,7 @@
         
 
         //crea una peticion para recuperar las citas de mañana y pasado mañana y mostralas en el ul que tiene el id recordatorios y la cantidad de recordatorios en el span con el id cantidadRecordatorios
-        $.ajax({
-          url: '/workout/recordatorios',
-          type: 'GET',
-          dataType: 'json',
-          success: function(data) {
-            const {results, subnick} = data;
-
-           
-            //recorre el data y lo muestra en el ul con el id recordatorios\
-            //console.log(data);
-            $.each(results, function(index, val) {
-              $('#recordatorios').append(`<li class="list-group-item list-group-item-action dropdown-notifications-item"><div class="d-flex"><div class="flex-shrink-0 me-3"><div class="avatar"><span class="avatar-initial rounded-circle bg-label-danger">${subnick}</span></div></div><div class="flex-grow-1"><h6 class="mb-1">Vencimiento de tu Plan</h6><p class="mb-0">${val.fecha_vencimiento}</p><small class="text-muted">ahora</small></div><div class="flex-shrink-0 dropdown-notifications-actions"><a href="javascript:void(0)" class="dropdown-notifications-read"><span class="badge badge-dot"></span></a><a href="javascript:void(0)" class="dropdown-notifications-archive"><span class="bx bx-x"></span></a></div></div> </li>`);
-            });
-            //muestra la cantidad de recordatorios en el span con el id cantidadRecordatorios
-            $('#cantidadrecordatorios').html(results.length);
-            
-          },
-          error: function(data) {
-            console.log(data);
-          }
-        });
+       
 
         
         //si existe el id de la tabla, la inicializo
@@ -463,10 +485,15 @@
           });
           }else{
             $('.table').DataTable({
-            "order": [[ 1, "desc" ]],
+            "order": [[ 0, "desc" ]],
             "language": {
               "url": "../assets/vendor/libs/datatables/datatables.es.json"
-            }
+            },
+            "dom": 'Bfrtip', // Indicamos que queremos los botones en la parte superior derecha
+            "buttons": [
+              'copy', 'excel', 'pdf', 'csv' // Los botones que deseas incluir
+            ]
+            
             
           });
           }
@@ -475,266 +502,11 @@
         
         //
         
-
-        
-        if($('#calendar').length)
-        {
-          
-
-          document.addEventListener('paste', function(event) {
-              //alert('Pegaste algo!');
-             const inputFieldsmodalmodal = document.querySelectorAll('#modal-event input');
-             
-              inputFieldsmodalmodal.forEach(function(inputField) {
-                  // Obtener el texto pegado
-                  const clipboardData = event.clipboardData || window.clipboardData;
-                  const pastedText = clipboardData.getData('text');
-                  //alert(pastedText)
-                  // Obtener el nombre del campo de entrada
-                  const fieldName = inputField.id;
-                  //alert(fieldName)
-
-                  // Asignar el texto pegado al campo de entrada correspondiente
-                  switch (fieldName) {
-                    case 'dni_paciente':
-                      console.log(pastedText.split(',')[0]);
-                      document.getElementById('dni_paciente').value = pastedText.split(',')[0];
-                      //darle evento change para que busque el paciente
-                      document.getElementById('dni_paciente').dispatchEvent(new Event('change'));
-                      
-                      break;
-                    case 'nombre_paciente':
-                    console.log(pastedText.split(',')[1]);
-                    document.getElementById('nombre_paciente').value = pastedText.split(',')[1];
-                      break;
-                    case 'apellido_paciente':
-                    console.log(pastedText.split(',')[2]);
-                    document.getElementById('apellido_paciente').value = pastedText.split(',')[2];
-                      break;
-                    case 'contacto_paciente':
-                    console.log(pastedText.split(',')[3]);
-                    document.getElementById('contacto_paciente').value = pastedText.split(',')[3];
-                      break;
-                    default:
-                      break;
-                  }
-                  
-
-              });
-            
-            //alert('pegado')
-           
-        
-            
-            // Asignar el texto pegado al campo de entrada correspondiente 5678,nicolas,piersanti,1122529738
-            
-
-            // Prevenir la acción de pegado predeterminada
-            event.preventDefault();
-          });
-        
-
-
-          $.ajax({
-            url: '/socios/calendario?json=1',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response){
-
-              let events = response;
-              $('#calendar').fullCalendar({
-                  header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,agendaWeek,agendaDay,listWeek'
-                  },
-                  defaultDate: moment().format('YYYY-MM-DD'),
-                  defaultView: 'agendaWeek', // Mostrar la vista por semana por defecto
-                  weekends: false, // Oculta los fines de semana
-                  // Oculta los días que no sean de lunes a viernes
-                  hiddenDays: [0, 6],
-                  navLinks: true, // can click day/week names to navigate views
-                  buttonIcons: true,
-                  weekNumbers: false,
-                  editable: true,
-                  eventLimit: true,
-                  events: events,
-                  locale: 'es',
-                  //mostra de otro color el dia de hoy
-                  dayRender: function (date, cell) {
-                    if (date.isSame(moment(), 'day')) {
-                        cell.css("background-color", "#ff9f89");
-                    }
-                  },
-                  dayClick: function (date, jsEvent, view) {
-
-                    $('#fecha_cita').val(date.format('YYYY-MM-DD HH:mm:ss'));
-                    // asignale el valor a fecha_fin_cita  date.add(30, 'minutes').format('YYYY-MM-DD HH:mm:ss');
-                    $('#fecha_fin_cita').val(date.add(30, 'minutes').format('YYYY-MM-DD HH:mm:ss'));
-
-                    $('#modal-title-add').text('Agregar Cita - '+date.format('DD-MM-YYYY HH:mm:ss'));
-                    $('#dni_paciente').text('');
-                    $('#event-description-add').html("");
-                    $('#dni_paciente').val('');
-                    $('#nombre_paciente').val('');
-                    $('#apellido_paciente').val('');
-                    $('#contacto_paciente').val('');
-                    $('#comentario_cita').val('');
-                    $('#id_agenda').val(0);
-                    $('#modal-event').modal('show');
-
-                    //eliminar la clase btn-warninr al boton
-                   
-                    let form = document.getElementById('add-event');
-                    form.action = '/socios/alta';
-                    let submitButton = form.querySelector('button[type="submit"]');
-                     submitButton.classList.add('btn-primary');
-                    //pone la clase btn-primary
-                    submitButton.classList.remove('btn-danger');
-                    submitButton.textContent = 'Guardar Cita';
-                    
-                  }, 
-                  eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) {
-
-                      let fecha_cita = event.start.format('YYYY-MM-DD HH:mm:ss');
-                      let fecha_fin_cita = event.end.format('YYYY-MM-DD HH:mm:ss');
-                      let id = event.id;
-                      // crea la variable fecha_cita_fin que sea igual a fecha_cita + 30 minutos
-                     
-                      //console.log(fecha_cita);
-                      
-                      console.log(fecha_cita);
-                      
-                      let url = '/socios/alta?id='+id;
-                      let data = {
-                        id_agenda: id,
-                        fecha_cita: fecha_cita,
-                        fecha_fin_cita: fecha_fin_cita
-                      };
-                      $.ajax({
-                        url: url,
-                        type: 'POST',
-                        dataType: 'json',
-                        data: data,
-                        success: function(response){
-                            
-                        }
-                      });
-                      let title = event.title;
-                      let message = 'La cita se movio a la fecha '+fecha_cita;
-                      let duration = 5000; // 5 segundos
-                      let type = 'bg-success'; // 'info', 'success', 'warning', 'danger'
-                      showBootstrapToast(title, message, duration, type);
-
-
-                  },
-                  eventResize: function(event, dayDelta, minuteDelta, revertFunc) {
-                    // Aquí se actualizará la duración del evento al cambiar su tamaño
-                    let fecha_cita = event.start.format('YYYY-MM-DD HH:mm:ss');
-                    let id = event.id;
-                    // Actualizar la duración del evento
-                    let fecha_fin_cita = event.end.format('YYYY-MM-DD HH:mm:ss');
-                    // Resto la fecha de inicio a la fecha de fin para obtener la duración en minutos
-                    //let duracion = moment.duration(event.end.diff(event.start)).asMinutes();
-                    //alert(fecha_fin_cita);
-                    //alert(id);
-                    let url = '/socios/alta?id='+id;
-                    //alert(url)
-                    let data = {
-                      id_agenda: id,
-                      fecha_cita: fecha_cita,
-                      fecha_fin_cita: fecha_fin_cita
-                    };
-                    console.log (data);
-                    $.ajax({
-                        url: url,
-                        type: 'POST',
-                        dataType: 'json',
-                        data: data,
-                        success: function(response){
-                            console.log(response);
-                        }
-                      });
-                      let title = event.title;
-                      let message = 'La cita se movio a la fecha desde '+fecha_cita+' hasta '+fecha_fin_cita;
-                      let duration = 5000; // 5 segundos
-                      let type = 'bg-success'; // 'info', 'success', 'warning', 'danger'
-                      showBootstrapToast(title, message, duration, type);
-
-                  },
-                  eventClick: function (calEvent, jsEvent, view) {
-                      console.log(calEvent);
-
-                      $('#fecha_cita').val(calEvent.start.format('YYYY-MM-DD HH:mm:ss'));
-                      $('#fecha_fin_cita').val(calEvent.end.format('YYYY-MM-DD HH:mm:ss'));
-                      $('#modal-title-add').text(calEvent.title);
-                      const id = calEvent.id;
-                      const url = '/socios?id='+id;
-                      $.ajax({
-                        url: url,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(response){
-                          
-                          let primeravez = response[0].primeravez;
-                          
-                          if(primeravez == 1){
-                            $("#primeravez").prop("checked", true);
-                          }else{
-                            $("#primeravez").prop("checked", false);
-                          }
-                          //console.log(response);
-                          $('#dni_paciente').text(response[0].dni_paciente);
-                          $('#id_agenda').val(response[0].id_agenda);
-                          $('#eliminacita').attr('onclick', "peticionAjax('/socios/eliminar?id="+response[0].id_agenda+"','DELETE','true','true')");
-                          $('#event-description-add').html(response[0].fecha_cita);
-                          $('#dni_paciente').val(response[0].dni_paciente);
-                          $('#nombre_paciente').val(response[0].nombre_paciente);
-                          $('#apellido_paciente').val(response[0].apellido_paciente);
-                          $('#contacto_paciente').val(response[0].contacto_paciente);
-                          $('#comentario_cita').val(response[0].comentario_cita);
-                          $('#modal-event').modal('show');
-                          
-                          let form = document.getElementById('add-event');
-                          form.action = '/agenda/alta?id='+$('#id_agenda').val();
-                          let submitButton = form.querySelector('button[type="submit"]');
-                          //ponele la clase btn-warninr al boton
-                          submitButton.classList.add('btn-warning');
-                          //elimina la clase btn-primary
-                          submitButton.classList.remove('btn-primary');
-                          submitButton.textContent = 'Modificar Cita';
-                        },
-                        error: function(xhr, status, error){
-                          console.log(xhr);
-                          console.log(status);
-                          console.log(error);
-                        }
-                      });
-                      // hace un modal(show) pero con alguna animacion css
-                      
-                  }, 
-                  
-
-                });
-                
-            
-            },
-            //maneja los errores con estados http imprimilo con swall
-            error: function(xhr, status, error){
-              console.log(xhr);
-              console.log(status);
-              console.log(error);
-            }
-          });
-          
-        }
        
       });
       
     </script>
 
-    <!-- Place this tag in your head or just before your close body tag. -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
   </body>
 
 </html>

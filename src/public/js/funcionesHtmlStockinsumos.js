@@ -1,4 +1,3 @@
-//hace un document ready con jquery
 
 
 document.getElementById("modalagregaejercicioForm").addEventListener("submit", function (event) {

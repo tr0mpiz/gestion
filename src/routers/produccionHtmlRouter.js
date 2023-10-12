@@ -14,55 +14,8 @@ import path from "path";
 
 export const produccionHtmlRouter = express.Router();
 
-produccionHtmlRouter.get("/recordatorios",isUser, async (req, res) => {
-    try {
-        //con el req.session.id_usuario obtengo la fecha_vencimiento DD /MM/ AAAA de la tabla socios cuando el id_usuario es igual al id del usuario logueado
-        
-       // const results = await ejecutarConsulta(`SELECT DATE_FORMAT(fecha_vencimiento,'%d/%m/%Y') AS fecha_vencimiento FROM socios WHERE id=${req.session.id_usuario}`);
-        //console.log(results);
-        //return res.status(200).json({results,subnick:req.session.subnick});
-    } catch (error) {
-        console.error(error);
-        return res.status(404).json({msg:"fallo"});
-        }
-});
 
 
-
-produccionHtmlRouter.get("/ejercicios", isUser, async (req, res) => {
-    let json=req.query.json;
-    //console.log(json);
-    if(json==1){
-        
-        const citas = await ejecutarConsulta("SELECT  CONCAT(nombre_paciente, ' ', apellido_paciente) AS title, a.comentario_cita AS description, DATE_FORMAT(fecha_cita,'%Y-%m-%d %H:%i:%s') AS start, DATE_FORMAT(fecha_fin_cita,'%Y-%m-%d %H:%i:%s') AS end ,color ,'#ffffff' AS textColor,a.id_agenda AS id   FROM agenda a, paciente b, agenda_estados c, estados e WHERE a.id_paciente=b.id_paciente AND a.id_agenda=c.id_agenda AND c.id_estado=e.id_estado AND a.id_agenda NOT IN (SELECT id_agenda FROM agenda_estados WHERE id_estado IN (6)) GROUP BY title, a.comentario_cita, DATE_FORMAT(fecha_cita,'%Y-%m-%d %H:%i:%s'),DATE_FORMAT(fecha_fin_cita,'%Y-%m-%d %H:%i:%s'),color, a.id_agenda;");
-        
-        //console.log(citas);
-        return res.status(200).json(citas);
-    }else{
-        
-        try {
-            const results = await ejecutarConsulta("SELECT c.*, a.*, b.*, DATE_FORMAT(fecha_cita,'%Y-%m-%d %H:%i:%s') AS fecha_cita, e.descripcion FROM agenda a, paciente b, agenda_estados c, estados e WHERE a.id_paciente=b.id_paciente AND a.id_agenda=c.id_agenda AND c.id_estado=e.id_estado AND a.id_agenda NOT IN (SELECT id_agenda FROM agenda_estados WHERE id_estado IN (2,3,5,6));");
-            const pactadas = await ejecutarConsulta("SELECT count(*) AS pactadas FROM agenda_estados WHERE id_estado = 1");
-            const fechaCita = new Date();
-            fechaCita.setDate(fechaCita.getDate() + 1);
-            const fechaFormateada = fechaCita.toISOString().slice(0, 10);
-            const maniana = await ejecutarConsulta(`SELECT count(*) as maniana FROM agenda WHERE DATE(fecha_cita) = '${fechaFormateada}' AND id_agenda NOT IN (SELECT id_agenda FROM agenda_estados WHERE id_estado IN (3,5,6))`);
-            const hoy = await ejecutarConsulta(`SELECT count(*) as hoy FROM agenda WHERE DATE(fecha_cita) = CURDATE() AND id_agenda NOT IN (SELECT id_agenda FROM agenda_estados WHERE id_estado IN (3,5,6))`);
-            let fecha = new Date();
-            // formate la fecha en dd/mm/yyyy hh:mm:ss
-            fecha = fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear() + " " + fecha.getHours() + ":" + fecha.getMinutes() ;
-    
-    
-            return res.status(200).render("calendario", { pacientes: results ,fecha:fecha,maniana:maniana,pactadas:pactadas,hoy:hoy,isUser:req.session.usuario});
-        }  catch (error) {
-            console.error(error);
-            return res.status(404).json({msg:"fallo"});
-          }
-    }
-    
-
-   
-});
 
 produccionHtmlRouter.get("/", isUser,async (req, res) => {
     let id=req.query.id;
@@ -88,16 +41,10 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
                     `SELECT DISTINCT razonsocial FROM tareas_detalles a, clientes b WHERE a.estado NOT IN (-1) AND a.idcliente = b.id AND a.idtarea = ${tarea.id} AND a.estado != -1`
                   );
                   
-                    //si existe que busque el nombre del cliente y lo agregue a la tarea
-                    //si no existe que busque el nombre del cliente y lo agregue a la tarea
-                if(tarea.clientes.length > 0 ){
-                    //primero que busque si existe un cliente con el id en tarea.clientes
-                    tarea.clientes = tarea.clientes.map((row) => row.razonsocial);
-                    tarea.clientes = tarea.clientes.join(" - ");
-                }else{
-                    tarea.clientes = "Sin tareas asignadas";
-                }
-                  
+                  //hace que tareas sea un json
+                    tarea.clientes = JSON.parse(JSON.stringify(tarea.clientes));
+                    //hace que clientes sea un json
+
                   // Obtén todos los detalles de la tarea que incluyen el nombre del producto
                   tarea.detallesTarea = await ejecutarConsulta(
                     `SELECT a.*,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento, b.nombre AS nombre_producto ,c.razonsocial,d.descripcion AS nombre_estado
@@ -106,10 +53,11 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
                      AND a.estado != -1
                      AND a.producto = b.id
                      AND a.idcliente = c.id
+                     AND produccion=1
                      AND a.estado = d.estado `
                   );
                   
-                console.log(tarea.detallesTarea)
+                console.log(tarea)
               
                   // Aquí puedes agregar cualquier otra información adicional que desees
               

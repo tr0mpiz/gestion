@@ -228,7 +228,7 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
             }
 
             
-
+            const tarea = tareas[0];
             // Guardar el PDF en el servidor
             const random = Math.floor(Math.random() * 1000);
             const pdfFileName = `tarea_${id}_${campo}_${estado}_${random}.pdf`;
@@ -238,7 +238,7 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
             pdf.end();
 
             const pdfFileLink = `/produccion/descargar-pdf/${pdfFileName}`;
-            const messageWithLink = `Cambio el estado ${campo} de la tarea con ID ${id} a ${estadonombre} <a href="${pdfFileLink}" target="_blank">Ver PDF</a>`;
+            const messageWithLink = `El prodcuto ${tarea.nombre} del cliente ${tarea.razonsocial} cambio su  estado ${campo}  a ${estadonombre}  <a href="${pdfFileLink}" target="_blank">Ver PDF</a>`;
 
             // Emitir el mensaje con el enlace al PDF a través del socket
             socketServer.emit('mensaje', messageWithLink);

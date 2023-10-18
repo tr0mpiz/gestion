@@ -14,11 +14,44 @@ import path from "path";
 
 export const produccionHtmlRouter = express.Router();
 
+produccionHtmlRouter.get("/buscatareas", isUser, async (req, res) => {
+  let cliente = req.query.cliente;
+  let producto = req.query.producto;
+  let adni = ``;
+  if(cliente!=-1){
+    adni = ` AND a.idcliente = ${cliente}`
+  }
+  if(producto!=-1){
+    //concatena a la variable adni el string que se le pasa por parametro
+    adni = adni + ` AND a.producto = ${producto}`
+  }
+
+  try {
+          let sql =  `SELECT a.*,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento, b.nombre AS nombre_producto ,c.razonsocial
+          FROM tareas_detalles a, productos b,clientes c
+          WHERE a.estado != -1
+          ${adni}
+          AND a.producto = b.id
+          AND a.idcliente = c.id
+          AND produccion=1`;
+          console.log(sql);
+          const tareas = await ejecutarConsulta(sql);
+          console.log("tareas",tareas);
+          return res.status(200).json(tareas);
+          
+     
+    }  catch (error) {
+        console.error(error);
+        return res.status(404).json({msg:"fallo",error:error});
+      }
+});
+
 
 
 
 produccionHtmlRouter.get("/", isUser,async (req, res) => {
     let id=req.query.id;
+    
     if(id){
         try {
             const results = await ejecutarConsulta("Select * from productos"+id);          
@@ -65,11 +98,12 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
                 })
               );
             
-              
+              const productos = await ejecutarConsulta('SELECT * FROM productos where baja = 0');
+              const clientes = await ejecutarConsulta('SELECT * FROM clientes');
               
               
 
-            return res.status(200).render("produccion", { tareas: tareasModificadas ,isUser:req.session.usuario,info:req.session.info});
+            return res.status(200).render("produccion", { tareas: tareasModificadas ,isUser:req.session.usuario,info:req.session.info,productos,clientes});
         }  catch (error) {
             console.error(error);
             return res.status(404).json({msg:"fallo",error:error});

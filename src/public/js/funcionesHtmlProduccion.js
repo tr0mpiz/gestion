@@ -1,4 +1,72 @@
 $(document).ready(function () {
+//cuando se cambia un select que busque las tareasde ese producto y de ese cliente
+$('select').on('change', function() {
+    const producto = $('#productofilter option:selected').val();
+    const cliente = $('#clientefilter option:selected').val();
+
+    let url = '/produccion/buscatareas?producto=' + producto + '&cliente=' + cliente;
+
+    // Realiza la solicitud AJAX con los valores seleccionados
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            // Limpia el contenido del contenedor de acordeones
+            $('#accordionTareas').empty();
+            console.log(data);
+            // Itera sobre los datos y crea los acordeones
+            data.forEach(function(tarea) {
+                let accordionItem = $('<div class="accordion-item card mb-1"></div>');
+                let accordionHeader = $('<h2 class="accordion-header" id="tareatitle-' + tarea.idtarea + '"></h2>');
+                let accordionButton = $('<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tarea-' + tarea.idtarea + '" aria-expanded="false" aria-controls="tarea-' + tarea.idtarea + '"></button>');
+                accordionButton.text('TAREA ' + tarea.idtarea + ' - CLIENTES: ' + tarea.razonsocial);
+
+                accordionButton.appendTo(accordionHeader);
+                accordionHeader.appendTo(accordionItem);
+
+                let accordionCollapse = $('<div class="accordion-collapse collapse" id="tarea-' + tarea.idtarea + '" aria-labelledby="tareatitle-' + tarea.idtarea + '" data-bs-parent="#accordionTareas"></div>');
+                let accordionBody = $('<div class="accordion-body"></div>');
+
+                // Muestra información de la tarea
+                accordionBody.append('<p><b>Producto:</b> ' + tarea.nombre_producto + '</p>');
+                accordionBody.append('<p><b>Cantidad:</b> ' + tarea.cantidad + ' UNIDADES</p>');
+                accordionBody.append('<p><b>Último movimiento:</b> ' + tarea.fechadecumplimiento + '</p>');
+                accordionBody.append('<p><b>Estados:</b> ' + tarea.estado + '</p>');
+
+                // Agrega la lista de checkboxes
+                let checkboxList = $('<ul class="list-group"></ul>');
+
+                // Función para crear un elemento de checkbox
+                function createCheckbox(id, campo, label, checked, disabled) {
+                    let listItem = $('<li class="list-group-item pl-5"></li>');
+                    let checkbox = $('<input id="' + id + '" class="form-check-input pl-2" data-campo="' + campo + '" data-id="' + tarea.idtarea + '" type="checkbox" ' + (checked ? 'checked' : '') + (disabled ? 'disabled' : '') + ' aria-label="...">');
+                    listItem.append(checkbox);
+                    listItem.append(label);
+                    return listItem;
+                }
+
+                // Agregar los checkboxes con sus propiedades correspondientes
+                checkboxList.append(createCheckbox('produccion-' + tarea.idtarea, 'produccion', 'Produccion', tarea.produccion, false));
+                checkboxList.append(createCheckbox('estacionado-' + tarea.idtarea, 'estacionado', 'Estacionado', tarea.estacionado, false));
+                checkboxList.append(createCheckbox('terminado-' + tarea.idtarea, 'terminado', 'Terminado', tarea.terminado, false));
+                checkboxList.append(createCheckbox('facturado-' + tarea.idtarea, 'facturado', 'Facturado', tarea.facturado, false));
+                checkboxList.append(createCheckbox('entregado-' + tarea.idtarea, 'entregado', 'Entregado', tarea.entregado, false));
+
+                checkboxList.appendTo(accordionBody);
+                accordionBody.appendTo(accordionCollapse);
+                accordionCollapse.appendTo(accordionItem);
+
+                accordionItem.appendTo('#accordionTareas');
+            });
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            // Manejar errores aquí
+        }
+    });
+});
+
+
 
 
   $('input[type="checkbox"]').on('click', function () {

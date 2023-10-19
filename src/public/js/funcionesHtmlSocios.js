@@ -28,6 +28,31 @@ recargarTareas.addEventListener("click", function (event) {
   location.reload();
 });
 
+const tareasaproduccion = document.getElementById("tareasaproduccion");
+tareasaproduccion.addEventListener("click", function (event) {
+   // El estado no es "terminado", pregunta al usuario si está seguro
+ 
+                
+                    // El usuario confirmó la acción, realiza la solicitud AJAX al servidor
+                    //obtene el valor del idtarea
+                    const idtarea = document.getElementById('idtarea').value;
+                    const url = `/socios/tareasaproduccion?idtarea=${idtarea}`;
+                    $.ajax({
+                        url: url,
+                        method: 'POST',
+                        success: function (response) {
+                            // Maneja la respuesta del servidor, si es necesario
+                            showBootstrapToast("Notificacion","Se actualizo el estado de todas las tareas asociadas a la tarea numero  "+idtarea,3000,"bg-success");
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            // Maneja errores si es necesario
+                            showBootstrapToast("Notificacion","Ocurrio un error al actualizar el estado de la tarea "+idtarea,3000,"bg-success");
+                            console.log(textStatus);
+                        }
+                    });
+                
+           
+});
 
 
 const asignarVencimiento = () => {

@@ -297,6 +297,26 @@ tareasHtmlRouter.post("/eliminaItemTarea", isUser,async (req, res) => {
          }
        
    });
+   tareasHtmlRouter.post("/tareasaproduccion", isUser,async (req, res) => {
+    let idtarea=req.query.idtarea;
+       try {
+             //crea un query para obtener los datos del paciente y la fecha de la cita formateada DD/MM/YYYY y hora HH:MM
+             const selectTareas = await ejecutarConsulta(`SELECT * FROM tareas_detalles WHERE idtarea= ${idtarea}`);
+             //hace un update de la tabla tareas_detalles y le pone el estado de produccion en 1 por cada registro que tenga selectTareas
+             selectTareas.forEach(async (tarea) => {
+                const updateejercicio = await ejecutarConsulta(`UPDATE tareas_detalles SET produccion = 1 WHERE id= ${tarea.id}`);
+                console.log(`UPDATE tareas_detalles SET produccion = 1 WHERE id= ${tarea.id}`);
+                });
+              return res.status(200).json({msg:"ok"})
+              
+       }  catch (error) {
+           console.error(error);
+           return res.status(404).json({msg:"fallo"});
+         }
+       
+   });
+
+   
    tareasHtmlRouter.post("/completaejerruti", isUser,async (req, res) => {
     let id=req.query.id;
        try {

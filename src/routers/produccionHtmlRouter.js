@@ -77,7 +77,18 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
                   //hace que tareas sea un json
                     tarea.clientes = JSON.parse(JSON.stringify(tarea.clientes));
                     //hace que clientes sea un json
-
+                    const result = await ejecutarConsulta(
+                      `SELECT sum(peso) AS kilos 
+                       FROM tareas_detalles a, productos b, clientes c, estados d
+                       WHERE a.idtarea = ${tarea.id}
+                       AND a.estado != -1
+                       AND a.producto = b.id
+                       AND a.idcliente = c.id
+                       AND produccion = 1
+                       AND a.estado = d.estado`
+                    );
+                    const kilos = result.map(row => row.kilos);
+                    tarea.kilos = kilos[0];
                   // Obtén todos los detalles de la tarea que incluyen el nombre del producto
                   tarea.detallesTarea = await ejecutarConsulta(
                     `SELECT a.*,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento, b.nombre AS nombre_producto ,c.razonsocial,d.descripcion AS nombre_estado
@@ -89,6 +100,7 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
                      AND produccion=1
                      AND a.estado = d.estado `
                   );
+                  
                   
                 console.log(tarea)
               
@@ -217,6 +229,9 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
             const tarea = tareas[0]; // Supongamos que solo obtenemos un resultado
             //crea un archivo decente que sea como una tabla o archivo de facil entendimiento con los datos de la tarea y el cliente
             //setea la fuente y el tamaño de la letra
+            pdf.image(path.join(__dirname, 'public', 'logo.png'), 200, 10, { width: 200 });
+            pdf.moveDown(10);
+            
             pdf.fontSize(43);
             pdf.text(`Tarea º ${tarea.idtarea}`, {
                 align: 'center'
@@ -226,7 +241,7 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
             //agregale un fondo que sea una imagen de fondo
             //que imprima la tarea y un salto de linea tipo br o n
             //imagend e fondo fullwidt
-            pdf.image(path.join(__dirname, 'public', 'logo.png'), 200, 600, { width: 200 });
+            
             //crea una variable fecha y hora dd/mm/a  HH:MM:SS
             const fecha = new Date().toLocaleDateString();
             const hora = new Date().toLocaleTimeString();
@@ -251,14 +266,28 @@ produccionHtmlRouter.post("/cambiaestado", async (req, res) => {
             pdf.text(``, {
                 align: 'center'
             });
-            pdf.moveDown();
-            pdf.text(`Acción  -  ${campo}`, {
-                align: 'center'
-            });
-            pdf.moveDown();
-            pdf.text(`ESTADO  -  ${estadonombre}`, {
-                align: 'center'
-            });
+            if(campo!="terminado" && estado==1){
+              pdf.moveDown();
+              pdf.text(`Acción  -  ${campo}`, {
+                  align: 'center'
+              });
+              pdf.moveDown();
+              pdf.text(`ESTADO  -  ${estadonombre}`, {
+                  align: 'center'
+              });
+            }else{
+                  pdf.moveDown();
+                  pdf.moveDown();
+                  pdf.text(`Kilos  -  ${tarea.kilogramoscumplidos}`, {
+                      align: 'center'
+                  });
+                  pdf.text(`Maquina  -  ${tarea.idoperario}`, {
+                      align: 'center'
+                  });
+                  
+                  pdf.moveDown();
+                  
+                }
             }
 
             

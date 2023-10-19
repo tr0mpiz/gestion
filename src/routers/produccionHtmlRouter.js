@@ -87,7 +87,10 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
                        AND produccion = 1
                        AND a.estado = d.estado`
                     );
-                    const kilos = result.map(row => row.kilos);
+                    
+                    // Mapear el resultado y formatear los valores de kilos
+                    const kilos = result.map(row => parseFloat(row.kilos).toFixed(2)); // 2 decimales
+                    
                     tarea.kilos = kilos[0];
                   // Obtén todos los detalles de la tarea que incluyen el nombre del producto
                   tarea.detallesTarea = await ejecutarConsulta(

@@ -8,6 +8,7 @@ import { insumosHtmlRouter } from "./routers/insumosHtmlRouter.js";
 import { stockHtmlRouter } from "./routers/stockHtmlRouter.js";
 import { stockinsumosHtmlRouter } from "./routers/stockinsumosHtmlRouter.js";
 import { clientesHtmlRouter } from "./routers/clientesHtmlRouter.js";
+import { proveedoresHtmlRouter } from "./routers/proveedoresHtmlRouter.js";
 import { tareasHtmlRouter } from "./routers/sociosHtmlRouter.js";
 import { reportesHtmlRouter } from "./routers/reportesHtmlRouter.js";
 import { loginHtmlRouter } from "./routers/loginHtmlRouter.js";
@@ -101,6 +102,7 @@ app.use("/insumos", insumosHtmlRouter);
 app.use("/stock", stockHtmlRouter);
 app.use("/stockinsumos", stockinsumosHtmlRouter);
 app.use("/clientes", clientesHtmlRouter);
+app.use("/proveedores", proveedoresHtmlRouter);
 app.use("/socios", tareasHtmlRouter);
 app.use("/login", loginHtmlRouter);
 

@@ -78,7 +78,7 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
                     tarea.clientes = JSON.parse(JSON.stringify(tarea.clientes));
                     //hace que clientes sea un json
                     const result = await ejecutarConsulta(
-                      `SELECT sum(peso) AS kilos 
+                      `SELECT SUM(peso * cantidad) AS kilos 
                        FROM tareas_detalles a, productos b, clientes c, estados d
                        WHERE a.idtarea = ${tarea.id}
                        AND a.estado != -1

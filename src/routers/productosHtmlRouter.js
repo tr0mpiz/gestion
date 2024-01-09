@@ -232,16 +232,3 @@ productosHtmlRouter.delete("/:pid", async (req, res) => {
         return res.status(200).render("home", { agendaos: allagendaos });
     }
 });
-
-productosHtmlRouter.put("/:pid", async (req, res) => {
-    let pid = req.params.pid;
-    let obj = req.body;
-    let agenda = await Service.updateOne(pid, obj.agenda);
-    if (agenda) {
-        let agenda = await Service.getAll();
-        agenda = JSON.parse(JSON.stringify(agenda));
-        return res.status(200).render("home", { agendaos: agenda });
-    } else {
-        return res.status(404).json({ status: "error", msg: `No Existe un agendao con ID: ${pid}`, data: {} });
-    }
-});

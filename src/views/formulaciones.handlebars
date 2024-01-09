@@ -1,0 +1,191 @@
+<div class="modal fade" id="modalagregaejercicio" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body">
+        <div class="text-center mb-4">
+          <h3>Formulacion</h3>
+          <p>En esta seccion toda la informacion de la Formulacion</p>
+        </div>
+        <form id="modalagregaejercicioForm" class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework" method="POST" onsubmit="return false" novalidate="novalidate">
+
+         <div class="form-group  col-md-2  asociados">
+            <label class="form-label">Id</label>
+            <input class="requerido  text-uppercase form-control"  readonly type="number" name="id" id="id" value="0">
+            
+            <div class="invalid-feedback">
+              Complete el campo!
+            </div>
+          </div>
+         
+          
+          <div class="form-group  col-md-12 ">
+            <label class="form-label">comentario</label>
+            <textarea style="margin-top: 0px; margin-bottom: 0px; height: 150px;" name="comentario" id="comentario"  class="requerido   form-control"></textarea>
+            
+          </div>
+          <div class="form-group  col-md-12 ">
+            
+          </div>
+          <div class="col-md-6 asociados ">
+              <label for="productoinsumo" class="form-label">Materia prima asociada:</label>
+              <select id="productoinsumo" name="productoinsumo" class="form-select" required>
+                <option value="-3">Seleccione una Materia prima</option>
+                  {{#each insumos}}
+                      <option value="{{this.id}}">{{this.nombre}} - LOTE {{this.proveedor}}</option>
+                  {{/each}}
+              </select>
+          </div>
+          <div class="col-md-3 asociados">
+              <label for="disponibleinsumo" class="form-label">Disponible:</label>
+              <input type="number" id="disponibleinsumo" placeholder="" readonly class="requerido  text-uppercase form-control">
+          </div>
+          <div class="col-md-3 asociados">
+              <label for="cantidadinsumo" class="form-label">Cantidad:</label>
+              <input type="number" id="cantidadinsumo" placeholder="" required class="requerido  text-uppercase form-control">
+          </div>
+          <div class="col-3 text-center asociados mt-5">
+            
+              <div  class="btn btn-success" id="agregarInsumo">Agregar 
+                <i class="bi bi-arrow-down-circle"></i>
+              </div>
+          </div>
+          <div class="col-md-12 mb-4 asociados" >
+            <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold text-primary text-uppercase">Materia prima</h6>
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                              <thead>
+                                  <tr>
+                                    <th>Fecha de creacion</th>
+                                    <th>Nombre</th>
+                                    <th>Lote</th>
+                                    <th>Cantidad</th>
+                                    <th class="text-center">Opciones</th>
+                                  </tr>
+                              </thead>
+                              <tfoot>
+                                <tr>
+                                 <th>Fecha de creacion</th>
+                                  <th>Nombre</th>
+                                  <th>Lote</th>
+                                  <th>Cantidad</th>
+                                  <th class="text-center" >Opciones</th>
+                                </tr>
+                              </tfoot>
+                              
+                              <tbody id="tbodyproductosasociados">
+                                
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div> 
+
+
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-success me-sm-3 me-1">Confirmar</button>
+            <button type="reset" class="btn btn-secondary me-sm-3 me-1" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+          </div>
+        <input type="hidden"></form>
+      </div>
+    </div>
+  </div>
+</div>
+{{! <style>
+    .form-group{ flex-basis: 50% !important; box-sizing: border-box !important; }img{width: 5rem;height: 3rem;}td{vertical-align: middle; }
+</style> }}
+
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">GESTION /</span> FORMULACIONES
+</h4>       
+
+
+
+
+<div class="container">
+<div class="row">
+    <!-- Earnings (Monthly) Card Example -->
+ 
+  <div class="col-md-12 mb-4">
+      <div class="card">
+          <div class="d-flex align-items-end row">
+              <div class="col-sm-7">
+              <div class="card-body">
+                  <h5 class="card-title text-primary">GESTION </h5>
+                  <p class="mb-4">En esta <span class="fw-bold">seccion</span> aparecen las formulaciones y sus batch</p>
+
+                  <a href="/socios" class="btn btn-sm btn-outline-primary">Ver Tareas</a>
+                  <button type="button" class="btn btn-sm  btn-primary " data-bs-toggle="modal" data-bs-target="#modalagregaejercicio">Agregar formulacion</button>
+              </div>
+              </div>
+              <div class="col-sm-5 text-center text-sm-left d-none d-sm-block">
+              <div class="card-body pb-0 px-0 px-md-4">
+                  <img src="../assets/img/illustrations/man-with-laptop-light.png" height="140" alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png" data-app-light-img="illustrations/man-with-laptop-light.png">
+              </div>
+              </div>
+          </div>
+      </div>
+  </div>
+    <!-- DataTales Example -->
+  <div class="col-md-12 mb-4">
+    <div class="card shadow mb-4">
+          <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary text-uppercase">Productos</h6>
+          </div>
+          <div class="card-body">
+              <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Comentario</th>
+                            <th>Fecha</th>
+                            <th class="text-center">Opciones</th>
+                          </tr>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                          <th>ID</th>
+                          <th>Comentario</th>
+                         <th>Fecha</th>
+                          <th class="text-center" >Opciones</th>
+                        </tr>
+                      </tfoot>
+                      
+                      <tbody id="table-product-body">
+                        {{#each productos}}
+                            <tr id="producto-{{this.id}}">
+                                <td>{{this.id}}</td>
+                                <td>{{this.comentario}}</td>
+                                <td>{{this.fechadecreacion_formateada}}</td>
+                                <td class="text-center" style="width: 100px;">
+                                  
+                                  <button data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-trash bx-xs' ></i> <span>Eliminar formula</span>" onclick="peticionAjax('/formulaciones/eliminaFormulacion?id={{this.id}}','GET','true','true')" class="btn btn-icon btn-outline-danger"><i class="bx bx-trash"></i></button>
+
+                                  <button class=" btn btn-icon btn-outline-info ml-1"  data-bs-comentario="{{this.comentario}}"  data-bs-id="{{this.id}}"   data-bs-toggle="modal" data-bs-target="#modalagregaejercicio"><i class="bx bx-plus"></i></button>
+                                </td>
+                            </tr>
+                        {{/each}}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div> 
+</div>
+{{! <style>
+    .form-group{ flex-basis: 50% !important; box-sizing: border-box !important; }img{width: 5rem;height: 3rem;}td{vertical-align: middle; }
+</style> }}
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="../js/funcionesHtmlFormulaciones.js"></script>
+
+{{! <script></script> }}

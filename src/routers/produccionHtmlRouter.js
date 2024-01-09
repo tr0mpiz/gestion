@@ -27,7 +27,7 @@ produccionHtmlRouter.get("/buscatareas", isUser, async (req, res) => {
   }
 
   try {
-          let sql =  `SELECT a.*,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento, b.nombre AS nombre_producto ,c.razonsocial
+          let sql =  `SELECT a.*,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento, b.nombre AS nombre_producto ,c.razonsocial,c.id as numerocliente
           FROM tareas_detalles a, productos b,clientes c
           WHERE a.estado != -1
           ${adni}
@@ -92,9 +92,9 @@ produccionHtmlRouter.get("/", isUser,async (req, res) => {
                     const kilos = result.map(row => parseFloat(row.kilos).toFixed(2)); // 2 decimales
                      
                     tarea.kilos = kilos[0];
-                  // Obtén todos los detalles de la tarea que incluyen el nombre del producto
+                  // Obtén todos los detalles de la tarea que incluyen el nombre del producto `SELECT a.*,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento, b.nombre AS nombre_producto ,c.id AS numerocliente, c.razonsocial,d.descripcion AS nombre_estado
                   tarea.detallesTarea = await ejecutarConsulta(
-                    `SELECT a.*,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento, b.nombre AS nombre_producto ,c.razonsocial,d.descripcion AS nombre_estado
+                    `SELECT a.*,DATE_FORMAT(fechadecumplimiento, '%d/%m/%y %H:%i') AS fechadecumplimiento,b.id AS id_producto, b.nombre AS nombre_producto ,c.id AS numerocliente,c.razonsocial,d.descripcion AS nombre_estado,DATE_FORMAT(CURDATE(), '%d%m%y') AS fechaactual
                      FROM tareas_detalles a, productos b,clientes c,estados d
                      WHERE a.idtarea = ${tarea.id}
                      AND a.estado != -1

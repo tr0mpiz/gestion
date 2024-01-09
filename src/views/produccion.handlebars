@@ -69,7 +69,7 @@
                       <div class="col-md-4">
                           <label for="productofilter" class="form-label">Productos:</label>
                           <select id="productofilter" name="productofilter" class="form-select" required>
-                            <option value="-1">TODOS LOS PRODUCTOS</option>
+                            <option value="-1">SELECCIONE</option>
                               {{#each productos}}
                                   <option value="{{this.id}}">{{this.nombre}}</option>
                               {{/each}}
@@ -109,15 +109,15 @@
                                 <div class="row">
                                   
                                   {{#each this.detallesTarea}}
-                                    <div class="col-xs-6 col-md-3 col-xl-3">
-                                      <div class="card pallet-{{id}}">
+                                    <div class="col-xs-6 col-md-4 col-xl-4 p-2  ">
+                                      <div class="card pallet-{{id}}  {{#compare terminado 1 }} border border-success border-1{{/compare}}  {{#compare terminado 1 }}  {{#compare produccion 1 }} {{#compare facturado 1 }} {{#compare entregado 1 }} listo {{/compare}} {{/compare}} {{/compare}} {{/compare}}"  >
                                         <div class="card-body">
-                                          <h5 class="card-title"> <b>{{ this.razonsocial }}</b> </h5>
-                                          <h6 class="card-title"><b>Ultimo movimiento:{{ this.fechadecumplimiento }}</b> </h6>
+                                          <h5 class="card-title"> <span>{{ this.razonsocial }} </span>   <span> <b> {{ this.numerocliente }}-{{ this.fechaactual }}{{ this.id_producto }} </b> </span> </h5>
+                                          <h6 class="card-title p-1"><b>Ultimo movimiento:{{ this.fechadecumplimiento }}</b> </h6>
                                           
                                           <p class="card-text"> <b><u> {{ nombre_producto }} - {{ cantidad }} UNIDADES </u></b> </p>
                                           <ul class="list-group">
-                                             <li class="list-group-item pl-5 ">
+                                             <li class="list-group-item pl-5">
                                               <input  id="produccion-{{id}}" class="form-check-input pl-2" data-campo="produccion" data-id="{{id}}" type="checkbox"  {{#compare produccion 1 }} checked {{/compare}}  {{#compare produccion 1 }} disabled {{/compare}} aria-label="...">
                                               Produccion
                                             </li>
@@ -125,12 +125,12 @@
                                               <input  id="estacionado-{{id}}" class="form-check-input pl-2" data-campo="estacionado" data-id="{{id}}" type="checkbox"  {{#compare terminado 1 }} disabled {{/compare}}    {{#compare estacionado 1 }} checked {{/compare}} aria-label="...">
                                               Estacionado
                                             </li>
-                                            <li class="list-group-item pl-5 ">
+                                            <li class="list-group-item pl-5">
                                               <input  id="terminado-{{id}}" class="form-check-input pl-2" data-campo="terminado" data-id="{{id}}" type="checkbox"  {{#compare terminado 1 }} checked {{/compare}} aria-label="...">
                                               Terminado
                                             </li>
                                             <li class="list-group-item pl-5 ">
-                                              <input  id="facturado-{{id}}" class="form-check-input pl-2" data-campo="facturado" data-id="{{id}}" type="checkbox"   {{#compare facturado 1 }} checked {{/compare}} aria-label="...">
+                                              <input  id="facturado-{{id}}" class="form-check-input pl-2" data-campo="facturado" data-id="{{id}}" type="checkbox"   {{#compare facturado 1 }} checked {{/compare}} aria-label="...">  
                                               Facturado
                                             </li>
                                             <li class="list-group-item pl-5 ">
@@ -172,9 +172,14 @@
 
 
 
-<script>
+<style>
+  .listo {
+    
+    background-color: rgba(56, 216, 56, 0.26); /* Color verde con opacidad del 80% */
+  transition: background-color 0.3s ease-in-out; 
+  }
   
-</script>
+</style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

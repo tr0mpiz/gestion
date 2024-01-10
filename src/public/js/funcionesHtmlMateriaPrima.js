@@ -46,7 +46,7 @@ ejerciciosModal.addEventListener('show.bs.modal', function (event) {
   // Button that triggered the modal
   let button = event.relatedTarget
   // Extract info from data-bs-* attributes
-
+ 
   let id = button.getAttribute('data-bs-id')
   let inputid = ejerciciosModal.querySelector('#id')
   inputid.value = id
@@ -67,6 +67,7 @@ ejerciciosModal.addEventListener('show.bs.modal', function (event) {
   let proveedor = button.getAttribute('data-bs-proveedor')
   let inputproveedor = ejerciciosModal.querySelector('#proveedor')
   inputproveedor.value = proveedor
+  
   
   
 

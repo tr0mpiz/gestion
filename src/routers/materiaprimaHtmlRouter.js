@@ -20,7 +20,8 @@ materiaprimaHtmlRouter.get("/eliminaItemInsumo", isUser,async (req, res) => {
     let id=req.query.id;
     if(id){
         try {
-            const results = await ejecutarConsulta("UPDATE materiaprima set baja = 1 WHERE id="+id);   
+            const results = await ejecutarConsulta("UPDATE materiaprima set baja = 1 WHERE id="+id);  
+            console.log("UPDATE materiaprima set baja = 1 WHERE id="+id) 
             return res.status(200).json(results);
         }  catch (error) {
             console.error(error);
@@ -70,7 +71,7 @@ materiaprimaHtmlRouter.get("/", isUser,async (req, res) => {
         try {
             
             //con el req.session.id_usuario obtengo los ejercicios que le corresponden a ese usuario de la tabla rutinas cuando el id_usuario es igual al id del usuario logueado y n_activado es igual a 1
-            const insumos = await ejecutarConsulta("Select * from materiaprima a, materiaprima_insumos b WHERE b.id = a.idinsumo AND a.baja=0 ");
+            const insumos = await ejecutarConsulta("Select a.id,b.nombre,proveedor,cantidad,a.descripcion from materiaprima a, materiaprima_insumos b WHERE b.id = a.idinsumo AND a.baja=0 ");
             const materiaprima = await ejecutarConsulta("SELECT * from materiaprima_insumos")
             const movimientosmateriaprima = await ejecutarConsulta("SELECT a.cantidad,DATE_FORMAT(a.fecha, '%d/%m/%Y %H:%i') AS fecha_formateada,b.nombre,c.proveedor FROM materiaprima_stock a,materiaprima_insumos b,materiaprima c WHERE c.id = a.idmateriaprima  AND b.id =c.idinsumo;")
             
@@ -166,7 +167,7 @@ materiaprimaHtmlRouter.post('/alta',async (req, res) => {
         
     }else{
         
-          let sqUpdateProductos = `UPDATE materiaprima SET proveedor='${proveedor}',descripcion='${descripcion}',cantidad=${cantidad},proveedor =${proveedor} , nombre ='${nombre}' WHERE id=${id}`;
+          let sqUpdateProductos = `UPDATE materiaprima SET proveedor='${proveedor}',descripcion='${descripcion}',cantidad=${cantidad},proveedor =${proveedor}  WHERE id=${id}`;
           let insertsqlProductos = await ejecutarConsulta(sqUpdateProductos);
           socketServer.emit('mensaje', 'Se actualizo el insumo '+nombre);
            
